@@ -1,0 +1,139 @@
+.question-screen {
+  height         : 100%;
+  width          : 100%;
+  display        : flex;
+  justify-content: center;
+  color          : white;
+  outline        : none;
+
+  --text-shadow                 : 0px 0px 3px #0008;
+  --question-txt-size           : 4vh;
+  --max-question-width          : 75vh;
+  --radio-size                  : 5vh;
+  --answer-txt-size             : 2.5vh;
+  --transition-duration         : 0.25s;
+  --prev-background-color       : #f1b00a;
+  --prev-background-color--hover: #a09004;
+  --next-background-color       : #33b84d;
+  --next-background-color--hover: #258b3a;
+  --transparent-black           : #0009;
+  --buttons-height              : 7vh;
+  --buttons-width               : 20vh;
+  --buttons-font-size           : 3vh
+}
+
+.question-screen__question-container {
+  height         : 100%;
+  display        : flex;
+  flex-direction : column;
+  justify-content: center;
+}
+
+.question-screen__question-container__question-title {
+  font-size    : var(--question-txt-size);
+  text-align   : center;
+  margin-bottom: 4vh;
+  user-select  : none;
+  max-width    : var(--max-question-width);
+  min-width    : var(--max-question-width);
+  text-shadow  : var(--text-shadow);
+}
+
+.question-screen__question-container__radio-answers {
+  display        : flex;
+  flex-direction : column;
+  justify-content: center;
+  margin-left    : 3vh;
+}
+
+.question-screen__question-container__radio-answers__radio_answer {
+  display       : flex;
+  flex-direction: row;
+  padding-bottom: 1vh;
+}
+
+.question-screen__question-container__radio-answers__radio_answer__radio {
+  height          : var(--radio-size);
+  width           : var(--radio-size);
+  border-radius   : 10vh;
+  background-color: white;
+  border          : 0.1vh solid var(--transparent-black);
+  cursor          : pointer;
+  flex-shrink     : 0;
+  user-select     : none;
+}
+
+.question-screen__question-container__radio-answers__radio_answer__text {
+  font-size   : var(--answer-txt-size);
+  display     : flex;
+  align-self  : center;
+  padding-left: 1vh;
+  user-select : none;
+  text-shadow : var(--text-shadow);
+}
+
+.question-screen__question-container__buttons-container {
+  display        : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  margin-top     : 1vh;
+}
+
+.question-screen__question-container__buttons-container__button,
+.question-screen__question-container__buttons-container__button--prev,
+.question-screen__question-container__buttons-container__button--next {
+  height             : var(--buttons-height);
+  width              : var(--buttons-width);
+  border-radius      : 10vh;
+  display            : flex;
+  justify-content    : center;
+  align-items        : center;
+  font-size          : var(--buttons-font-size);
+  font-weight        : 800;
+  border             : 0.1vh solid var(--transparent-black);
+  cursor             : pointer;
+  user-select        : none;
+  transition-duration: var(--transition-duration);
+  transition-property: color, transform;
+  margin             : 1vh;
+}
+
+.question-screen__question-container__buttons-container__button:hover {
+  transform: scale(1.02);
+}
+
+.question-screen__question-container__buttons-container__button--prev {
+  background-color: var(--prev-background-color);
+  color           : black;
+}
+
+.question-screen__question-container__buttons-container__button--prev:hover {
+  background-color: var(--prev-background-color--hover);
+}
+
+.question-screen__question-container__buttons-container__button--next {
+  background-color: var(--next-background-color);
+  color           : white;
+}
+
+.question-screen__question-container__buttons-container__button--next:hover {
+  background-color: var(--next-background-color--hover);
+}
+
+.question-screen__question-container__buttons-container__button__icon {
+  margin   : 0 -1vh;
+  font-size: 4.5vh;
+}
+
+@media (max-width: 90vh) {
+  .question-screen__question-container__question-title {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 50vh) {
+  .question-screen__question-container__buttons-container {
+    flex-direction: column;
+    align-items   : center;
+  }
+}

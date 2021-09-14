@@ -1,0 +1,101 @@
+{
+  "questions": [
+    {
+      "question": "¿Cómo calificaría su experiencia en Hotel Palmeras? 🏨🌴",
+      "img": "https://images.trvl-media.com/hotels/54000000/53720000/53714500/53714404/1316f078_z.jpg",
+      "answers": [
+        {
+          "value": "5",
+          "label": "Muy Buena 😀"
+        },
+        {
+          "value": "4",
+          "label": "Buena 😊"
+        },
+        {
+          "value": "3",
+          "label": "Regular 😐"
+        },
+        {
+          "value": "2",
+          "label": "Mala 😕"
+        },
+        {
+          "value": "1",
+          "label": "Muy mala 😠"
+        }
+      ]
+    },
+    {
+      "question": "¿Cómo fue su experiencia con el personal? 👷🛎",
+      "img": "https://www.beekeeper.io/wp-content/uploads/2021/02/Recruit-Hotel-Employees-Feature.jpg",
+      "answers": [
+        {
+          "value": "5",
+          "label": "Muy Buena 😀"
+        },
+        {
+          "value": "4",
+          "label": "Buena 😊"
+        },
+        {
+          "value": "3",
+          "label": "Regular 😐"
+        },
+        {
+          "value": "2",
+          "label": "Mala 😕"
+        },
+        {
+          "value": "1",
+          "label": "Muy mala 😠"
+        }
+      ]
+    },
+    {
+      "question": "¿Volvería a venir a Hotel Palmeras? 🤔🌴",
+      "img": "https://elviajerofeliz.com/wp-content/uploads/2015/03/consejos-para-viajar-en-avion.jpg",
+      "answers": [
+        {
+          "value": true,
+          "label": "Si 😀"
+        },
+        {
+          "value": false,
+          "label": "No 😕"
+        }
+      ]
+    },
+    {
+      "question": "¿Recomendaría a alguien Hotel Palmeras? 👤📨",
+      "img": "https://previews.123rf.com/images/antonioguillem/antonioguillem1709/antonioguillem170900089/85723774-tres-amigos-alegres-hablando-sentado-en-un-sofá-en-casa.jpg",
+      "answers": [
+        {
+          "value": true,
+          "label": "Si 😀"
+        },
+        {
+          "value": false,
+          "label": "No 😕"
+        }
+      ]
+    },
+    {
+      "question": "¿Qué le parecieron los precios de Hotel Palmeras? 💲💰",
+      "answers": [
+        {
+          "value": 3,
+          "label": "Caro 💸💸💸"
+        },
+        {
+          "value": 2,
+          "label": "Normal 💸💸"
+        },
+        {
+          "value": 1,
+          "label": "Accesible 💸"
+        }
+      ]
+    }
+  ]
+}
