@@ -7,6 +7,7 @@ const QuestionsScreen: FC = () => {
   const [actualQuestion, setActualQuestion] = useState<QuestionData>()
   const [questions, setQuestions] = useState<QuestionData[]>()
   const [questionIndex, setQuestionIndex] = useState<number>(0)
+  const [finished, setFinished] = useState<boolean>(false);
 
   const [answeredQuestions, setAnsweredQuestions] = useState<any[]>()
 
@@ -45,7 +46,7 @@ const QuestionsScreen: FC = () => {
     if (!questions?.length) return
 
     storeThisAnswer(answer)
-    if (nextIndex >= questions?.length) return;
+    if (nextIndex >= questions?.length) { console.log('end'); setFinished(true); return };
     setQuestionIndex(nextIndex)
   }
 
@@ -59,7 +60,7 @@ const QuestionsScreen: FC = () => {
   }
 
   return (
-    <div
+    <body
       className="questions-screen"
       style={actualQuestion?.img ? {
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${actualQuestion.img})`,
@@ -69,27 +70,34 @@ const QuestionsScreen: FC = () => {
       } : undefined}
     >
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-      <div className="questions-screen__question">
-        <div className="questions-screen__question__question-counter">
-          <div className="questions-screen__question__question-counter__txt">
-            {questionIndex + 1}/{data.questions.length || 0}
-          </div>
-          <div className="questions-screen__question__question-counter__progress-bar">
-            <div
-              className="questions-screen__question__question-counter__progress-bar__progress"
-              style={{ width: questions?.length ? ((((questionIndex + 1) / questions.length) * 100) + '%') : undefined }}
-            />
-          </div>
+      {!finished ?
+        <div className="questions-screen__question">
+          <header className="questions-screen__question__question-counter">
+            <div className="questions-screen__question__question-counter__txt">
+              {questionIndex + 1}/{data.questions.length || 0}
+            </div>
+            <div className="questions-screen__question__question-counter__progress-bar">
+              <div
+                className="questions-screen__question__question-counter__progress-bar__progress"
+                style={{ width: questions?.length ? ((((questionIndex + 1) / questions.length) * 100) + '%') : undefined }}
+              />
+            </div>
+          </header>
+          <Question
+            question={actualQuestion?.question || ""}
+            answers={actualQuestion?.answers || [{ value: '' }]}
+            onNext={answer => handleNext(answer)}
+            prevAnswer={answeredQuestions?.length ? answeredQuestions[questionIndex] : undefined}
+            onPrev={answer => handlePrev(answer)}
+          />
         </div>
-        <Question
-          question={actualQuestion?.question || ""}
-          answers={actualQuestion?.answers || [{ value: '' }]}
-          onNext={answer => handleNext(answer)}
-          prevAnswer={answeredQuestions?.length ? answeredQuestions[questionIndex] : undefined}
-          onPrev={answer => handlePrev(answer)}
-        />
-      </div>
-    </div>
+      :
+        <div className="questions-screen__finished">
+          <h1 className="questions-screen__finished__thxTxt">¡Gracias por contestar!</h1>
+          <img className="questions-screen__finished__gif" src="https://i.giphy.com/media/l1INk1qF0fw73snz2p/giphy.webp" alt="" />
+        </div>
+      }
+    </body>
   )
 }
 

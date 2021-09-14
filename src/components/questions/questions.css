@@ -55,7 +55,25 @@
   /* border-right    : 0.5px solid var(--transparent-black); */
 }
 
+.questions-screen__finished {
+  margin        : 30px;
+  position      : relative;
+  display       : flex;
+  flex-direction: row;
+  align-items   : center;
+  align-self    : center;
+  flex-direction: column;
+}
 
+.questions-screen__finished__thxTxt {
+  font-size : 8vh;
+  text-align: center;
+}
+
+.questions-screen__finished__gif {
+  height: auto;
+  width : 50vh;
+}
 
 @media (max-width: 50vh) {
   .questions-screen__question__question-counter {
