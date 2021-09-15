@@ -2,7 +2,12 @@ import React, { FC, useEffect } from 'react'
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import './question.css'
 
-const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers, prevAnswer }) => {
+enum Languages {
+  "spanish" = "es",
+  "english" = "en"
+}
+
+const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers, prevAnswer, language }) => {
   const [selectedAnswer, setSelectedAnswer] = React.useState(prevAnswer)
 
   useEffect(() => {
@@ -114,14 +119,14 @@ const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers,
             onClick={e => prevHandler()}
           >
             <MdNavigateBefore className="question-screen__question-container__buttons-container__button__icon"></MdNavigateBefore>
-            Anterior
+            {language === Languages.spanish ? "Anterior" : "Previous"}
           </div>
           <div
             className="question-screen__question-container__buttons-container__button question-screen__question-container__buttons-container__button--next"
             style={typeof selectedAnswer === 'undefined' ? { backgroundColor: 'white', color: '#0008', cursor: 'default' } : undefined}
             onClick={() => nextHandler()}
           >
-            Siguiente
+            {language === Languages.spanish ? "Siguiente" : "Next"}
             <MdNavigateNext className="question-screen__question-container__buttons-container__button__icon" color="white"></MdNavigateNext>
           </div>
         </div>
@@ -173,7 +178,8 @@ interface QuestionRequirements {
   answers: RadioAnswerRequirements[]
   onNext?: (value: any) => void
   onPrev?: (value?: any) => void
-  prevAnswer?: any
+  prevAnswer?: any,
+  language: Languages
 }
 
 interface RadioAnswerRequirements {

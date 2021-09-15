@@ -3,41 +3,74 @@ import Question from "src/components/question/question";
 import './questions.css'
 import * as data from './dataExample.json'
 
-const QuestionsScreen: FC = () => {
-  const [actualQuestion, setActualQuestion] = useState<QuestionData>()
-  const [questions, setQuestions] = useState<QuestionData[]>()
-  const [questionIndex, setQuestionIndex] = useState<number>(0)
-  const [finished, setFinished] = useState<boolean>(false);
+enum Languages {
+  "spanish" = "es",
+  "english" = "en"
+}
 
-  const [answeredQuestions, setAnsweredQuestions] = useState<any[]>()
+const QuestionsScreen: FC = () => {
+  const [language, setLanguage] = useState<Languages>(Languages.spanish);
+  const [questions, setQuestions] = useState<QuestionData[]>()
+  const [actualQuestion, setActualQuestion] = useState<ActualQuestion>()
+  const [questionIndex, setQuestionIndex] = useState<number>(0)
+  
+  const [registeredAnswers, setRegisteredAnswers] = useState<any[]>()
+  const [finished, setFinished] = useState<boolean>(false);
 
   useEffect(() => {
     setQuestions(data.questions)
-    setActualQuestion(data.questions[0])
+    setActualQuestionWithQuestionData(data.questions[0])
+    // eslint-disable-next-line
   }, [])
+
+  const setActualQuestionWithQuestionData = (questionInQuestionDataForm: QuestionData) => {
+    let answers: ActualQuestion['answers']
+    let question: ActualQuestion['question']
+
+    if (language === Languages.spanish) {
+      question = questionInQuestionDataForm.question.es
+      answers = questionInQuestionDataForm.answers.map((answer) => {
+        let answerLabel = answer.value;
+        if (answer.es) answerLabel = answer.es
+        return { value: answer.value, label: answerLabel }
+      })
+      setActualQuestion({img: questionInQuestionDataForm.img, answers, question})
+    }
+
+    if (language === Languages.english) {
+      question = questionInQuestionDataForm.question.en
+      answers = questionInQuestionDataForm.answers.map((answer) => {
+        let answerLabel = answer.value;
+        if (answer.es) answerLabel = answer.en
+        return { value: answer.value, label: answerLabel }
+      })
+      setActualQuestion({img: questionInQuestionDataForm.img, answers, question})
+    }
+  }
 
   useEffect(() => {
     if (!questions?.length) return
-    setActualQuestion(questions[questionIndex])
-  }, [questionIndex, questions])
+    setActualQuestionWithQuestionData(questions[questionIndex])
+    // eslint-disable-next-line
+  }, [questionIndex, questions, language])
 
   useEffect(() => {
-    console.log(answeredQuestions)
-  }, [answeredQuestions])
+    console.log(registeredAnswers)
+  }, [registeredAnswers])
 
   const storeThisAnswer = (answer: any) => {
-    if (answeredQuestions?.length) {
-      if (typeof answeredQuestions[questionIndex] === 'undefined') {
-        const newArray = [...answeredQuestions]
+    if (registeredAnswers?.length) {
+      if (typeof registeredAnswers[questionIndex] === 'undefined') {
+        const newArray = [...registeredAnswers]
         newArray.push(answer)
-        setAnsweredQuestions(newArray)
+        setRegisteredAnswers(newArray)
       } else {
-        const newArray = [...answeredQuestions]
+        const newArray = [...registeredAnswers]
         newArray[questionIndex] = answer
-        setAnsweredQuestions(newArray)
+        setRegisteredAnswers(newArray)
       }
     } else {
-      setAnsweredQuestions([answer])
+      setRegisteredAnswers([answer])
     }
   }
 
@@ -70,6 +103,12 @@ const QuestionsScreen: FC = () => {
       } : undefined}
     >
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      <button
+        onClick={()=>{language===Languages.spanish ? setLanguage(Languages.english) : setLanguage(Languages.spanish)}}
+        style={{height: '3vh', width: '18vh', fontSize: '1.60vh', padding: '0.1vh', borderWidth: '0.1vh'}}
+      >
+        {language === Languages.spanish ? "Change language" : "Cambiar idioma"}
+      </button>
       {!finished ?
         <div className="questions-screen__question">
           <header className="questions-screen__question__question-counter">
@@ -87,19 +126,21 @@ const QuestionsScreen: FC = () => {
             question={actualQuestion?.question || ""}
             answers={actualQuestion?.answers || [{ value: '' }]}
             onNext={answer => handleNext(answer)}
-            prevAnswer={answeredQuestions?.length ? answeredQuestions[questionIndex] : undefined}
+            prevAnswer={registeredAnswers?.length ? registeredAnswers[questionIndex] : undefined}
             onPrev={answer => handlePrev(answer)}
+            language={language}
           />
         </div>
         :
         <div className="questions-screen__finished">
-          <h1 className="questions-screen__finished__thxTxt">¡Gracias por contestar!</h1>
+          <h1 className="questions-screen__finished__thxTxt">{language === Languages.spanish ? '¡Gracias por contestar!' : 'Thanks for answering!'}</h1>
           {/* <img className="questions-screen__finished__gif" src="https://i.giphy.com/media/l1INk1qF0fw73snz2p/giphy.webp" alt="" /> */}
           {
-            questions && answeredQuestions ?
+            questions && registeredAnswers ?
               <QuestionsWithAnswersInTable
                 questions={questions}
-                answeredQuestions={answeredQuestions}
+                answeredQuestions={registeredAnswers}
+                language={language}
               /> : undefined
           }
         </div>
@@ -108,16 +149,14 @@ const QuestionsScreen: FC = () => {
   )
 }
 
-const QuestionsWithAnswersInTable: FC<{ questions: QuestionData[], answeredQuestions: any[] }> = ({ questions, answeredQuestions }) => {
+const QuestionsWithAnswersInTable: FC<{ questions: QuestionData[], answeredQuestions: any[], language: Languages }> = ({ questions, answeredQuestions, language }) => {
   if (questions.length >= 0 && questions.length === answeredQuestions.length) {
     const questionsWithAnswer = questions.map((question, index) => {
-      let questionTxt = question.question
+      let questionTxt = language === Languages.spanish ? question.question.es : question.question.en;
       let answer = answeredQuestions[index]
-
       if (typeof answer === 'boolean') {
         answer ? answer = 'true' : answer = 'false';
       }
-
       const questionWithAnswer = [questionTxt, answer]
       return (
         <tr key={index}>
@@ -130,7 +169,6 @@ const QuestionsWithAnswersInTable: FC<{ questions: QuestionData[], answeredQuest
         </tr>
       )
     })
-
     return (
       <>
         <table className="questions-screen__finished__table">
@@ -146,8 +184,14 @@ const QuestionsWithAnswersInTable: FC<{ questions: QuestionData[], answeredQuest
 }
 
 interface QuestionData {
-  question: string,
+  question: { es: string, en: string },
   img?: string,
+  answers: { value: any, es?: string, en?: string }[]
+}
+
+interface ActualQuestion {
+  question: string
+  img?: string
   answers: { value: any, label?: string }[]
 }
 
