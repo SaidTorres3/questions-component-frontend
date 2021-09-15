@@ -134,9 +134,7 @@ const RadioAnswer: FC<InternalRadioAnswerRequeriments> = ({ selectedAnswer, labe
   if (!label) {
     label = value
   }
-
   const [thisIsSelected, setThisIsSelected] = React.useState<boolean>(false)
-
   React.useEffect(() => {
     if (selectedAnswer === value) {
       setThisIsSelected(true)
@@ -144,7 +142,6 @@ const RadioAnswer: FC<InternalRadioAnswerRequeriments> = ({ selectedAnswer, labe
       setThisIsSelected(false)
     }
   }, [selectedAnswer, setThisIsSelected, value])
-
   return (
     <div
       className="question-screen__question-container__radio-answers__radio_answer"

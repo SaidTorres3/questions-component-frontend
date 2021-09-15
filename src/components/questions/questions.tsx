@@ -91,13 +91,57 @@ const QuestionsScreen: FC = () => {
             onPrev={answer => handlePrev(answer)}
           />
         </div>
-      :
+        :
         <div className="questions-screen__finished">
           <h1 className="questions-screen__finished__thxTxt">¡Gracias por contestar!</h1>
-          <img className="questions-screen__finished__gif" src="https://i.giphy.com/media/l1INk1qF0fw73snz2p/giphy.webp" alt="" />
+          {/* <img className="questions-screen__finished__gif" src="https://i.giphy.com/media/l1INk1qF0fw73snz2p/giphy.webp" alt="" /> */}
+          {
+            questions && answeredQuestions ?
+              <QuestionsWithAnswersInTable
+                questions={questions}
+                answeredQuestions={answeredQuestions}
+              /> : undefined
+          }
         </div>
       }
     </body>
+  )
+}
+
+const QuestionsWithAnswersInTable: FC<{ questions: QuestionData[], answeredQuestions: any[] }> = ({ questions, answeredQuestions }) => {
+  if (questions.length >= 0 && questions.length === answeredQuestions.length) {
+    const questionsWithAnswer = questions.map((question, index) => {
+      let questionTxt = question.question
+      let answer = answeredQuestions[index]
+
+      if (typeof answer === 'boolean') {
+        answer ? answer = 'true' : answer = 'false';
+      }
+
+      const questionWithAnswer = [questionTxt, answer]
+      return (
+        <tr key={index}>
+          <td>
+            {questionWithAnswer[0]}
+          </td>
+          <td>
+            {questionWithAnswer[1]}
+          </td>
+        </tr>
+      )
+    })
+
+    return (
+      <>
+        <table className="questions-screen__finished__table">
+          {questionsWithAnswer}
+        </table>
+      </>
+    )
+  }
+  return (
+    <>
+    </>
   )
 }
 

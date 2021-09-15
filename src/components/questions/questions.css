@@ -63,6 +63,7 @@
   align-items   : center;
   align-self    : center;
   flex-direction: column;
+  overflow      : auto;
 }
 
 .questions-screen__finished__thxTxt {
@@ -73,6 +74,18 @@
 .questions-screen__finished__gif {
   height: auto;
   width : 50vh;
+}
+
+.questions-screen__finished__table {
+  border-spacing: 0.2vh;
+}
+
+td,
+th {
+  border    : 0.1vh solid #dddddd;
+  text-align: left;
+  padding   : 0.8vh;
+  font-size : 2vh;
 }
 
 @media (max-width: 50vh) {
