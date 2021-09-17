@@ -9,60 +9,21 @@ enum Languages {
 
 const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers, prevAnswer, language }) => {
   const [selectedAnswer, setSelectedAnswer] = React.useState(prevAnswer)
+  const questionScreen = React.useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     focusQuestionScreen()
-    if (typeof prevAnswer === 'undefined' || !answers) return
-    if (typeof selectedAnswer === 'undefined') {
-      setSelectedAnswer(prevAnswer)
-    }
+    setPrevAnswerAsActualAnswer()
     // eslint-disable-next-line
   }, [prevAnswer, answers, setSelectedAnswer, selectedAnswer])
 
-  const resetAnswer = () => {
-    setSelectedAnswer(undefined)
-  }
-
-  const answerValueToIndex = (answerToFindIndex: RadioAnswerRequirements) => {
-    const index = answers.findIndex(answer => answer.value === answerToFindIndex)
-    return index
-  }
-
-  const indexToAnswerValue = (index: number) => {
-    const answer = answers[index]
-    return answer
-  }
-
-  const moveToNextAnswer = (direction: 'Up' | 'Down') => {
-    const limit = answers.length - 1
-    const selectedAnswerIndex = answerValueToIndex(selectedAnswer)
-    let nextIndex: number;
-    if (selectedAnswerIndex || selectedAnswerIndex === 0) { //If selectedAnswerIndex exist
-      nextIndex = selectedAnswerIndex + (direction === 'Down' ? 1 : -1);
-      if (nextIndex > limit && direction === 'Down') {
-        nextIndex = 0
-      } else if (nextIndex < 0 && direction === 'Up') {
-        nextIndex = limit
-      }
-    } else {
-      if (direction === 'Down') {
-        nextIndex = 0
-      } else {
-        nextIndex = limit
-      }
-    }
-    const answer = indexToAnswerValue(nextIndex)
-    setSelectedAnswer(answer.value)
-  }
-
-  // HANDLERS ******************************************************************************
   const prevHandler = () => {
-    if (onPrev) onPrev(selectedAnswer);
+    goPrevQuestion()
     resetAnswer()
   }
 
   const nextHandler = () => {
-    if (onNext && typeof selectedAnswer !== 'undefined') onNext(selectedAnswer);
+    goNextQuestion()
     resetAnswer()
   }
 
@@ -74,7 +35,66 @@ const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers,
     if (e.key === 'ArrowDown') { moveToNextAnswer('Down') }
     if (e.key === 'ArrowUp') { moveToNextAnswer('Up') }
   }
-  // END OF HANDLERS ***********************************************************************
+
+  const moveToNextAnswer = (direction: 'Up' | 'Down') => {
+    const lastAnswerIndex = answers.length - 1
+    const selectedAnswerIndex = answerValueToAnswerIndex(selectedAnswer)
+    let nextIndex: number;
+    const isThereASelectedAnswer = selectedAnswerIndex >= 0
+    if (isThereASelectedAnswer) { //If selectedAnswerIndex exist
+      nextIndex = selectedAnswerIndex + (direction === 'Down' ? 1 : -1);
+      if (nextIndex > lastAnswerIndex && direction === 'Down') {
+        nextIndex = 0
+      } else if (nextIndex < 0 && direction === 'Up') {
+        nextIndex = lastAnswerIndex
+      }
+    } else {
+      if (direction === 'Down') {
+        nextIndex = 0
+      } else {
+        nextIndex = lastAnswerIndex
+      }
+    }
+    const answer = answerIndexToAnswerValue(nextIndex)
+    setSelectedAnswer(answer.value)
+  }
+
+  // UTILITIES *******************************************************************************************************
+
+  const resetAnswer = () => {
+    setSelectedAnswer(undefined)
+  }
+
+  const goPrevQuestion = () => {
+    if (onPrev) onPrev(selectedAnswer);
+  }
+
+  const goNextQuestion = () => {
+    if (onNext && typeof selectedAnswer !== 'undefined') onNext(selectedAnswer);
+  }
+
+  const setPrevAnswerAsActualAnswer = () => {
+    if (typeof prevAnswer === 'undefined' || !answers) return
+    if (typeof selectedAnswer === 'undefined') {
+      setSelectedAnswer(prevAnswer)
+    }
+  }
+
+  const focusQuestionScreen = () => {
+    questionScreen.current?.focus()
+  }
+
+  const answerValueToAnswerIndex = (answerToFindIndex: RadioAnswerRequirements) => {
+    const index = answers.findIndex(answer => answer.value === answerToFindIndex)
+    return index
+  }
+
+  const answerIndexToAnswerValue = (index: number) => {
+    const answer = answers[index]
+    return answer
+  }
+
+  // END OF UTILITIES *******************************************************************************************************
 
   const AnswersMap = () => {
     return answers.map((answer, index) => {
@@ -89,13 +109,7 @@ const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers,
       )
     })
   }
-
-  const questionScreen = React.useRef<HTMLDivElement>(null)
-
-  const focusQuestionScreen = () => {
-    questionScreen.current?.focus()
-  }
-
+  
   return (
     <div
       className="question-screen"

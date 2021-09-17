@@ -14,42 +14,39 @@ const QuestionsScreen: FC = () => {
   const [actualQuestion, setActualQuestion] = useState<ActualQuestion>()
   const [questionIndex, setQuestionIndex] = useState<number>(0)
 
-  const [registeredAnswers, setRegisteredAnswers] = useState<any[]>()
+  const [registeredAnswers, createRegisteredAnswersArrayWithThisAnswer] = useState<any[]>()
   const [finished, setFinished] = useState<boolean>(false);
 
   useEffect(() => {
-    // When the component load, set the data from the json file.
-    setQuestions(data.questions)
-    setActualQuestionWithQuestionData(data.questions[0])
+    setQuestionsFromJSONData()
     // eslint-disable-next-line
   }, [])
 
   useEffect(() => {
-    // On change question index, the actual question changes to it's correspondiente index
-    if (!questions?.length) return
-    setActualQuestionWithQuestionData(questions[questionIndex])
+    updateActualQuestionAccordingToActualIndex()
     // eslint-disable-next-line
   }, [questionIndex, questions, language])
 
   const setActualQuestionWithQuestionData = (questionInQuestionDataForm: QuestionData) => {
-    if (language === Languages.spanish) {
-      setActualQuestionInSpanish(questionInQuestionDataForm)
-    }
-    if (language === Languages.english) {
-      setActualQuestionInEnglish(questionInQuestionDataForm)
+    switch(language) {
+      case (Languages.spanish):
+        setActualQuestionInSpanish(questionInQuestionDataForm); break;
+      case (Languages.english):
+        setActualQuestionInEnglish(questionInQuestionDataForm); break;
+      default: setActualQuestionInSpanish(questionInQuestionDataForm);
     }
   }
 
   const storeThisAnswer = (answer: any) => {
     if (registeredAnswers?.length) {
-      const existARegisteredAnswerInThisQuestion = typeof registeredAnswers[questionIndex] !== 'undefined'
-      if (!existARegisteredAnswerInThisQuestion) {
+      const existAPreviousAnswerInThisQuestion = typeof registeredAnswers[questionIndex] !== 'undefined'
+      if (!existAPreviousAnswerInThisQuestion) {
         pushAnswerToRegisteredAnswers(answer)
       } else {
-        replaceAnswerOfRegisteredAnswers(answer)
+        replaceAnswerOfRegisteredAnswersWithThisAnswer(answer)
       }
     } else {
-      setRegisteredAnswers([answer])
+      createRegisteredAnswersArrayWithThisAnswer([answer])
     }
   }
 
@@ -62,6 +59,16 @@ const QuestionsScreen: FC = () => {
   }
 
   // UTILITIES *******************************************************************************************************
+
+  const setQuestionsFromJSONData = () => {
+    setQuestions(data.questions)
+    setActualQuestionWithQuestionData(data.questions[0])
+  }
+
+  const updateActualQuestionAccordingToActualIndex = () => {
+    if (!questions?.length) return
+    setActualQuestionWithQuestionData(questions[questionIndex])
+  }
 
   const setActualQuestionInSpanish = (questionInQuestionDataForm: QuestionData) => {
     let answers: ActualQuestion['answers']
@@ -111,15 +118,15 @@ const QuestionsScreen: FC = () => {
     if (!existARegisteredAnswerInThisQuestion) {
       const newArray = [...registeredAnswers]
       newArray.push(answer)
-      setRegisteredAnswers(newArray)
+      createRegisteredAnswersArrayWithThisAnswer(newArray)
     }
   }
 
-  const replaceAnswerOfRegisteredAnswers = (answer: any) => {
+  const replaceAnswerOfRegisteredAnswersWithThisAnswer = (answer: any) => {
     if (!registeredAnswers?.length) return
     const newArray = [...registeredAnswers]
     newArray[questionIndex] = answer
-    setRegisteredAnswers(newArray)
+    createRegisteredAnswersArrayWithThisAnswer(newArray)
   }
 
   // END OF UTILITIES *******************************************************************************************************
@@ -160,14 +167,12 @@ const QuestionsScreen: FC = () => {
     return (
       <div className="questions-screen__finished">
         <h1 className="questions-screen__finished__thxTxt">{language === Languages.spanish ? '¡Gracias por contestar!' : 'Thanks for answering!'}</h1>
-        {/* <img className="questions-screen__finished__gif" src="https://i.giphy.com/media/l1INk1qF0fw73snz2p/giphy.webp" alt="" /> */}
-        {
-          questions && registeredAnswers ?
-            <QuestionsWithAnswersInTable
-              questions={questions}
-              answeredQuestions={registeredAnswers}
-              language={language}
-            /> : undefined
+        { questions && registeredAnswers ?
+          <QuestionsWithAnswersInTable
+            questions={questions}
+            answeredQuestions={registeredAnswers}
+            language={language}
+          /> : undefined
         }
       </div>
     )
@@ -228,8 +233,9 @@ const QuestionsWithAnswersInTable: FC<{ questions: QuestionData[], answeredQuest
 }
 
 interface QuestionData {
-  question: { es: string, en: string },
-  img?: string,
+  id: number
+  question: { es: string, en: string }
+  img?: string
   answers: { value: any, es?: string, en?: string }[]
 }
 

@@ -1,6 +1,7 @@
 {
   "questions": [
     {
+      "id": 1,
       "img": "https://images.trvl-media.com/hotels/54000000/53720000/53714500/53714404/1316f078_z.jpg",
       "question": {
         "es": "¿Cómo calificaría su experiencia en Hotel Palmeras? 🏨🌴",
@@ -35,6 +36,7 @@
       ]
     },
     {
+      "id": 2,
       "img": "https://www.beekeeper.io/wp-content/uploads/2021/02/Recruit-Hotel-Employees-Feature.jpg",
       "question": {
         "es": "¿Cómo fue su experiencia con el personal? 👷🛎",
@@ -69,6 +71,7 @@
       ]
     },
     {
+      "id": 3,
       "img": "https://www.hotelpalmeras.com/images/hotel/TERRAZA/IMG_1945%20300%20DPI%20terraza.jpg",
       "question": {
         "es": "¿Volvería a venir a Hotel Palmeras? 🤔🌴",
@@ -88,6 +91,7 @@
       ]
     },
     {
+      "id": 4,
       "img": "https://previews.123rf.com/images/antonioguillem/antonioguillem1709/antonioguillem170900089/85723774-tres-amigos-alegres-hablando-sentado-en-un-sofá-en-casa.jpg",
       "question": {
         "es": "¿Recomendaría a alguien Hotel Palmeras? 👤📨",
@@ -107,6 +111,7 @@
       ]
     },
     {
+      "id": 5,
       "question": {
         "es": "¿Qué le parecieron los precios de Hotel Palmeras? 💲💰",
         "en": "What do you think about the prices of Hotel Palmeras? 💲💰"
@@ -115,7 +120,7 @@
         {
           "value": 3,
           "es": "Caro 💸💸💸",
-          "en": "Expesive 💸💸💸"
+          "en": "Expensive 💸💸💸"
         },
         {
           "value": 2,
