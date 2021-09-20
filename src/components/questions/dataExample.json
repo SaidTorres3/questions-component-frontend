@@ -9,27 +9,27 @@
       },
       "answers": [
         {
-          "value": "5",
+          "value": 5,
           "es": "Muy Buena 😀",
           "en": "Awesome 😀"
         },
         {
-          "value": "4",
+          "value": 4,
           "es": "Buena 😊",
           "en": "Good 😊"
         },
         {
-          "value": "3",
+          "value": 3,
           "es": "Regular 😐",
           "en": "Regular 😐"
         },
         {
-          "value": "2",
+          "value": 2,
           "es": "Mala 😕",
           "en": "Bad 😕"
         },
         {
-          "value": "1",
+          "value": 1,
           "es": "Muy mala 😠",
           "en": "Very bad 😠"
         }
@@ -44,27 +44,27 @@
       },
       "answers": [
         {
-          "value": "5",
+          "value": 5,
           "es": "Muy Buena 😀",
           "en": "Awesome 😀"
         },
         {
-          "value": "4",
+          "value": 4,
           "es": "Buena 😊",
           "en": "Good 😊"
         },
         {
-          "value": "3",
+          "value": 3,
           "es": "Regular 😐",
           "en": "Regular 😐"
         },
         {
-          "value": "2",
+          "value": 2,
           "es": "Mala 😕",
           "en": "Bad 😕"
         },
         {
-          "value": "1",
+          "value": 1,
           "es": "Muy mala 😠",
           "en": "Very bad 😠"
         }
