@@ -131,38 +131,6 @@ const QuestionsScreen: FC = () => {
 
   // END OF UTILITIES *******************************************************************************************************
 
-  const QuestionScreenQuestion: FC = () => {
-    return (
-      <div className="questions-screen__question">
-        <header className="questions-screen__question__question-counter">
-          <div className="questions-screen__question__question-counter__txt">
-            {questionIndex + 1}/{data.questions.length || 0}
-          </div>
-          <div className="questions-screen__question__question-counter__progress-bar">
-            <div
-              className="questions-screen__question__question-counter__progress-bar__progress"
-              style={{ width: questions?.length ? ((((questionIndex + 1) / questions.length) * 100) + '%') : undefined }}
-            />
-          </div>
-          <button
-            onClick={() => { language === Languages.spanish ? setLanguage(Languages.english) : setLanguage(Languages.spanish) }}
-            className="questions-screen__question__question-counter__lang-button"
-          >
-            {language === Languages.spanish ? "Change language" : "Cambiar idioma"}
-          </button>
-        </header>
-        <Question
-          question={actualQuestion?.question || ""}
-          answers={actualQuestion?.answers || [{ value: '' }]}
-          onNext={answer => handleNext(answer)}
-          prevAnswer={registeredAnswers?.length ? registeredAnswers[questionIndex] : undefined}
-          onPrev={answer => handlePrev(answer)}
-          language={language}
-        />
-      </div>
-    )
-  }
-
   const QuestionScreenFinished: FC = () => {
     return (
       <div className="questions-screen__finished">
@@ -190,7 +158,33 @@ const QuestionsScreen: FC = () => {
     >
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       {!finished ?
-        <QuestionScreenQuestion />
+        <div className="questions-screen__question">
+          <header className="questions-screen__question__question-counter">
+            <div className="questions-screen__question__question-counter__txt">
+              {questionIndex + 1}/{data.questions.length || 0}
+            </div>
+            <div className="questions-screen__question__question-counter__progress-bar">
+              <div
+                className="questions-screen__question__question-counter__progress-bar__progress"
+                style={{ width: questions?.length ? ((((questionIndex + 1) / questions.length) * 100) + '%') : undefined }}
+              />
+            </div>
+            <button
+              onClick={() => { language === Languages.spanish ? setLanguage(Languages.english) : setLanguage(Languages.spanish) }}
+              className="questions-screen__question__question-counter__lang-button"
+            >
+              {language === Languages.spanish ? "Change language" : "Cambiar idioma"}
+            </button>
+          </header>
+          <Question
+            question={actualQuestion?.question || ""}
+            answers={actualQuestion?.answers || [{ value: '' }]}
+            onNext={answer => handleNext(answer)}
+            prevAnswer={registeredAnswers?.length ? registeredAnswers[questionIndex] : undefined}
+            onPrev={answer => handlePrev(answer)}
+            language={language}
+          />
+        </div>
         :
         <QuestionScreenFinished />
       }
