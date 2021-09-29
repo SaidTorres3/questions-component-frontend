@@ -1,0 +1,14 @@
+schema: http://localhost:4000/graphql
+generates:
+  src/graphql.ts:
+    plugins:
+      - typescript
+  src/:
+    documents: 'src/**/*.gql.ts'
+    preset: near-operation-file
+    presetConfig:
+      extension: .ts
+      baseTypesPath: graphql.ts
+    plugins:
+      - typescript-operations
+      - typescript-react-apollo

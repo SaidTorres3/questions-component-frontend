@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.4.15",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "@types/jest": "^26.0.24",
-    "@types/node": "^12.20.24",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
+    "graphql": "^15.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
@@ -19,7 +20,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "codegen": "graphql-codegen"
   },
   "eslintConfig": {
     "extends": [
@@ -38,5 +40,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.2.0",
+    "@graphql-codegen/gql-tag-operations-preset": "^1.1.6",
+    "@graphql-codegen/near-operation-file-preset": "^2.1.4",
+    "@graphql-codegen/typescript": "^2.2.2",
+    "@graphql-codegen/typescript-react-apollo": "^3.1.4",
+    "@types/node": "^16.9.4"
   }
 }

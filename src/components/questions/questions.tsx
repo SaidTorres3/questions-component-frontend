@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import Question from "src/components/question/question";
 import './questions.css'
-import * as data from './dataExample.json'
+import { useGetQuestionsQuery } from "./operations.gql";
 
 enum Languages {
   "spanish" = "es",
@@ -17,10 +17,12 @@ const QuestionsScreen: FC = () => {
   const [registeredAnswers, createRegisteredAnswersArrayWithThisAnswer] = useState<any[]>()
   const [finished, setFinished] = useState<boolean>(false);
 
+  const { data } = useGetQuestionsQuery()
+
   useEffect(() => {
-    setQuestionsFromJSONData()
-    // eslint-disable-next-line
-  }, [])
+    if (!data?.getFullQuestions.questions) return
+    setQuestionsFromData()
+  }, [data])
 
   useEffect(() => {
     updateActualQuestionAccordingToActualIndex()
@@ -28,7 +30,7 @@ const QuestionsScreen: FC = () => {
   }, [questionIndex, questions, language])
 
   const setActualQuestionWithQuestionData = (questionInQuestionDataForm: QuestionData) => {
-    switch(language) {
+    switch (language) {
       case (Languages.spanish):
         setActualQuestionInSpanish(questionInQuestionDataForm); break;
       case (Languages.english):
@@ -60,9 +62,10 @@ const QuestionsScreen: FC = () => {
 
   // UTILITIES *******************************************************************************************************
 
-  const setQuestionsFromJSONData = () => {
-    setQuestions(data.questions)
-    setActualQuestionWithQuestionData(data.questions[0])
+  const setQuestionsFromData = () => {
+    if(!data?.getFullQuestions.questions) return
+    setQuestions(data.getFullQuestions.questions)
+    setActualQuestionWithQuestionData(data.getFullQuestions.questions[0])
   }
 
   const updateActualQuestionAccordingToActualIndex = () => {
@@ -135,7 +138,7 @@ const QuestionsScreen: FC = () => {
     return (
       <div className="questions-screen__finished">
         <h1 className="questions-screen__finished__thxTxt">{language === Languages.spanish ? '¡Gracias por contestar!' : 'Thanks for answering!'}</h1>
-        { questions && registeredAnswers ?
+        {questions && registeredAnswers ?
           <QuestionsWithAnswersInTable
             questions={questions}
             answeredQuestions={registeredAnswers}
@@ -161,7 +164,7 @@ const QuestionsScreen: FC = () => {
         <div className="questions-screen__question">
           <header className="questions-screen__question__question-counter">
             <div className="questions-screen__question__question-counter__txt">
-              {questionIndex + 1}/{data.questions.length || 0}
+              {questionIndex + 1}/{data?.getFullQuestions.questions.length || 0}
             </div>
             <div className="questions-screen__question__question-counter__progress-bar">
               <div
