@@ -11,7 +11,7 @@ enum Languages {
 const QuestionsScreen: FC = () => {
   const [language, setLanguage] = useState<Languages>(Languages.spanish);
   const [questions, setQuestions] = useState<QuestionData[]>()
-  const [actualQuestion, setActualQuestion] = useState<ActualQuestion>()
+  const [question, setQuestion] = useState<ActualQuestion>()
   const [questionIndex, setQuestionIndex] = useState<number>(0)
 
   const [registeredAnswers, createRegisteredAnswersArrayWithThisAnswer] = useState<any[]>()
@@ -22,20 +22,25 @@ const QuestionsScreen: FC = () => {
   useEffect(() => {
     if (!data?.getFullQuestions.questions) return
     setQuestionsFromData()
+    // eslint-disable-next-line
   }, [data])
+
+  useEffect(() => {
+    console.log(question?.img)
+  }, [question])
 
   useEffect(() => {
     updateActualQuestionAccordingToActualIndex()
     // eslint-disable-next-line
   }, [questionIndex, questions, language])
 
-  const setActualQuestionWithQuestionData = (questionInQuestionDataForm: QuestionData) => {
+  const setActualQuestion = (questionInQuestionDataForm: QuestionData) => {
     switch (language) {
       case (Languages.spanish):
-        setActualQuestionInSpanish(questionInQuestionDataForm); break;
+        langToSpanish(questionInQuestionDataForm); break;
       case (Languages.english):
-        setActualQuestionInEnglish(questionInQuestionDataForm); break;
-      default: setActualQuestionInSpanish(questionInQuestionDataForm);
+        langToEnglish(questionInQuestionDataForm); break;
+      default: langToSpanish(questionInQuestionDataForm);
     }
   }
 
@@ -65,15 +70,11 @@ const QuestionsScreen: FC = () => {
   const setQuestionsFromData = () => {
     if(!data?.getFullQuestions.questions) return
     setQuestions(data.getFullQuestions.questions)
-    setActualQuestionWithQuestionData(data.getFullQuestions.questions[0])
+    setActualQuestion(data.getFullQuestions.questions[0])
+    console.log(" i m g : " + data.getFullQuestions.questions[0].imgUrl)
   }
 
-  const updateActualQuestionAccordingToActualIndex = () => {
-    if (!questions?.length) return
-    setActualQuestionWithQuestionData(questions[questionIndex])
-  }
-
-  const setActualQuestionInSpanish = (questionInQuestionDataForm: QuestionData) => {
+  const langToSpanish = (questionInQuestionDataForm: QuestionData) => {
     let answers: ActualQuestion['answers']
     let question: ActualQuestion['question']
     question = questionInQuestionDataForm.question.es
@@ -82,10 +83,10 @@ const QuestionsScreen: FC = () => {
       if (answer.es) answerLabel = answer.es
       return { value: answer.value, label: answerLabel }
     })
-    setActualQuestion({ img: questionInQuestionDataForm.img, answers, question })
+    setQuestion({ img: questionInQuestionDataForm.img, answers, question })
   }
 
-  const setActualQuestionInEnglish = (questionInQuestionDataForm: QuestionData) => {
+  const langToEnglish = (questionInQuestionDataForm: QuestionData) => {
     let answers: ActualQuestion['answers']
     let question: ActualQuestion['question']
     question = questionInQuestionDataForm.question.en
@@ -94,7 +95,12 @@ const QuestionsScreen: FC = () => {
       if (answer.es) answerLabel = answer.en
       return { value: answer.value, label: answerLabel }
     })
-    setActualQuestion({ img: questionInQuestionDataForm.img, answers, question })
+    setQuestion({ img: questionInQuestionDataForm.img, answers, question })
+  }
+
+  const updateActualQuestionAccordingToActualIndex = () => {
+    if (!questions?.length) return
+    setActualQuestion(questions[questionIndex])
   }
 
   const storeAnswerAndSetNextQuestion = (answer: any) => {
@@ -152,8 +158,8 @@ const QuestionsScreen: FC = () => {
   return (
     <body
       className="questions-screen"
-      style={actualQuestion?.img ? {
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${actualQuestion.img})`,
+      style={question?.img ? {
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${question.img})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center center'
@@ -180,8 +186,8 @@ const QuestionsScreen: FC = () => {
             </button>
           </header>
           <Question
-            question={actualQuestion?.question || ""}
-            answers={actualQuestion?.answers || [{ value: '' }]}
+            question={question?.question || ""}
+            answers={question?.answers || [{ value: '' }]}
             onNext={answer => handleNext(answer)}
             prevAnswer={registeredAnswers?.length ? registeredAnswers[questionIndex] : undefined}
             onPrev={answer => handlePrev(answer)}
