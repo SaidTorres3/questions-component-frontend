@@ -26,7 +26,7 @@ const QuestionsScreen: FC = () => {
   }, [data])
 
   useEffect(() => {
-    console.log(question?.img)
+    console.log(question?.imgUrl)
   }, [question])
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const QuestionsScreen: FC = () => {
       if (answer.es) answerLabel = answer.es
       return { value: answer.value, label: answerLabel }
     })
-    setQuestion({ img: questionInQuestionDataForm.img, answers, question })
+    setQuestion({ imgUrl: questionInQuestionDataForm.imgUrl, answers, question })
   }
 
   const langToEnglish = (questionInQuestionDataForm: QuestionData) => {
@@ -95,7 +95,7 @@ const QuestionsScreen: FC = () => {
       if (answer.es) answerLabel = answer.en
       return { value: answer.value, label: answerLabel }
     })
-    setQuestion({ img: questionInQuestionDataForm.img, answers, question })
+    setQuestion({ imgUrl: questionInQuestionDataForm.imgUrl, answers, question })
   }
 
   const updateActualQuestionAccordingToActualIndex = () => {
@@ -158,8 +158,8 @@ const QuestionsScreen: FC = () => {
   return (
     <body
       className="questions-screen"
-      style={question?.img ? {
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${question.img})`,
+      style={question?.imgUrl ? {
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${question.imgUrl})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center center'
@@ -238,13 +238,13 @@ const QuestionsWithAnswersInTable: FC<{ questions: QuestionData[], answeredQuest
 interface QuestionData {
   id: number
   question: { es: string, en: string }
-  img?: string
+  imgUrl?: string|null
   answers: { value: any, es?: string, en?: string }[]
 }
 
 interface ActualQuestion {
   question: string
-  img?: string
+  imgUrl?: string|null
   answers: { value: any, label?: string }[]
 }
 
