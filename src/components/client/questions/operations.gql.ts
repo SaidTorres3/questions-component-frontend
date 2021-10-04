@@ -1,4 +1,4 @@
-import * as Types from '../../graphql';
+import * as Types from '../../../graphql';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
@@ -6,7 +6,7 @@ const defaultOptions =  {}
 export type GetQuestionsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetQuestionsQuery = { __typename?: 'Query', getFullQuestions: { __typename?: 'GetFullQuestionsPayload', questions: Array<{ __typename?: 'Full_Question', id: number, uuid: string, imgUrl?: string | null | undefined, question: { __typename?: 'Question', id: number, es: string, en: string }, answers: Array<{ __typename?: 'Answer', id: number, value: string, es: string, en: string }> }> } };
+export type GetQuestionsQuery = { __typename?: 'Query', getFullQuestions: { __typename?: 'GetFullQuestionsPayload', questions: Array<{ __typename?: 'Full_Question', id: number, uuid: string, imgUrl?: string | null | undefined, question: { __typename?: 'Question', id: number, es: string, en: string }, answers: Array<{ __typename?: 'Answer', id: number, value: any, es: string, en: string }> }> } };
 
 
 export const GetQuestionsDocument = gql`

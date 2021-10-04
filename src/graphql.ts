@@ -9,6 +9,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: any;
 };
 
 export type Answer = {
@@ -17,11 +19,21 @@ export type Answer = {
   es: Scalars['String'];
   full_question: Full_Question;
   id: Scalars['Int'];
-  value: Scalars['String'];
+  posted_answers: Array<Posted_Answer>;
+  uuid: Scalars['ID'];
+  value: Scalars['JSON'];
+};
+
+export type AnswerInterface = {
+  en: Scalars['String'];
+  es: Scalars['String'];
+  value: Scalars['JSON'];
 };
 
 export type CreateFullQuestionInput = {
+  answersParams: Array<AnswerInterface>;
   imgUrl?: Maybe<Scalars['String']>;
+  questionParams: QuestionInterface;
 };
 
 export type CreateFullQuestionPayload = {
@@ -29,11 +41,21 @@ export type CreateFullQuestionPayload = {
   createdUuid: Scalars['ID'];
 };
 
+export type CreatePostedAnswerInput = {
+  answersUuid?: Maybe<Array<Scalars['ID']>>;
+};
+
+export type CreatePostedAnswerPayload = {
+  __typename?: 'CreatePostedAnswerPayload';
+  response: Scalars['String'];
+};
+
 export type Full_Question = {
   __typename?: 'Full_Question';
   answers: Array<Answer>;
   id: Scalars['Int'];
   imgUrl?: Maybe<Scalars['String']>;
+  posted_answers: Array<Posted_Answer>;
   question: Question;
   uuid: Scalars['ID'];
 };
@@ -46,11 +68,26 @@ export type GetFullQuestionsPayload = {
 export type Mutation = {
   __typename?: 'Mutation';
   createFullQuestion: CreateFullQuestionPayload;
+  createPostedAnswers: CreatePostedAnswerPayload;
 };
 
 
 export type MutationCreateFullQuestionArgs = {
   input?: Maybe<CreateFullQuestionInput>;
+};
+
+
+export type MutationCreatePostedAnswersArgs = {
+  input?: Maybe<CreatePostedAnswerInput>;
+};
+
+export type Posted_Answer = {
+  __typename?: 'Posted_Answer';
+  answer: Answer;
+  full_question: Full_Question;
+  id: Scalars['Int'];
+  respondent: Respondent;
+  uuid: Scalars['ID'];
 };
 
 export type Query = {
@@ -64,4 +101,16 @@ export type Question = {
   es: Scalars['String'];
   full_question: Full_Question;
   id: Scalars['Int'];
+};
+
+export type QuestionInterface = {
+  en: Scalars['String'];
+  es: Scalars['String'];
+};
+
+export type Respondent = {
+  __typename?: 'Respondent';
+  id: Scalars['Int'];
+  posted_answers: Array<Posted_Answer>;
+  uuid: Scalars['ID'];
 };

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import Question from "src/components/question/question";
+import Question from "src/components/client/question/question";
 import './questions.css'
 import { useGetQuestionsQuery } from "./operations.gql";
 
