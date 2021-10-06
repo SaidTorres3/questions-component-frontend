@@ -6,23 +6,19 @@ const defaultOptions =  {}
 export type GetQuestionsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetQuestionsQuery = { __typename?: 'Query', getFullQuestions: { __typename?: 'GetFullQuestionsPayload', questions: Array<{ __typename?: 'Full_Question', id: number, uuid: string, imgUrl?: string | null | undefined, question: { __typename?: 'Question', id: number, es: string, en: string }, answers: Array<{ __typename?: 'Answer', id: number, value: any, es: string, en: string }> }> } };
+export type GetQuestionsQuery = { __typename?: 'Query', getQuestions: { __typename?: 'GetQuestionsPayload', questions: Array<{ __typename?: 'Question', uuid: string, imgUrl?: string | null | undefined, es: string, en: string, answers: Array<{ __typename?: 'Answer', uuid: string, value: any, es: string, en: string }> }> } };
 
 
 export const GetQuestionsDocument = gql`
     query GetQuestions {
-  getFullQuestions {
+  getQuestions {
     questions {
-      id
       uuid
       imgUrl
-      question {
-        id
-        es
-        en
-      }
+      es
+      en
       answers {
-        id
+        uuid
         value
         es
         en

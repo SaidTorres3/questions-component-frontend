@@ -17,9 +17,9 @@ export type Answer = {
   __typename?: 'Answer';
   en: Scalars['String'];
   es: Scalars['String'];
-  full_question: Full_Question;
   id: Scalars['Int'];
   posted_answers: Array<Posted_Answer>;
+  question: Question;
   uuid: Scalars['ID'];
   value: Scalars['JSON'];
 };
@@ -28,17 +28,6 @@ export type AnswerInterface = {
   en: Scalars['String'];
   es: Scalars['String'];
   value: Scalars['JSON'];
-};
-
-export type CreateFullQuestionInput = {
-  answersParams: Array<AnswerInterface>;
-  imgUrl?: Maybe<Scalars['String']>;
-  questionParams: QuestionInterface;
-};
-
-export type CreateFullQuestionPayload = {
-  __typename?: 'CreateFullQuestionPayload';
-  createdUuid: Scalars['ID'];
 };
 
 export type CreatePostedAnswerInput = {
@@ -50,30 +39,26 @@ export type CreatePostedAnswerPayload = {
   response: Scalars['String'];
 };
 
-export type Full_Question = {
-  __typename?: 'Full_Question';
-  answers: Array<Answer>;
-  id: Scalars['Int'];
+export type CreateQuestionInput = {
+  answersParams: Array<AnswerInterface>;
   imgUrl?: Maybe<Scalars['String']>;
-  posted_answers: Array<Posted_Answer>;
-  question: Question;
-  uuid: Scalars['ID'];
+  questionParams: QuestionInterface;
 };
 
-export type GetFullQuestionsPayload = {
-  __typename?: 'GetFullQuestionsPayload';
-  questions: Array<Full_Question>;
+export type CreateQuestionPayload = {
+  __typename?: 'CreateQuestionPayload';
+  createdUuid: Scalars['ID'];
+};
+
+export type GetQuestionsPayload = {
+  __typename?: 'GetQuestionsPayload';
+  questions: Array<Question>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createFullQuestion: CreateFullQuestionPayload;
   createPostedAnswers: CreatePostedAnswerPayload;
-};
-
-
-export type MutationCreateFullQuestionArgs = {
-  input?: Maybe<CreateFullQuestionInput>;
+  createQuestion: CreateQuestionPayload;
 };
 
 
@@ -81,26 +66,34 @@ export type MutationCreatePostedAnswersArgs = {
   input?: Maybe<CreatePostedAnswerInput>;
 };
 
+
+export type MutationCreateQuestionArgs = {
+  input?: Maybe<CreateQuestionInput>;
+};
+
 export type Posted_Answer = {
   __typename?: 'Posted_Answer';
   answer: Answer;
-  full_question: Full_Question;
   id: Scalars['Int'];
+  question: Question;
   respondent: Respondent;
   uuid: Scalars['ID'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  getFullQuestions: GetFullQuestionsPayload;
+  getQuestions: GetQuestionsPayload;
 };
 
 export type Question = {
   __typename?: 'Question';
+  answers: Array<Answer>;
   en: Scalars['String'];
   es: Scalars['String'];
-  full_question: Full_Question;
   id: Scalars['Int'];
+  imgUrl?: Maybe<Scalars['String']>;
+  posted_answers: Array<Posted_Answer>;
+  uuid: Scalars['ID'];
 };
 
 export type QuestionInterface = {

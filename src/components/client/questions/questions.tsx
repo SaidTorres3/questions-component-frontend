@@ -20,7 +20,7 @@ const QuestionsScreen: FC = () => {
   const { data } = useGetQuestionsQuery()
 
   useEffect(() => {
-    if (!data?.getFullQuestions.questions) return
+    if (!data?.getQuestions.questions) return
     setQuestionsFromData()
     // eslint-disable-next-line
   }, [data])
@@ -68,16 +68,16 @@ const QuestionsScreen: FC = () => {
   // UTILITIES *******************************************************************************************************
 
   const setQuestionsFromData = () => {
-    if(!data?.getFullQuestions.questions) return
-    setQuestions(data.getFullQuestions.questions)
-    setActualQuestion(data.getFullQuestions.questions[0])
-    console.log(" i m g : " + data.getFullQuestions.questions[0].imgUrl)
+    if(!data?.getQuestions.questions) return
+    setQuestions(data.getQuestions.questions)
+    setActualQuestion(data.getQuestions.questions[0])
+    console.log(" i m g : " + data.getQuestions.questions[0].imgUrl)
   }
 
   const langToSpanish = (questionInQuestionDataForm: QuestionData) => {
     let answers: ActualQuestion['answers']
     let question: ActualQuestion['question']
-    question = questionInQuestionDataForm.question.es
+    question = questionInQuestionDataForm.es
     answers = questionInQuestionDataForm.answers.map((answer) => {
       let answerLabel = answer.value;
       if (answer.es) answerLabel = answer.es
@@ -89,7 +89,7 @@ const QuestionsScreen: FC = () => {
   const langToEnglish = (questionInQuestionDataForm: QuestionData) => {
     let answers: ActualQuestion['answers']
     let question: ActualQuestion['question']
-    question = questionInQuestionDataForm.question.en
+    question = questionInQuestionDataForm.en
     answers = questionInQuestionDataForm.answers.map((answer) => {
       let answerLabel = answer.value;
       if (answer.es) answerLabel = answer.en
@@ -170,7 +170,7 @@ const QuestionsScreen: FC = () => {
         <div className="questions-screen__question">
           <header className="questions-screen__question__question-counter">
             <div className="questions-screen__question__question-counter__txt">
-              {questionIndex + 1}/{data?.getFullQuestions.questions.length || 0}
+              {questionIndex + 1}/{data?.getQuestions.questions.length || 0}
             </div>
             <div className="questions-screen__question__question-counter__progress-bar">
               <div
@@ -204,7 +204,7 @@ const QuestionsScreen: FC = () => {
 const QuestionsWithAnswersInTable: FC<{ questions: QuestionData[], answeredQuestions: any[], language: Languages }> = ({ questions, answeredQuestions, language }) => {
   if (questions.length >= 0 && questions.length === answeredQuestions.length) {
     const questionsWithAnswer = questions.map((question, index) => {
-      let questionTxt = language === Languages.spanish ? question.question.es : question.question.en;
+      let questionTxt = language === Languages.spanish ? question.es : question.en;
       let answer = answeredQuestions[index]
       if (typeof answer === 'boolean') {
         answer ? answer = 'true' : answer = 'false';
@@ -236,8 +236,9 @@ const QuestionsWithAnswersInTable: FC<{ questions: QuestionData[], answeredQuest
 }
 
 interface QuestionData {
-  id: number
-  question: { es: string, en: string }
+  uuid: string
+  es: string,
+  en: string,
   imgUrl?: string|null
   answers: { value: any, es?: string, en?: string }[]
 }
