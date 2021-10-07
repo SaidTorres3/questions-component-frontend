@@ -10,6 +10,7 @@ import CardHeader from '../../components/Card/CardHeader';
 import CardBody from '../../components/Card/CardBody';
 import { createStyles } from '@material-ui/core';
 import { useGetQuestionsQuery } from './operations.gql'
+import Button from '../../components/CustomButtons/Button';
 
 function TableList(props: any) {
   const { classes } = props;
@@ -18,22 +19,45 @@ function TableList(props: any) {
 
   return (
     <GridContainer>
+      <GridItem xs={12} sm={12} md={12}>
+        <Button type="button" color="success">Agregar pregunta</Button>
+      </GridItem>
       {
-        data?.getQuestions.questions.map(question => {
-          return <GridItem xs={12} sm={12} md={12}>
+        data?.getQuestions.questions.map((question, index) => {
+          return <GridItem xs={12} sm={12} md={12} key={index}>
             <Card>
               <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>
-                  {question.es}
-                </h4>
-                <p className={classes.cardCategoryWhite}>
-                  {question.en}
-                </p>
+                <div className={classes.cardHeader}>
+                  <div>
+                    <h4 className={classes.cardTitleWhite}>
+                      {question.es}
+                    </h4>
+                    <p className={classes.cardCategoryWhite}>
+                      {question.en}
+                    </p>
+                  </div>
+                  <div className={classes.cardButtons}>
+                    <div className={classes.cardButton}>
+                      <Button type="button" color="warning" size="sm">
+                        <span className="material-icons">
+                          edit
+                        </span>
+                      </Button>
+                    </div>
+                    <div className={classes.cardButton}>
+                      <Button type="button" color="info" size="sm">
+                        <span className="material-icons">
+                          visibility
+                        </span>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </CardHeader>
               <CardBody>
                 <Table
                   tableHeaderColor="primary"
-                  tableHead={['Valor', 'Repuesta español', 'Respuesta inglés', 'Cantidad de veces que ha sido seleccionada']}
+                  tableHead={['Valor', 'Repuesta español', 'Respuesta inglés'/*, 'Cantidad de veces que ha sido seleccionada'*/]}
                   tableData={
                     question.answers.map((answer => {
                       return [answer.value, answer.es, answer.en]
@@ -76,6 +100,25 @@ const styles = createStyles({
       fontWeight: 400,
       lineHeight: 1
     }
+  },
+  cardHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    "@media (max-width: 700px)": {
+      flexDirection: 'column'
+    }
+  },
+  cardButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: 1,
+    justifyContent: 'end',
+    "@media (max-width: 700px)": {
+      justifyContent: 'center'
+    }
+  },
+  cardButton: {
+    margin: 5
   }
 });
 
