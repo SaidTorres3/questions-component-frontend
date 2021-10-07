@@ -11,31 +11,28 @@ const dashboardRoutes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    rtlName: 'لوحة القيادة',
     icon: Dashboard,
     component: DashboardPage,
     layout: '/admin'
   },
-  // {
-  //   path: '/user',
-  //   name: 'User Profile',
-  //   rtlName: 'ملف تعريفي للمستخدم',
-  //   icon: Person,
-  //   component: UserProfile,
-  //   layout: '/admin'
-  // },
   {
     path: '/preguntas',
     name: 'Preguntas',
-    rtlName: 'قائمة الجدول',
     icon: 'content_paste',
     component: TableList,
     layout: '/admin'
   },
   {
+    path: '/preguntas/:pregunta',
+    name: 'Pregunta',
+    icon: 'content_paste',
+    component: TableList,
+    layout: '/admin',
+    invisible: true
+  },
+  {
     path: '/notifications',
     name: 'Notifications',
-    rtlName: 'إخطارات',
     icon: Notifications,
     component: NotificationsPage,
     layout: '/admin'

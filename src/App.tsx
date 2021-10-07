@@ -1,7 +1,9 @@
 import './App.css';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import Admin from './components/admin/layouts/Admin';
 import QuestionsScreen from 'src/components/client/questions/questions';
+
+import Admin from './components/admin/layouts/Admin';
+import './components/admin/assets/css/material-dashboard-react.css';
 
 function App() {
   return (
