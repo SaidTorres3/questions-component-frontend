@@ -2,21 +2,18 @@ import React from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
-import GridItem from '../../components/Grid/GridItem';
-import GridContainer from '../../components/Grid/GridContainer';
-import Table from '../../components/Table/Table';
-import Card from '../../components/Card/Card';
-import CardHeader from '../../components/Card/CardHeader';
-import CardBody from '../../components/Card/CardBody';
+import GridItem from '../../../components/Grid/GridItem';
+import GridContainer from '../../../components/Grid/GridContainer';
+import Table from '../../../components/Table/Table';
+import Card from '../../../components/Card/Card';
+import CardHeader from '../../../components/Card/CardHeader';
+import CardBody from '../../../components/Card/CardBody';
 import { createStyles } from '@material-ui/core';
-import { useGetQuestionsQuery } from './operations.gql'
-import Button from '../../components/CustomButtons/Button';
+import Button from '../../../components/CustomButtons/Button';
 import { Link } from 'react-router-dom';
 
-function TableList(props: any) {
+function Question(props: any) {
   const { classes } = props;
-
-  const { data } = useGetQuestionsQuery()
 
   return (
     <GridContainer>
@@ -25,10 +22,8 @@ function TableList(props: any) {
           <Button type="button" color="success">Agregar pregunta</Button>
         </Link>
       </GridItem>
-      {
-        data?.getQuestions.questions.map((question, index) => {
-          return <GridItem xs={12} sm={12} md={12} key={index}>
-            <Card>
+          <GridItem xs={12} sm={12} md={12}>
+            {/* <Card>
               <CardHeader color="primary">
                 <div className={classes.cardHeader}>
                   <div>
@@ -59,21 +54,10 @@ function TableList(props: any) {
                   </div>
                 </div>
               </CardHeader>
-              <CardBody>
-                <Table
-                  tableHeaderColor="primary"
-                  tableHead={['Valor', 'Repuesta español', 'Respuesta inglés'/*, 'Cantidad de veces que ha sido seleccionada'*/]}
-                  tableData={
-                    question.answers.map((answer => {
-                      return [answer.value, answer.es, answer.en]
-                    }))
-                  }
-                />
-              </CardBody>
-            </Card>
+             
+            </Card> */}
+            Le ñ
           </GridItem>
-        })
-      }
     </GridContainer>
   );
 }
@@ -127,4 +111,4 @@ const styles = createStyles({
   }
 });
 
-export default withStyles(styles)(TableList);
+export default withStyles(styles)(Question);
