@@ -17,7 +17,6 @@ export type Answer = {
   __typename?: 'Answer';
   en: Scalars['String'];
   es: Scalars['String'];
-  id: Scalars['Int'];
   posted_answers: Array<Posted_Answer>;
   question: Question;
   uuid: Scalars['ID'];
@@ -41,13 +40,23 @@ export type CreatePostedAnswerPayload = {
 
 export type CreateQuestionInput = {
   answersParams: Array<AnswerInterface>;
+  en: Scalars['String'];
+  es: Scalars['String'];
   imgUrl?: Maybe<Scalars['String']>;
-  questionParams: QuestionInterface;
 };
 
 export type CreateQuestionPayload = {
   __typename?: 'CreateQuestionPayload';
   createdUuid: Scalars['ID'];
+};
+
+export type GetQuestionInput = {
+  questionUuid: Scalars['ID'];
+};
+
+export type GetQuestionPayload = {
+  __typename?: 'GetQuestionPayload';
+  question: Question;
 };
 
 export type GetQuestionsPayload = {
@@ -74,7 +83,6 @@ export type MutationCreateQuestionArgs = {
 export type Posted_Answer = {
   __typename?: 'Posted_Answer';
   answer: Answer;
-  id: Scalars['Int'];
   question: Question;
   respondent: Respondent;
   uuid: Scalars['ID'];
@@ -82,7 +90,13 @@ export type Posted_Answer = {
 
 export type Query = {
   __typename?: 'Query';
+  getQuestion: GetQuestionPayload;
   getQuestions: GetQuestionsPayload;
+};
+
+
+export type QueryGetQuestionArgs = {
+  input: GetQuestionInput;
 };
 
 export type Question = {
@@ -90,20 +104,13 @@ export type Question = {
   answers: Array<Answer>;
   en: Scalars['String'];
   es: Scalars['String'];
-  id: Scalars['Int'];
   imgUrl?: Maybe<Scalars['String']>;
   posted_answers: Array<Posted_Answer>;
   uuid: Scalars['ID'];
 };
 
-export type QuestionInterface = {
-  en: Scalars['String'];
-  es: Scalars['String'];
-};
-
 export type Respondent = {
   __typename?: 'Respondent';
-  id: Scalars['Int'];
   posted_answers: Array<Posted_Answer>;
   uuid: Scalars['ID'];
 };

@@ -6,6 +6,8 @@ import DashboardPage from './components/admin/views/Dashboard/Dashboard';
 import TableList from './components/admin/views/TableList/TableList';
 import NotificationsPage from './components/admin/views/Notifications/Notifications';
 import Question from './components/admin/views/TableList/Question/Question';
+import CreateQuestion from './components/admin/views/TableList/CreateQuestion/CreateQuestion';
+import UserProfile from './components/admin/views/UserProfile/UserProfile';
 // core components/views for RTL layout
 
 const dashboardRoutes = [
@@ -18,6 +20,22 @@ const dashboardRoutes = [
   },
   {
     path: '/preguntas/crear',
+    name: 'Pregunta',
+    icon: 'content_paste',
+    component: CreateQuestion,
+    layout: '/admin',
+    invisible: true
+  },
+  {
+    path: '/preguntas/:pregunta/editar',
+    name: 'Pregunta',
+    icon: 'content_paste',
+    component: UserProfile,
+    layout: '/admin',
+    invisible: true
+  },
+  {
+    path: '/preguntas/:pregunta',
     name: 'Pregunta',
     icon: 'content_paste',
     component: Question,
@@ -41,3 +59,8 @@ const dashboardRoutes = [
 ];
 
 export default dashboardRoutes;
+
+
+export type URLParams = {
+  pregunta: string
+}

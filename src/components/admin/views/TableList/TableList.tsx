@@ -41,14 +41,16 @@ function TableList(props: any) {
                   </div>
                   <div className={classes.cardButtons}>
                     <div className={classes.cardButton}>
-                      <Button type="button" color="warning" size="sm">
-                        <span className="material-icons">
-                          edit
-                        </span>
-                      </Button>
+                      <Link to={`/admin/preguntas/${question.uuid}/editar`} >
+                        <Button type="button" color="warning" size="sm">
+                          <span className="material-icons">
+                            edit
+                          </span>
+                        </Button>
+                      </Link>
                     </div>
                     <div className={classes.cardButton}>
-                      <Link to="/admin/dashboard" >
+                      <Link to={`/admin/preguntas/${question.uuid}`} >
                         <Button type="button" color="info" size="sm">
                           <span className="material-icons">
                             visibility
