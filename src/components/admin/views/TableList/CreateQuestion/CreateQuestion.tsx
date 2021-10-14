@@ -15,6 +15,7 @@ import { URLParams } from 'src/routes'
 import { AnswerInterface, CreateQuestionInput } from 'src/graphql';
 import CustomInput from 'src/components/admin/components/CustomInput/CustomInput';
 import CardFooter from 'src/components/admin/components/Card/CardFooter';
+import { useCreateQuestionMutation } from './operations.gql';
 
 function CreateQuestion(props: any) {
   const { classes } = props;
@@ -37,6 +38,12 @@ function CreateQuestion(props: any) {
     ],
   })
 
+  const [createQuestionMutation, { data, loading, error }] = useCreateQuestionMutation({
+    variables: {
+      input: state
+    },
+  });
+
   const handleChange = (evt: any) => {
     const value = evt.target.value;
     setState({
@@ -52,19 +59,55 @@ function CreateQuestion(props: any) {
     });
   }
 
-  const handleChageAnswer = (e: any, index: number) => {
-    const value = e.target.value
+  const deleteAnswer = (index: number) => {
+    if (state.answersParams.length > 2)
+      setState({
+        ...state,
+        answersParams: [...state.answersParams.slice(0, index), ...state.answersParams.slice(index + 1)]
+      });
+  }
+
+  const handleChangeAnswer = (evt: any, index: number) => {
     setState({
       ...state,
       answersParams: state.answersParams.map((answerE, indexE): AnswerInterface => {
         const answer: AnswerInterface = index === indexE ? {
           ...answerE,
-          [e.target.name]: value
+          [evt.target.name]: evt.target.value
         } : answerE
         return answer
       })
     })
   }
+
+  const handleSubmit = (): void => {
+    const doesAnswerHasAllValues = (answer: AnswerInterface): boolean => {
+      if (
+        answer.en.trim() &&
+        answer.es.trim() &&
+        answer.value.trim()
+      ) return true
+      return false
+    }
+
+    if (state.en.trim() && state.es.trim()) {
+      const results = state.answersParams.map((answer) => doesAnswerHasAllValues(answer))
+      for (let result of results) {
+        if (!result) {
+          return
+        }
+      }
+
+      createQuestionMutation({
+        variables: {
+          input: state
+        }
+      }).then((res) => {
+        console.log(res.data)
+      })
+    }
+  }
+
 
 
   return (
@@ -74,7 +117,7 @@ function CreateQuestion(props: any) {
           <CardBody>
             <div className={classes.form}>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={12}>
                   <CustomInput
                     labelText="Pregunta en español*"
                     formControlProps={{
@@ -88,7 +131,7 @@ function CreateQuestion(props: any) {
                     }}
                   />
                 </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={12}>
                   <CustomInput
                     labelText="Pregunta en inglés*"
                     id="en"
@@ -102,7 +145,7 @@ function CreateQuestion(props: any) {
                     }}
                   />
                 </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={12}>
                   <CustomInput
                     labelText="Imagen"
                     id="imgUrl"
@@ -117,11 +160,69 @@ function CreateQuestion(props: any) {
                   />
                 </GridItem>
               </GridContainer>
-              <Button>Agregar respuesta</Button>
+              <h3 style={{ textAlign: 'center' }}>Respuestas:</h3>
+              {
+                state.answersParams.map((answer, index) => {
+                  return <GridContainer key={index} className={classes.formArray}>
+                    <GridItem xs={12} sm={12} md={3}>
+                      <CustomInput
+                        labelText="Valor*"
+                        id="value"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "value",
+                          value: answer.value,
+                          onChange: (evt: any) => handleChangeAnswer(evt, index)
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        labelText="Respuesta en español*"
+                        id="es"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "es",
+                          value: answer.es,
+                          onChange: (evt: any) => handleChangeAnswer(evt, index)
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        labelText="Respuesta en inglés*"
+                        id="en"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          name: "en",
+                          value: answer.en,
+                          onChange: (evt: any) => handleChangeAnswer(evt, index)
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={1}>
+                      <Button
+                        disabled={state.answersParams.length <= 2}
+                        color="danger"
+                        onClick={() => deleteAnswer(index)}
+                      >
+                        X
+                      </Button>
+                    </GridItem>
+                  </GridContainer>
+                })
+              }
+              <Button color="success" onClick={addAnswer}>Agregar respuesta</Button>
             </div>
           </CardBody>
           <CardFooter>
-            <Button color="primary">Crear pregunta</Button>
+            <Button onClick={handleSubmit} color="primary">Crear pregunta</Button>
           </CardFooter>
         </Card>
       </GridItem>
@@ -172,6 +273,11 @@ const styles = createStyles({
   form: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  formArray: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: '#f00'
   }
 });
 

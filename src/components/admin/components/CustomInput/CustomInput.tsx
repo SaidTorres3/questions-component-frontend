@@ -53,6 +53,7 @@ function CustomInput({ ...props }: any) {
         </InputLabel>
       ) : null}
       <Input
+        autoComplete="off"   
         classes={{
           root: marginTop,
           disabled: classes.disabled,
