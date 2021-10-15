@@ -15,15 +15,32 @@ import RTLNavbarLinks from './RTLNavbarLinks';
 import Button from '../CustomButtons/Button';
 
 import headerStyle from '../../assets/jss/material-dashboard-react/components/headerStyle';
+import { useHistory } from 'react-router';
 
 function Header({ ...props }: any) {
+  const history = useHistory()
+
   function makeBrand() {
-    var name;
+    let name = "";
     props.routes.map((prop: any, key: any) => {
-      if (prop.layout + prop.path === props.location.pathname) {
-        name = props.rtlActive ? prop.rtlName : prop.name;
+      let expectedRoute: string = prop.layout + prop.path
+      let currentRoute: string = props.location.pathname
+      let expectedRouteSplited: string[] = expectedRoute.split("/").filter(pathSegment => pathSegment !== "")
+      const currentRouteSplited: string[] = currentRoute.split("/").filter(pathSegment => pathSegment !== "")
+      if (expectedRouteSplited.length === currentRouteSplited.length) {
+        for (let i = 0; i < expectedRouteSplited.length; i++) {
+          if (expectedRouteSplited[i].indexOf(":") >= 0) {
+            if(currentRouteSplited[i].indexOf("-") >= 0) {
+              expectedRouteSplited[i] = currentRouteSplited[i]
+            }
+          }
+        }
+        expectedRoute = expectedRouteSplited.join("/")
+        currentRoute = currentRouteSplited.join("/")
       }
-      return null;
+      if (expectedRoute === currentRoute) {
+        name = prop.name;
+      }
     });
     return name;
   }
@@ -36,7 +53,10 @@ function Header({ ...props }: any) {
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button color="transparent" href="#" className={classes.title}>
+          <Button color="primary" onClick={() => history.goBack()}>
+            {"<"}
+          </Button>
+          <Button onClick={() => history.go(props.location.pathname)} color="transparent" href={props.location.pathname} className={classes.title}>
             {makeBrand()}
           </Button>
         </div>

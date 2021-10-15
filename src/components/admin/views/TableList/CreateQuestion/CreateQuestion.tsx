@@ -4,21 +4,20 @@ import withStyles from '@material-ui/core/styles/withStyles';
 // core components
 import GridItem from '../../../components/Grid/GridItem';
 import GridContainer from '../../../components/Grid/GridContainer';
-import Table from '../../../components/Table/Table';
 import Card from '../../../components/Card/Card';
 import CardHeader from '../../../components/Card/CardHeader';
 import CardBody from '../../../components/Card/CardBody';
 import { createStyles } from '@material-ui/core';
 import Button from '../../../components/CustomButtons/Button';
-import { Link, useParams } from "react-router-dom";
-import { URLParams } from 'src/routes'
 import { AnswerInterface, CreateQuestionInput } from 'src/graphql';
 import CustomInput from 'src/components/admin/components/CustomInput/CustomInput';
 import CardFooter from 'src/components/admin/components/Card/CardFooter';
 import { useCreateQuestionMutation } from './operations.gql';
+import { useHistory } from "react-router-dom";
 
 function CreateQuestion(props: any) {
   const { classes } = props;
+  const history = useHistory()
 
   const [state, setState] = useState<CreateQuestionInput>({
     imgUrl: "",
@@ -38,11 +37,9 @@ function CreateQuestion(props: any) {
     ],
   })
 
-  const [createQuestionMutation, { data, loading, error }] = useCreateQuestionMutation({
-    variables: {
-      input: state
-    },
-  });
+  const [submited, setSubmited] = useState<boolean>(false)
+
+  const [createQuestionMutation] = useCreateQuestionMutation();
 
   const handleChange = (evt: any) => {
     const value = evt.target.value;
@@ -81,34 +78,35 @@ function CreateQuestion(props: any) {
   }
 
   const handleSubmit = (): void => {
-    const doesAnswerHasAllValues = (answer: AnswerInterface): boolean => {
-      if (
-        answer.en.trim() &&
-        answer.es.trim() &&
-        answer.value.trim()
-      ) return true
-      return false
-    }
-
+    setSubmited(true)
     if (state.en.trim() && state.es.trim()) {
+      const doesAnswerHasAllValues = (answer: AnswerInterface): boolean => {
+        if (
+          answer.en.trim() &&
+          answer.es.trim() &&
+          answer.value.trim()
+        ) return true
+        return false
+      }
       const results = state.answersParams.map((answer) => doesAnswerHasAllValues(answer))
       for (let result of results) {
         if (!result) {
+          setSubmited(false)
           return
         }
       }
-
       createQuestionMutation({
         variables: {
           input: state
         }
-      }).then((res) => {
-        console.log(res.data)
       })
+        .then((res) => {
+          history.replace(`/admin/preguntas/${res.data?.createQuestion.createdUuid}`)
+        })
+    } else {
+      setSubmited(false)
     }
   }
-
-
 
   return (
     <GridContainer>
@@ -222,7 +220,13 @@ function CreateQuestion(props: any) {
             </div>
           </CardBody>
           <CardFooter>
-            <Button onClick={handleSubmit} color="primary">Crear pregunta</Button>
+            <Button
+              onClick={handleSubmit}
+              color="primary"
+              disabled={submited}
+            >
+              Crear pregunta
+            </Button>
           </CardFooter>
         </Card>
       </GridItem>

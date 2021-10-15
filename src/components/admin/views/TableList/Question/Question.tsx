@@ -22,7 +22,6 @@ function Question(props: any) {
 
   return (
     <GridContainer>
-
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="primary">
@@ -60,7 +59,6 @@ function Question(props: any) {
             />
           </CardBody>
         </Card>
-        {data?.getQuestion.question.uuid}
       </GridItem>
     </GridContainer>
   );

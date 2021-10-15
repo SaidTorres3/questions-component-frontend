@@ -20,7 +20,7 @@ const dashboardRoutes = [
   },
   {
     path: '/preguntas/crear',
-    name: 'Pregunta',
+    name: 'Crear pregunta',
     icon: 'content_paste',
     component: CreateQuestion,
     layout: '/admin',
@@ -28,7 +28,7 @@ const dashboardRoutes = [
   },
   {
     path: '/preguntas/:pregunta/editar',
-    name: 'Pregunta',
+    name: 'Editar pregunta',
     icon: 'content_paste',
     component: UserProfile,
     layout: '/admin',
@@ -36,7 +36,7 @@ const dashboardRoutes = [
   },
   {
     path: '/preguntas/:pregunta',
-    name: 'Pregunta',
+    name: 'Ver pregunta',
     icon: 'content_paste',
     component: Question,
     layout: '/admin',
