@@ -38,6 +38,7 @@ import {
 } from '../../variables/charts';
 
 import dashboardStyle from '../../assets/jss/material-dashboard-react/views/dashboardStyle';
+import { useGetStatsQuery } from './operations.gql';
 
 interface Props {
   classes: any;
@@ -47,25 +48,11 @@ interface State {
   value: number;
 }
 
-class Dashboard extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      value: 0
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleChangeIndex = this.handleChangeIndex.bind(this);
-  }
-  handleChange = (event: any, value: number) => {
-    this.setState({ value });
-  }
+const Dashboard = (props: any) => {
+  const { classes } = props;
 
-  handleChangeIndex = (index: number) => {
-    this.setState({ value: index });
-  }
+  const { data, loading, error } = useGetStatsQuery()
 
-  render() {
-    const { classes } = this.props;
     return (
       <div>
         <GridContainer>
@@ -75,9 +62,9 @@ class Dashboard extends React.Component<Props, State> {
                 <CardIcon color="warning">
                   <Icon>content_copy</Icon>
                 </CardIcon>
-                <p className={classes.cardCategory}>Used Space</p>
+                <p className={classes.cardCategory}>Calificación promedio</p>
                 <h3 className={classes.cardTitle}>
-                  49/50 <small>GB</small>
+                  {data?.getStats.averageScore}/100
                 </h3>
               </CardHeader>
               <CardFooter stats={true}>
@@ -289,7 +276,6 @@ class Dashboard extends React.Component<Props, State> {
         </GridContainer>
       </div>
     );
-  }
 }
 
 // Dashboard.propTypes = {

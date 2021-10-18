@@ -9,24 +9,27 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
 };
 
 export type Answer = {
   __typename?: 'Answer';
-  en: Scalars['String'];
-  es: Scalars['String'];
-  posted_answers: Array<Posted_Answer>;
-  question: Question;
   uuid: Scalars['ID'];
+  question: Question;
+  posted_answers: Array<Posted_Answer>;
   value: Scalars['JSON'];
+  es: Scalars['String'];
+  en: Scalars['String'];
+  createdAt: Scalars['DateTime'];
 };
 
 export type AnswerInterface = {
-  en: Scalars['String'];
-  es: Scalars['String'];
   value: Scalars['JSON'];
+  es: Scalars['String'];
+  en: Scalars['String'];
 };
 
 export type CreatePostedAnswerInput = {
@@ -39,10 +42,10 @@ export type CreatePostedAnswerPayload = {
 };
 
 export type CreateQuestionInput = {
-  answersParams: Array<AnswerInterface>;
-  en: Scalars['String'];
-  es: Scalars['String'];
   imgUrl?: Maybe<Scalars['String']>;
+  es: Scalars['String'];
+  en: Scalars['String'];
+  answersParams: Array<AnswerInterface>;
 };
 
 export type CreateQuestionPayload = {
@@ -64,15 +67,15 @@ export type GetQuestionsPayload = {
   questions: Array<Question>;
 };
 
-export type Mutation = {
-  __typename?: 'Mutation';
-  createPostedAnswers: CreatePostedAnswerPayload;
-  createQuestion: CreateQuestionPayload;
+export type GetStatsPayload = {
+  __typename?: 'GetStatsPayload';
+  averageScore: Scalars['Int'];
 };
 
-
-export type MutationCreatePostedAnswersArgs = {
-  input?: Maybe<CreatePostedAnswerInput>;
+export type Mutation = {
+  __typename?: 'Mutation';
+  createQuestion: CreateQuestionPayload;
+  createPostedAnswers: CreatePostedAnswerPayload;
 };
 
 
@@ -80,18 +83,25 @@ export type MutationCreateQuestionArgs = {
   input?: Maybe<CreateQuestionInput>;
 };
 
+
+export type MutationCreatePostedAnswersArgs = {
+  input?: Maybe<CreatePostedAnswerInput>;
+};
+
 export type Posted_Answer = {
   __typename?: 'Posted_Answer';
-  answer: Answer;
-  question: Question;
-  respondent: Respondent;
   uuid: Scalars['ID'];
+  question: Question;
+  answer: Answer;
+  respondent: Respondent;
+  createdAt: Scalars['DateTime'];
 };
 
 export type Query = {
   __typename?: 'Query';
   getQuestion: GetQuestionPayload;
   getQuestions: GetQuestionsPayload;
+  getStats: GetStatsPayload;
 };
 
 
@@ -101,16 +111,18 @@ export type QueryGetQuestionArgs = {
 
 export type Question = {
   __typename?: 'Question';
-  answers: Array<Answer>;
-  en: Scalars['String'];
-  es: Scalars['String'];
-  imgUrl?: Maybe<Scalars['String']>;
-  posted_answers: Array<Posted_Answer>;
   uuid: Scalars['ID'];
+  imgUrl?: Maybe<Scalars['String']>;
+  es: Scalars['String'];
+  en: Scalars['String'];
+  answers: Array<Answer>;
+  posted_answers: Array<Posted_Answer>;
+  createdAt: Scalars['DateTime'];
 };
 
 export type Respondent = {
   __typename?: 'Respondent';
-  posted_answers: Array<Posted_Answer>;
   uuid: Scalars['ID'];
+  posted_answers: Array<Posted_Answer>;
+  createdAt: Scalars['DateTime'];
 };
