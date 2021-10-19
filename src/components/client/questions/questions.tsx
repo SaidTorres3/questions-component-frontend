@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import Question from "src/components/client/question/question";
 import './questions.css'
-import { useGetQuestionsQuery } from "./operations.gql";
+import { useCreatePostedAnswersMutation, useGetQuestionsQuery } from "./operations.gql";
 
 enum Languages {
   "spanish" = "es",
@@ -18,6 +18,18 @@ const QuestionsScreen: FC = () => {
   const [finished, setFinished] = useState<boolean>(false);
 
   const { data } = useGetQuestionsQuery()
+  // const [CreatePostedAnswersMutation] = useCreatePostedAnswersMutation()
+
+  // useEffect(()=>{
+  //   if (finished && registeredAnswers) {
+
+  //     CreatePostedAnswersMutation({
+  //       variables: [
+
+  //       ]
+  //     })
+  //   }
+  // }, [finished])
 
   useEffect(() => {
     if (!data?.getQuestions.questions) return

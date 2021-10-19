@@ -62,9 +62,9 @@ const Dashboard = (props: any) => {
                 <CardIcon color="warning">
                   <Icon>content_copy</Icon>
                 </CardIcon>
-                <p className={classes.cardCategory}>Calificación promedio</p>
+                <p className={classes.cardCategory}>Calificación promedio mensual</p>
                 <h3 className={classes.cardTitle}>
-                  {data?.getStats.averageScore}/100
+                  {data?.getStats.monthlyAverageScore}/100
                 </h3>
               </CardHeader>
               <CardFooter stats={true}>
@@ -72,7 +72,7 @@ const Dashboard = (props: any) => {
                   <Danger>
                     <Warning />
                   </Danger>
-                  <a href="#pablo" onClick={e => e.preventDefault()}>
+                  <a href="" onClick={e => e.preventDefault()}>
                     Get more space
                   </a>
                 </div>
@@ -85,8 +85,8 @@ const Dashboard = (props: any) => {
                 <CardIcon color="success">
                   <Store />
                 </CardIcon>
-                <p className={classes.cardCategory}>Revenue</p>
-                <h3 className={classes.cardTitle}>$34,245</h3>
+                <p className={classes.cardCategory}>Calificación promedio</p>
+                <h3 className={classes.cardTitle}>{data?.getStats.averageScore}/100</h3>
               </CardHeader>
               <CardFooter stats={true}>
                 <div className={classes.stats}>
@@ -102,8 +102,8 @@ const Dashboard = (props: any) => {
                 <CardIcon color="danger">
                   <Icon>info_outline</Icon>
                 </CardIcon>
-                <p className={classes.cardCategory}>Fixed Issues</p>
-                <h3 className={classes.cardTitle}>75</h3>
+                <p className={classes.cardCategory}>Cantidad de preguntas</p>
+                <h3 className={classes.cardTitle}>{data?.getStats.questionsAmount}</h3>
               </CardHeader>
               <CardFooter stats={true}>
                 <div className={classes.stats}>
@@ -119,8 +119,8 @@ const Dashboard = (props: any) => {
                 <CardIcon color="info">
                   <Accessibility />
                 </CardIcon>
-                <p className={classes.cardCategory}>Followers</p>
-                <h3 className={classes.cardTitle}>+245</h3>
+                <p className={classes.cardCategory}>Cantidad de encuestas realizadas</p>
+                <h3 className={classes.cardTitle}>{data?.getStats.respondentsAmount}</h3>
               </CardHeader>
               <CardFooter stats={true}>
                 <div className={classes.stats}>
@@ -132,7 +132,7 @@ const Dashboard = (props: any) => {
           </GridItem>
         </GridContainer>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={6}>
             <Card chart={true}>
               <CardHeader color="success">
                 <ChartistGraph
@@ -159,7 +159,7 @@ const Dashboard = (props: any) => {
               </CardFooter>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
+          <GridItem xs={12} sm={12} md={6}>
             <Card chart={true}>
               <CardHeader color="warning">
                 <ChartistGraph
@@ -173,30 +173,6 @@ const Dashboard = (props: any) => {
               </CardHeader>
               <CardBody>
                 <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-                <p className={classes.cardCategory}>
-                  Last Campaign Performance
-                </p>
-              </CardBody>
-              <CardFooter chart={true}>
-                <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart={true}>
-              <CardHeader color="danger">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={completedTasksChart.data}
-                  type="Line"
-                  options={completedTasksChart.options}
-                  // listener={completedTasksChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Completed Tasks</h4>
                 <p className={classes.cardCategory}>
                   Last Campaign Performance
                 </p>

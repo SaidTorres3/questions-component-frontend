@@ -38,7 +38,7 @@ export type CreatePostedAnswerInput = {
 
 export type CreatePostedAnswerPayload = {
   __typename?: 'CreatePostedAnswerPayload';
-  response: Scalars['String'];
+  respondentUuid: Scalars['ID'];
 };
 
 export type CreateQuestionInput = {
@@ -69,7 +69,10 @@ export type GetQuestionsPayload = {
 
 export type GetStatsPayload = {
   __typename?: 'GetStatsPayload';
+  monthlyAverageScore: Scalars['Int'];
   averageScore: Scalars['Int'];
+  questionsAmount: Scalars['Int'];
+  respondentsAmount: Scalars['Int'];
 };
 
 export type Mutation = {

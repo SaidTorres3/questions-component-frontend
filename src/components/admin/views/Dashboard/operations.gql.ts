@@ -6,13 +6,16 @@ const defaultOptions =  {}
 export type GetStatsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetStatsQuery = { __typename?: 'Query', getStats: { __typename?: 'GetStatsPayload', averageScore: number } };
+export type GetStatsQuery = { __typename?: 'Query', getStats: { __typename?: 'GetStatsPayload', averageScore: number, monthlyAverageScore: number, questionsAmount: number, respondentsAmount: number } };
 
 
 export const GetStatsDocument = gql`
     query GetStats {
   getStats {
     averageScore
+    monthlyAverageScore
+    questionsAmount
+    respondentsAmount
   }
 }
     `;
