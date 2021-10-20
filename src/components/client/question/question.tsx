@@ -8,7 +8,7 @@ enum Languages {
 }
 
 const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers, prevAnswer, language }) => {
-  const [selectedAnswer, setSelectedAnswer] = React.useState(prevAnswer)
+  const [selectedAnswer, setSelectedAnswer] = React.useState<string|undefined>(prevAnswer)
   const questionScreen = React.useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers,
 
   const moveToNextAnswer = (direction: 'Up' | 'Down') => {
     const lastAnswerIndex = answers.length - 1
-    const selectedAnswerIndex = answerValueToAnswerIndex(selectedAnswer)
+    const selectedAnswerIndex = answerUuidToAnswerIndex(selectedAnswer!)
     let nextIndex: number;
     const isThereASelectedAnswer = selectedAnswerIndex >= 0
     if (isThereASelectedAnswer) { //If selectedAnswerIndex exist
@@ -55,8 +55,8 @@ const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers,
         nextIndex = lastAnswerIndex
       }
     }
-    const answer = answerIndexToAnswerValue(nextIndex)
-    setSelectedAnswer(answer.value)
+    const answer = answerIndexToAnswer(nextIndex)
+    setSelectedAnswer(answer.uuid)
   }
 
   // UTILITIES *******************************************************************************************************
@@ -84,12 +84,12 @@ const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers,
     questionScreen.current?.focus()
   }
 
-  const answerValueToAnswerIndex = (answerToFindIndex: RadioAnswerRequirements) => {
-    const index = answers.findIndex(answer => answer.value === answerToFindIndex)
+  const answerUuidToAnswerIndex = (answerUuid: string): number => {
+    const index = answers.findIndex(answer => answer.uuid === answerUuid)
     return index
   }
 
-  const answerIndexToAnswerValue = (index: number) => {
+  const answerIndexToAnswer = (index: number): RadioAnswerRequirements => {
     const answer = answers[index]
     return answer
   }
@@ -102,6 +102,7 @@ const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers,
         <RadioAnswer
           value={answer.value}
           label={answer.label}
+          uuid={answer.uuid}
           onSelect={(answerValue) => setSelectedAnswer(answerValue)}
           selectedAnswer={selectedAnswer}
           key={index}
@@ -149,13 +150,13 @@ const Question: FC<QuestionRequirements> = ({ onNext, onPrev, question, answers,
   )
 }
 
-const RadioAnswer: FC<InternalRadioAnswerRequeriments> = ({ selectedAnswer, label, value, onSelect }) => {
+const RadioAnswer: FC<InternalRadioAnswerRequeriments> = ({ selectedAnswer, label, value, onSelect, uuid }) => {
   if (!label) {
     label = value
   }
   const [thisIsSelected, setThisIsSelected] = React.useState<boolean>(false)
   React.useEffect(() => {
-    if (selectedAnswer === value) {
+    if (selectedAnswer === uuid) {
       setThisIsSelected(true)
     } else {
       setThisIsSelected(false)
@@ -164,7 +165,7 @@ const RadioAnswer: FC<InternalRadioAnswerRequeriments> = ({ selectedAnswer, labe
   return (
     <div
       className="question-screen__question-container__radio-answers__radio_answer"
-      onClick={() => onSelect ? onSelect(value) : undefined}
+      onClick={() => onSelect ? onSelect(uuid) : undefined}
     >
       <div
         className="question-screen__question-container__radio-answers__radio_answer__radio"
@@ -181,24 +182,26 @@ const RadioAnswer: FC<InternalRadioAnswerRequeriments> = ({ selectedAnswer, labe
 }
 
 interface InternalRadioAnswerRequeriments {
-  selectedAnswer: any,
+  selectedAnswer: string|undefined,
   label?: string,
   value: any,
-  onSelect: (value: any) => void
+  uuid: string
+  onSelect: (string: any) => void
 }
 
 interface QuestionRequirements {
   question: string
   answers: RadioAnswerRequirements[]
-  onNext?: (value: any) => void
-  onPrev?: (value?: any) => void
-  prevAnswer?: any,
+  onNext?: (value: string) => void
+  onPrev?: (value?: string) => void
+  prevAnswer?: string,
   language: Languages
 }
 
 interface RadioAnswerRequirements {
   label?: string,
   value: any,
+  uuid: string
 }
 
 export default Question

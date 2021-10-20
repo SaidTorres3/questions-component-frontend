@@ -14,7 +14,7 @@ const QuestionsScreen: FC = () => {
   const [question, setQuestion] = useState<ActualQuestion>()
   const [questionIndex, setQuestionIndex] = useState<number>(0)
 
-  const [registeredAnswers, createRegisteredAnswersArrayWithThisAnswer] = useState<any[]>()
+  const [registeredAnswers, setRegisteredAnswers] = useState<string[]>()
   const [finished, setFinished] = useState<boolean>(false);
 
   const { data } = useGetQuestionsQuery()
@@ -56,7 +56,7 @@ const QuestionsScreen: FC = () => {
     }
   }
 
-  const storeThisAnswer = (answer: any) => {
+  const storeThisAnswer = (answer: string) => {
     if (registeredAnswers?.length) {
       const existAPreviousAnswerInThisQuestion = typeof registeredAnswers[questionIndex] !== 'undefined'
       if (!existAPreviousAnswerInThisQuestion) {
@@ -65,15 +65,15 @@ const QuestionsScreen: FC = () => {
         replaceAnswerOfRegisteredAnswersWithThisAnswer(answer)
       }
     } else {
-      createRegisteredAnswersArrayWithThisAnswer([answer])
+      setRegisteredAnswers([answer])
     }
   }
 
-  const handleNext = (answer: any) => {
+  const handleNext = (answer: string) => {
     storeAnswerAndSetNextQuestion(answer)
   }
 
-  const handlePrev = (answer: any) => {
+  const handlePrev = (answer: string|undefined) => {
     storeAnswerAndSetPrevQuestion(answer)
   }
 
@@ -83,7 +83,6 @@ const QuestionsScreen: FC = () => {
     if(!data?.getQuestions.questions) return
     setQuestions(data.getQuestions.questions)
     setActualQuestion(data.getQuestions.questions[0])
-    console.log(" i m g : " + data.getQuestions.questions[0].imgUrl)
   }
 
   const langToSpanish = (questionInQuestionDataForm: QuestionData) => {
@@ -93,7 +92,7 @@ const QuestionsScreen: FC = () => {
     answers = questionInQuestionDataForm.answers.map((answer) => {
       let answerLabel = answer.value;
       if (answer.es) answerLabel = answer.es
-      return { value: answer.value, label: answerLabel }
+      return { value: answer.value, label: answerLabel, uuid: answer.uuid }
     })
     setQuestion({ imgUrl: questionInQuestionDataForm.imgUrl, answers, question })
   }
@@ -105,7 +104,7 @@ const QuestionsScreen: FC = () => {
     answers = questionInQuestionDataForm.answers.map((answer) => {
       let answerLabel = answer.value;
       if (answer.es) answerLabel = answer.en
-      return { value: answer.value, label: answerLabel }
+      return { value: answer.value, label: answerLabel, uuid: answer.uuid }
     })
     setQuestion({ imgUrl: questionInQuestionDataForm.imgUrl, answers, question })
   }
@@ -139,7 +138,7 @@ const QuestionsScreen: FC = () => {
     if (!existARegisteredAnswerInThisQuestion) {
       const newArray = [...registeredAnswers]
       newArray.push(answer)
-      createRegisteredAnswersArrayWithThisAnswer(newArray)
+      setRegisteredAnswers(newArray)
     }
   }
 
@@ -147,7 +146,7 @@ const QuestionsScreen: FC = () => {
     if (!registeredAnswers?.length) return
     const newArray = [...registeredAnswers]
     newArray[questionIndex] = answer
-    createRegisteredAnswersArrayWithThisAnswer(newArray)
+    setRegisteredAnswers(newArray)
   }
 
   // END OF UTILITIES *******************************************************************************************************
@@ -199,7 +198,7 @@ const QuestionsScreen: FC = () => {
           </header>
           <Question
             question={question?.question || ""}
-            answers={question?.answers || [{ value: '' }]}
+            answers={question?.answers || [{ value: '', uuid: '', label: '' }]}
             onNext={answer => handleNext(answer)}
             prevAnswer={registeredAnswers?.length ? registeredAnswers[questionIndex] : undefined}
             onPrev={answer => handlePrev(answer)}
@@ -252,13 +251,17 @@ interface QuestionData {
   es: string,
   en: string,
   imgUrl?: string|null
-  answers: { value: any, es?: string, en?: string }[]
+  answers: { value: any, es?: string, en?: string, uuid: string }[]
 }
-
 interface ActualQuestion {
   question: string
   imgUrl?: string|null
-  answers: { value: any, label?: string }[]
+  answers: Answer[]
+}
+interface Answer { 
+  value: any,
+  label: string,
+  uuid: string
 }
 
 export default QuestionsScreen
