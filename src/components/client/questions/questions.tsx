@@ -18,18 +18,19 @@ const QuestionsScreen: FC = () => {
   const [finished, setFinished] = useState<boolean>(false);
 
   const { data } = useGetQuestionsQuery()
-  // const [CreatePostedAnswersMutation] = useCreatePostedAnswersMutation()
+  const [CreatePostedAnswersMutation] = useCreatePostedAnswersMutation()
 
-  // useEffect(()=>{
-  //   if (finished && registeredAnswers) {
-
-  //     CreatePostedAnswersMutation({
-  //       variables: [
-
-  //       ]
-  //     })
-  //   }
-  // }, [finished])
+  useEffect(()=>{
+    if (finished && registeredAnswers) {
+      CreatePostedAnswersMutation({
+        variables: {
+          input: {
+            answersUuid: registeredAnswers
+          }
+        }
+      })
+    }
+  }, [finished])
 
   useEffect(() => {
     if (!data?.getQuestions.questions) return
