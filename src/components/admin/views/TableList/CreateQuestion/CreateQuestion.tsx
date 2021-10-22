@@ -38,8 +38,53 @@ function CreateQuestion(props: any) {
   })
 
   const [submited, setSubmited] = useState<boolean>(false)
-
   const [createQuestionMutation] = useCreateQuestionMutation();
+  const [numericValues, setNumericValues] = useState<boolean>(false)
+
+  React.useEffect(() => {
+    if (numericValues) setAnswerValuesWithNumericValues()
+    else clearAnswerValues()
+  }, [numericValues])
+
+  const setAnswerValuesWithNumericValues = () => {
+    setState((prevState) => {
+      let stateCopy = { ...prevState, answersParams: prevState.answersParams.slice() }
+      const answersAmount = stateCopy.answersParams.length
+      stateCopy.answersParams = stateCopy.answersParams.map((answer, index) => {
+        answer.value = (answersAmount - index)
+        return answer
+      })
+      return stateCopy
+    })
+  }
+
+  const clearAnswerValues = () => {
+    setState((prevState) => {
+      let stateCopy = { ...prevState, answersParams: prevState.answersParams.slice() }
+      stateCopy.answersParams = stateCopy.answersParams.map((answer) => {
+        answer.value = ''
+        return answer
+      })
+      return stateCopy
+    })
+  }
+
+  const addAnswer = () => {
+    setState({
+      ...state,
+      answersParams: state.answersParams.concat({ value: '', es: '', en: '' })
+    });
+    if (numericValues) setAnswerValuesWithNumericValues()
+  }
+
+  const deleteAnswer = (index: number) => {
+    if (state.answersParams.length > 2)
+      setState({
+        ...state,
+        answersParams: [...state.answersParams.slice(0, index), ...state.answersParams.slice(index + 1)]
+      });
+    if (numericValues) setAnswerValuesWithNumericValues()
+  }
 
   const handleChange = (evt: any) => {
     const value = evt.target.value;
@@ -49,20 +94,6 @@ function CreateQuestion(props: any) {
     });
   }
 
-  const addAnswer = (e: any) => {
-    setState({
-      ...state,
-      answersParams: state.answersParams.concat({ value: '', es: '', en: '' })
-    });
-  }
-
-  const deleteAnswer = (index: number) => {
-    if (state.answersParams.length > 2)
-      setState({
-        ...state,
-        answersParams: [...state.answersParams.slice(0, index), ...state.answersParams.slice(index + 1)]
-      });
-  }
 
   const handleChangeAnswer = (evt: any, index: number) => {
     setState({
@@ -79,12 +110,13 @@ function CreateQuestion(props: any) {
 
   const handleSubmit = (): void => {
     setSubmited(true)
+
     if (state.en.trim() && state.es.trim()) {
       const doesAnswerHasAllValues = (answer: AnswerInterface): boolean => {
         if (
           answer.en.trim() &&
           answer.es.trim() &&
-          answer.value.trim()
+          answer.value
         ) return true
         return false
       }
@@ -159,6 +191,10 @@ function CreateQuestion(props: any) {
                 </GridItem>
               </GridContainer>
               <h3 style={{ textAlign: 'center' }}>Respuestas:</h3>
+              <div onClick={() => setNumericValues(!numericValues)} className={classes.numericValueLabelContainer}>
+                <input checked={numericValues} type="radio" />
+                <label>{'Llenar valores de mejor a peor (considerar pregunta para obtener puntaje)'}</label>
+              </div>
               {
                 state.answersParams.map((answer, index) => {
                   return <GridContainer key={index} className={classes.formArray}>
@@ -172,7 +208,8 @@ function CreateQuestion(props: any) {
                         inputProps={{
                           name: "value",
                           value: answer.value,
-                          onChange: (evt: any) => handleChangeAnswer(evt, index)
+                          onChange: (evt: any) => handleChangeAnswer(evt, index),
+                          disabled: numericValues
                         }}
                       />
                     </GridItem>
@@ -282,6 +319,11 @@ const styles = createStyles({
     display: 'flex',
     justifyContent: 'center',
     backgroundColor: '#f00'
+  },
+  numericValueLabelContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    userSelect: 'none',
   }
 });
 
