@@ -26,7 +26,7 @@ export type Answer = {
   createdAt: Scalars['DateTime'];
 };
 
-export type AnswerInterface = {
+export type CreateAnswerInput = {
   value: Scalars['JSON'];
   es: Scalars['String'];
   en: Scalars['String'];
@@ -45,12 +45,31 @@ export type CreateQuestionInput = {
   imgUrl?: Maybe<Scalars['String']>;
   es: Scalars['String'];
   en: Scalars['String'];
-  answersParams: Array<AnswerInterface>;
+  answers: Array<CreateAnswerInput>;
 };
 
 export type CreateQuestionPayload = {
   __typename?: 'CreateQuestionPayload';
   createdUuid: Scalars['ID'];
+};
+
+export type EditAnswerInput = {
+  uuid: Scalars['ID'];
+  es: Scalars['String'];
+  en: Scalars['String'];
+};
+
+export type EditQuestionInput = {
+  uuid: Scalars['ID'];
+  imgUrl?: Maybe<Scalars['String']>;
+  es: Scalars['String'];
+  en: Scalars['String'];
+  answers: Array<EditAnswerInput>;
+};
+
+export type EditQuestionPayload = {
+  __typename?: 'EditQuestionPayload';
+  questionUuid: Scalars['ID'];
 };
 
 export type GetQuestionInput = {
@@ -79,6 +98,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createQuestion: CreateQuestionPayload;
   createPostedAnswers: CreatePostedAnswerPayload;
+  editQuestion: EditQuestionPayload;
 };
 
 
@@ -89,6 +109,11 @@ export type MutationCreateQuestionArgs = {
 
 export type MutationCreatePostedAnswersArgs = {
   input?: Maybe<CreatePostedAnswerInput>;
+};
+
+
+export type MutationEditQuestionArgs = {
+  input?: Maybe<EditQuestionInput>;
 };
 
 export type Posted_Answer = {

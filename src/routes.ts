@@ -8,6 +8,7 @@ import NotificationsPage from './components/admin/views/Notifications/Notificati
 import Question from './components/admin/views/TableList/Question/Question';
 import CreateQuestion from './components/admin/views/TableList/CreateQuestion/CreateQuestion';
 import UserProfile from './components/admin/views/UserProfile/UserProfile';
+import EditQuestion from './components/admin/views/TableList/EditQuestion/EditQuestion';
 // core components/views for RTL layout
 
 const dashboardRoutes = [
@@ -30,7 +31,7 @@ const dashboardRoutes = [
     path: '/preguntas/:pregunta/editar',
     name: 'Editar pregunta',
     icon: 'content_paste',
-    component: UserProfile,
+    component: EditQuestion,
     layout: '/admin',
     invisible: true
   },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
@@ -9,97 +9,57 @@ import CardHeader from '../../../components/Card/CardHeader';
 import CardBody from '../../../components/Card/CardBody';
 import { createStyles } from '@material-ui/core';
 import Button from '../../../components/CustomButtons/Button';
-import { CreateAnswerInput, CreateQuestionInput } from 'src/graphql';
+import { EditAnswerInput, EditQuestionInput } from 'src/graphql';
 import CustomInput from 'src/components/admin/components/CustomInput/CustomInput';
 import CardFooter from 'src/components/admin/components/Card/CardFooter';
-import { useCreateQuestionMutation } from './operations.gql';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { useEditQuestionMutation, useGetQuestionQuery } from './operations.gql';
+import { URLParams } from 'src/routes';
 
-function CreateQuestion(props: any) {
+function EditQuestion(props: any) {
   const { classes } = props;
   const history = useHistory()
 
-  const [state, setState] = useState<CreateQuestionInput>({
-    imgUrl: "",
-    es: '',
-    en: '',
-    answers: [
-      {
-        es: '',
-        en: '',
-        value: ''
-      },
-      {
-        es: '',
-        en: '',
-        value: ''
+  const [state, setState] = useState<EditQuestionInput>()
+  const { pregunta } = useParams<URLParams>()
+  const { data } = useGetQuestionQuery({ variables: { input: { questionUuid: pregunta } } })
+  useEffect(() => {
+    if (!data?.getQuestion.question) return
+    const question = data.getQuestion.question
+    const ansuas = question.answers.map((ansua) => {
+      return {
+        uuid: ansua.uuid,
+        en: ansua.en,
+        es: ansua.es
       }
-    ],
-  })
+    })
+    setState({
+      uuid: question.uuid,
+      en: question.en,
+      es: question.es,
+      imgUrl: question.imgUrl,
+      answers: ansuas
+    })
+  }, [data])
 
   const [submited, setSubmited] = useState<boolean>(false)
-  const [createQuestionMutation] = useCreateQuestionMutation();
-  const [numericValues, setNumericValues] = useState<boolean>(false)
-
-  React.useEffect(() => {
-    if (numericValues) setAnswerValuesWithNumericValues()
-    else clearAnswerValues()
-  }, [numericValues])
-
-  const setAnswerValuesWithNumericValues = () => {
-    setState((prevState) => {
-      let stateCopy = { ...prevState, answersParams: prevState.answers.slice() }
-      const answersAmount = stateCopy.answersParams.length
-      stateCopy.answersParams = stateCopy.answersParams.map((answer, index) => {
-        answer.value = (answersAmount - index)
-        return answer
-      })
-      return stateCopy
-    })
-  }
-
-  const clearAnswerValues = () => {
-    setState((prevState) => {
-      let stateCopy = { ...prevState, answersParams: prevState.answers.slice() }
-      stateCopy.answersParams = stateCopy.answersParams.map((answer) => {
-        answer.value = ''
-        return answer
-      })
-      return stateCopy
-    })
-  }
-
-  const addAnswer = () => {
-    setState({
-      ...state,
-      answers: state.answers.concat({ value: '', es: '', en: '' })
-    });
-    if (numericValues) setAnswerValuesWithNumericValues()
-  }
-
-  const deleteAnswer = (index: number) => {
-    if (state.answers.length > 2)
-      setState({
-        ...state,
-        answers: [...state.answers.slice(0, index), ...state.answers.slice(index + 1)]
-      });
-    if (numericValues) setAnswerValuesWithNumericValues()
-  }
+  const [editQuestionMutation] = useEditQuestionMutation();
 
   const handleChange = (evt: any) => {
     const value = evt.target.value;
+    if (!state) return
     setState({
       ...state,
       [evt.target.name]: value
     });
   }
 
-
   const handleChangeAnswer = (evt: any, index: number) => {
+    if (!state) return
     setState({
       ...state,
-      answers: state.answers.map((answerE, indexE): CreateAnswerInput => {
-        const answer: CreateAnswerInput = index === indexE ? {
+      answers: state.answers.map((answerE, indexE): EditAnswerInput => {
+        const answer = index === indexE ? {
           ...answerE,
           [evt.target.name]: evt.target.value
         } : answerE
@@ -109,14 +69,14 @@ function CreateQuestion(props: any) {
   }
 
   const handleSubmit = (): void => {
+    if (!state) return
     setSubmited(true)
 
     if (state.en.trim() && state.es.trim()) {
-      const doesAnswerHasAllValues = (answer: CreateAnswerInput): boolean => {
+      const doesAnswerHasAllValues = (answer: EditAnswerInput): boolean => {
         if (
           answer.en.trim() &&
-          answer.es.trim() &&
-          answer.value
+          answer.es.trim()
         ) return true
         return false
       }
@@ -127,13 +87,13 @@ function CreateQuestion(props: any) {
           return
         }
       }
-      createQuestionMutation({
+      editQuestionMutation({
         variables: {
           input: state
         }
       })
         .then((res) => {
-          history.replace(`/admin/preguntas/${res.data?.createQuestion.createdUuid}`)
+          history.replace(`/admin/preguntas/${res.data?.editQuestion.questionUuid}`)
         })
     } else {
       setSubmited(false)
@@ -156,7 +116,7 @@ function CreateQuestion(props: any) {
                     id="es"
                     inputProps={{
                       name: "es",
-                      value: state.es,
+                      value: state?.es || "Cargando...",
                       onChange: handleChange
                     }}
                   />
@@ -170,7 +130,7 @@ function CreateQuestion(props: any) {
                     }}
                     inputProps={{
                       name: "en",
-                      value: state.en,
+                      value: state?.en || "Cargando...",
                       onChange: handleChange
                     }}
                   />
@@ -184,19 +144,15 @@ function CreateQuestion(props: any) {
                     }}
                     inputProps={{
                       name: "imgUrl",
-                      value: state.imgUrl,
+                      value: state?.imgUrl || "Cargando...",
                       onChange: handleChange
                     }}
                   />
                 </GridItem>
               </GridContainer>
               <h3 style={{ textAlign: 'center' }}>Respuestas:</h3>
-              <div onClick={() => setNumericValues(!numericValues)} className={classes.numericValueLabelContainer}>
-                <input checked={numericValues} type="radio" />
-                <label>{'Llenar valores de mejor a peor (considerar pregunta para obtener puntaje)'}</label>
-              </div>
               {
-                state.answers.map((answer, index) => {
+                state?.answers.map((answer, index) => {
                   return <GridContainer key={index} className={classes.formArray}>
                     <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
@@ -207,9 +163,8 @@ function CreateQuestion(props: any) {
                         }}
                         inputProps={{
                           name: "value",
-                          value: answer.value,
-                          onChange: (evt: any) => handleChangeAnswer(evt, index),
-                          disabled: numericValues
+                          value: data?.getQuestion.question.answers[index].value || "Cargando...",
+                          disabled: true
                         }}
                       />
                     </GridItem>
@@ -241,19 +196,9 @@ function CreateQuestion(props: any) {
                         }}
                       />
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={1}>
-                      <Button
-                        disabled={state.answers.length <= 2}
-                        color="danger"
-                        onClick={() => deleteAnswer(index)}
-                      >
-                        X
-                      </Button>
-                    </GridItem>
                   </GridContainer>
                 })
               }
-              <Button color="success" onClick={addAnswer}>Agregar respuesta</Button>
             </div>
           </CardBody>
           <CardFooter>
@@ -262,7 +207,7 @@ function CreateQuestion(props: any) {
               color="primary"
               disabled={submited}
             >
-              Crear pregunta
+              Editar pregunta
             </Button>
           </CardFooter>
         </Card>
@@ -327,4 +272,4 @@ const styles = createStyles({
   }
 });
 
-export default withStyles(styles)(CreateQuestion);
+export default withStyles(styles)(EditQuestion);
