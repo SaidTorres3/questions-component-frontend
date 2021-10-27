@@ -92,6 +92,14 @@ export type GetStatsPayload = {
   averageScore: Scalars['Int'];
   questionsAmount: Scalars['Int'];
   respondentsAmount: Scalars['Int'];
+  selectedAnswersChart: SelectedAnswersChart;
+  monthlyAnswersChart: MonthlyAnswersChart;
+};
+
+export type MonthlyAnswersChart = {
+  __typename?: 'MonthlyAnswersChart';
+  monthlyCount: Array<Scalars['Int']>;
+  hightestCount: Scalars['Int'];
 };
 
 export type Mutation = {
@@ -153,4 +161,11 @@ export type Respondent = {
   uuid: Scalars['ID'];
   posted_answers: Array<Posted_Answer>;
   createdAt: Scalars['DateTime'];
+};
+
+export type SelectedAnswersChart = {
+  __typename?: 'SelectedAnswersChart';
+  labels: Array<Scalars['String']>;
+  count: Array<Scalars['Int']>;
+  hightestCount: Scalars['Int'];
 };

@@ -72,11 +72,11 @@ export const dailySalesChart = {
 export const emailsSubscriptionChart = {
   data: {
     labels: [
-      'Jan',
+      'Ene',
       'Feb',
       'Mar',
-      'Apr',
-      'Mai',
+      'Abr',
+      'May',
       'Jun',
       'Jul',
       'Aug',

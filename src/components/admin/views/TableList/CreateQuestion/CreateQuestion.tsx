@@ -48,9 +48,9 @@ function CreateQuestion(props: any) {
 
   const setAnswerValuesWithNumericValues = () => {
     setState((prevState) => {
-      let stateCopy = { ...prevState, answersParams: prevState.answers.slice() }
-      const answersAmount = stateCopy.answersParams.length
-      stateCopy.answersParams = stateCopy.answersParams.map((answer, index) => {
+      let stateCopy = { ...prevState, answers: prevState.answers.slice() }
+      const answersAmount = stateCopy.answers.length
+      stateCopy.answers = stateCopy.answers.map((answer, index) => {
         answer.value = (answersAmount - index)
         return answer
       })
@@ -60,8 +60,8 @@ function CreateQuestion(props: any) {
 
   const clearAnswerValues = () => {
     setState((prevState) => {
-      let stateCopy = { ...prevState, answersParams: prevState.answers.slice() }
-      stateCopy.answersParams = stateCopy.answersParams.map((answer) => {
+      let stateCopy = { ...prevState, answers: prevState.answers.slice() }
+      stateCopy.answers = stateCopy.answers.map((answer) => {
         answer.value = ''
         return answer
       })

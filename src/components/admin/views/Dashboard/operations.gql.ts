@@ -6,7 +6,7 @@ const defaultOptions =  {}
 export type GetStatsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetStatsQuery = { __typename?: 'Query', getStats: { __typename?: 'GetStatsPayload', averageScore: number, monthlyAverageScore: number, questionsAmount: number, respondentsAmount: number } };
+export type GetStatsQuery = { __typename?: 'Query', getStats: { __typename?: 'GetStatsPayload', averageScore: number, monthlyAverageScore: number, questionsAmount: number, respondentsAmount: number, selectedAnswersChart: { __typename?: 'SelectedAnswersChart', labels: Array<string>, count: Array<number>, hightestCount: number }, monthlyAnswersChart: { __typename?: 'MonthlyAnswersChart', monthlyCount: Array<number>, hightestCount: number } } };
 
 
 export const GetStatsDocument = gql`
@@ -16,6 +16,15 @@ export const GetStatsDocument = gql`
     monthlyAverageScore
     questionsAmount
     respondentsAmount
+    selectedAnswersChart {
+      labels
+      count
+      hightestCount
+    }
+    monthlyAnswersChart {
+      monthlyCount
+      hightestCount
+    }
   }
 }
     `;

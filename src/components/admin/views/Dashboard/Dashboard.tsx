@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // react plugin for creating charts
 import ChartistGraph from 'react-chartist';
 // @material-ui/core
@@ -53,205 +53,167 @@ const Dashboard = (props: any) => {
 
   const { data, loading, error } = useGetStatsQuery()
 
-    return (
-      <div>
-        <GridContainer>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="warning" stats={true} icon={true}>
-                <CardIcon color="warning">
-                  <Icon>content_copy</Icon>
-                </CardIcon>
-                <p className={classes.cardCategory}>Calificación promedio mensual</p>
-                <h3 className={classes.cardTitle}>
-                  {data?.getStats.monthlyAverageScore}/100
-                </h3>
-              </CardHeader>
-              <CardFooter stats={true}>
-                <div className={classes.stats}>
-                  <Danger>
-                    <Warning />
-                  </Danger>
-                  <a href="" onClick={e => e.preventDefault()}>
-                    Get more space
-                  </a>
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="success" stats={true} icon={true}>
-                <CardIcon color="success">
-                  <Store />
-                </CardIcon>
-                <p className={classes.cardCategory}>Calificación promedio</p>
-                <h3 className={classes.cardTitle}>{data?.getStats.averageScore}/100</h3>
-              </CardHeader>
-              <CardFooter stats={true}>
-                <div className={classes.stats}>
-                  <DateRange />
-                  Last 24 Hours
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="danger" stats={true} icon={true}>
-                <CardIcon color="danger">
-                  <Icon>info_outline</Icon>
-                </CardIcon>
-                <p className={classes.cardCategory}>Cantidad de preguntas</p>
-                <h3 className={classes.cardTitle}>{data?.getStats.questionsAmount}</h3>
-              </CardHeader>
-              <CardFooter stats={true}>
-                <div className={classes.stats}>
-                  <LocalOffer />
-                  Tracked from Github
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="info" stats={true} icon={true}>
-                <CardIcon color="info">
-                  <Accessibility />
-                </CardIcon>
-                <p className={classes.cardCategory}>Cantidad de encuestas realizadas</p>
-                <h3 className={classes.cardTitle}>{data?.getStats.respondentsAmount}</h3>
-              </CardHeader>
-              <CardFooter stats={true}>
-                <div className={classes.stats}>
-                  <Update />
-                  Just Updated
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={6}>
-            <Card chart={true}>
-              <CardHeader color="success">
+  useEffect(() => {
+    console.log(data?.getStats.selectedAnswersChart)
+  }, [data]);
+
+  return (
+    <div>
+      <GridContainer>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="warning" stats={true} icon={true}>
+              <CardIcon color="warning">
+                <Icon>content_copy</Icon>
+              </CardIcon>
+              <p className={classes.cardCategory}>Calificación promedio mensual</p>
+              <h3 className={classes.cardTitle}>
+                {data?.getStats.monthlyAverageScore}/100
+              </h3>
+            </CardHeader>
+            <CardFooter stats={true}>
+              <div className={classes.stats}>
+                <Danger>
+                  <Warning />
+                </Danger>
+                <a href="" onClick={e => e.preventDefault()}>
+                  Get more space
+                </a>
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="success" stats={true} icon={true}>
+              <CardIcon color="success">
+                <Store />
+              </CardIcon>
+              <p className={classes.cardCategory}>Calificación promedio</p>
+              <h3 className={classes.cardTitle}>{data?.getStats.averageScore}/100</h3>
+            </CardHeader>
+            <CardFooter stats={true}>
+              <div className={classes.stats}>
+                <DateRange />
+                Last 24 Hours
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="danger" stats={true} icon={true}>
+              <CardIcon color="danger">
+                <Icon>info_outline</Icon>
+              </CardIcon>
+              <p className={classes.cardCategory}>Cantidad de preguntas</p>
+              <h3 className={classes.cardTitle}>{data?.getStats.questionsAmount}</h3>
+            </CardHeader>
+            <CardFooter stats={true}>
+              <div className={classes.stats}>
+                <LocalOffer />
+                Tracked from Github
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="info" stats={true} icon={true}>
+              <CardIcon color="info">
+                <Accessibility />
+              </CardIcon>
+              <p className={classes.cardCategory}>Cantidad de encuestas realizadas</p>
+              <h3 className={classes.cardTitle}>{data?.getStats.respondentsAmount}</h3>
+            </CardHeader>
+            <CardFooter stats={true}>
+              <div className={classes.stats}>
+                <Update />
+                Just Updated
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={6}>
+          <Card chart={true}>
+            <CardHeader color="success">
+              {data?.getStats.selectedAnswersChart.labels &&
+                data?.getStats.selectedAnswersChart.count ?
                 <ChartistGraph
                   className="ct-chart"
-                  data={dailySalesChart.data}
-                  type="Line"
-                  options={dailySalesChart.options}
-                  // listener={dailySalesChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Daily Sales</h4>
-                <p className={classes.cardCategory}>
-                  <span className={classes.successText}>
-                    <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                  </span>{' '}
-                  increase in today sales.
-                </p>
-              </CardBody>
-              <CardFooter chart={true}>
-                <div className={classes.stats}>
-                  <AccessTime /> updated 4 minutes ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
-            <Card chart={true}>
-              <CardHeader color="warning">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={emailsSubscriptionChart.data}
+                  data={{ labels: data.getStats.selectedAnswersChart.labels, series: [data.getStats.selectedAnswersChart.count] }}
                   type="Bar"
-                  options={emailsSubscriptionChart.options}
-                  // responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                  // listener={emailsSubscriptionChart.animation}
+                  options={{
+                    low: 0,
+                    high: data.getStats.selectedAnswersChart.count.at(-1), // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                    chartPadding: {
+                      top: 0,
+                      right: 0,
+                      bottom: 0,
+                      left: 0
+                    }
+                  }}
+                // listener={dailySalesChart.animation}
+                /> : undefined}
+            </CardHeader>
+            <CardBody>
+              <h4 className={classes.cardTitle}>Conteo de respuestas a preguntas</h4>
+              <p className={classes.cardCategory}>
+                Conteo del puntaje de las respuestas a las preguntas que son aptas para sacar una calificación.
+              </p>
+            </CardBody>
+            <CardFooter chart={true}>
+              <div className={classes.stats}>
+                <ArrowUpward className={classes.upArrowCardCategory} /> Cantidad de veces que aparece el puntaje seleccionado más abundante: {data?.getStats.selectedAnswersChart.hightestCount}
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={6}>
+          <Card chart={true}>
+            <CardHeader color="warning">
+              {data?.getStats.monthlyAnswersChart.monthlyCount ?
+                <ChartistGraph
+                  className="ct-chart"
+                  data={{ labels: emailsSubscriptionChart.data.labels, series: [data.getStats.monthlyAnswersChart.monthlyCount] }}
+                  type="Line"
+                  options={{
+                    axisX: {
+                      showGrid: false
+                    },
+                    low: 0,
+                    high: data.getStats.monthlyAnswersChart.hightestCount,
+                    chartPadding: {
+                      top: 0,
+                      right: 5,
+                      bottom: 0,
+                      left: 0
+                    }
+                  }}
                 />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-                <p className={classes.cardCategory}>
-                  Last Campaign Performance
-                </p>
-              </CardBody>
-              <CardFooter chart={true}>
-                <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-        </GridContainer>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={6}>
-            <CustomTabs
-              title="Tasks:"
-              headerColor="primary"
-              tabs={[
-                {
-                  tabName: 'Bugs',
-                  tabIcon: BugReport,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[0, 3]}
-                      tasksIndexes={[0, 1, 2, 3]}
-                      tasks={bugs}
-                    />
-                  )
-                },
-                {
-                  tabName: 'Website',
-                  tabIcon: Code,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[0]}
-                      tasksIndexes={[0, 1]}
-                      tasks={website}
-                    />
-                  )
-                },
-                {
-                  tabName: 'Server',
-                  tabIcon: Cloud,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[1]}
-                      tasksIndexes={[0, 1, 2]}
-                      tasks={server}
-                    />
-                  )
-                }
-              ]}
-            />
-          </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
-            <Card>
-              <CardHeader color="warning">
-                <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
-                <p className={classes.cardCategoryWhite}>
-                  New employees on 15th September, 2016
-                </p>
-              </CardHeader>
-              <CardBody>
-                <Table
-                  tableHeaderColor="warning"
-                  tableHead={['ID', 'Name', 'Salary', 'Country']}
-                  tableData={[
-                    ['1', 'Dakota Rice', '$36,738', 'Niger'],
-                    ['2', 'Minerva Hooper', '$23,789', 'Curaçao'],
-                    ['3', 'Sage Rodriguez', '$56,142', 'Netherlands'],
-                    ['4', 'Philip Chaney', '$38,735', 'Korea, South']
-                  ]}
-                />
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer>
-      </div>
-    );
+                : undefined}
+            </CardHeader>
+            <CardBody>
+              <h4 className={classes.cardTitle}>Encuestas realizadas en el {new Date().getFullYear()}</h4>
+              <p className={classes.cardCategory}>
+                {/* <span className={classes.successText}>
+                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
+                </span>{' '} */}
+                Conteo mensual de todas las encuestas realizadas en el año {new Date().getFullYear()}.
+              </p>
+            </CardBody>
+            <CardFooter chart={true}>
+              <div className={classes.stats}>
+                <ArrowUpward className={classes.upArrowCardCategory} /> Mayor cantidad de encuestas realizadas en un mes: {data?.getStats.monthlyAnswersChart.hightestCount}
+              </div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>
+    </div>
+  );
 }
 
 // Dashboard.propTypes = {
