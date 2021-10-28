@@ -117,7 +117,7 @@ class Dashboard extends React.Component<Props, State> {
       <div className={classes.wrapper}>
         <Sidebar
           routes={routes}
-          logoText={'Creative Tim'}
+          logoText={'ENCUESTAS'}
           logo={logo}
           image={this.state.image}
           handleDrawerToggle={this.handleDrawerToggle}

@@ -39,21 +39,26 @@ function CreateQuestion(props: any) {
 
   const [submited, setSubmited] = useState<boolean>(false)
   const [createQuestionMutation] = useCreateQuestionMutation();
-  const [numericValues, setNumericValues] = useState<boolean>(false)
+  const [isQuestionEnableToGetScore, setIsQuestionEnableToGetScore] = useState<boolean>(false)
 
   React.useEffect(() => {
-    if (numericValues) setAnswerValuesWithNumericValues()
+    if (isQuestionEnableToGetScore) setAnswerValuesWithNumericValues()
     else clearAnswerValues()
-  }, [numericValues])
+  }, [isQuestionEnableToGetScore])
 
   const setAnswerValuesWithNumericValues = () => {
     setState((prevState) => {
-      let stateCopy = { ...prevState, answers: prevState.answers.slice() }
-      const answersAmount = stateCopy.answers.length
-      stateCopy.answers = stateCopy.answers.map((answer, index) => {
-        answer.value = (answersAmount - index)
-        return answer
-      })
+      const answers: CreateAnswerInput[] = []
+      const answersAmount = 5
+      for (let index = 0; index < answersAmount; index++) {
+        const value = (answersAmount - index)
+        let answer: CreateAnswerInput = { value, es: '', en: '' };
+        answer.value = value
+        answer.es = scoreAnswerDefaultText[value - 1][0]
+        answer.en = scoreAnswerDefaultText[value - 1][1]
+        answers.push(answer)
+      }
+      let stateCopy = { ...prevState, answers }
       return stateCopy
     })
   }
@@ -74,7 +79,7 @@ function CreateQuestion(props: any) {
       ...state,
       answers: state.answers.concat({ value: '', es: '', en: '' })
     });
-    if (numericValues) setAnswerValuesWithNumericValues()
+    if (isQuestionEnableToGetScore) setAnswerValuesWithNumericValues()
   }
 
   const deleteAnswer = (index: number) => {
@@ -83,7 +88,7 @@ function CreateQuestion(props: any) {
         ...state,
         answers: [...state.answers.slice(0, index), ...state.answers.slice(index + 1)]
       });
-    if (numericValues) setAnswerValuesWithNumericValues()
+    if (isQuestionEnableToGetScore) setAnswerValuesWithNumericValues()
   }
 
   const handleChange = (evt: any) => {
@@ -191,8 +196,8 @@ function CreateQuestion(props: any) {
                 </GridItem>
               </GridContainer>
               <h3 style={{ textAlign: 'center' }}>Respuestas:</h3>
-              <div onClick={() => setNumericValues(!numericValues)} className={classes.numericValueLabelContainer}>
-                <input checked={numericValues} type="radio" />
+              <div onClick={() => setIsQuestionEnableToGetScore(!isQuestionEnableToGetScore)} className={classes.numericValueLabelContainer}>
+                <input checked={isQuestionEnableToGetScore} type="radio" />
                 <label>{'Llenar valores de mejor a peor (considerar pregunta para obtener puntaje)'}</label>
               </div>
               {
@@ -209,7 +214,7 @@ function CreateQuestion(props: any) {
                           name: "value",
                           value: answer.value,
                           onChange: (evt: any) => handleChangeAnswer(evt, index),
-                          disabled: numericValues
+                          disabled: isQuestionEnableToGetScore
                         }}
                       />
                     </GridItem>
@@ -241,7 +246,7 @@ function CreateQuestion(props: any) {
                         }}
                       />
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={1}>
+                    {!isQuestionEnableToGetScore ? <GridItem xs={12} sm={12} md={1}>
                       <Button
                         disabled={state.answers.length <= 2}
                         color="danger"
@@ -249,11 +254,11 @@ function CreateQuestion(props: any) {
                       >
                         X
                       </Button>
-                    </GridItem>
+                    </GridItem> : undefined}
                   </GridContainer>
                 })
               }
-              <Button color="success" onClick={addAnswer}>Agregar respuesta</Button>
+              {!isQuestionEnableToGetScore ? <Button color="success" onClick={addAnswer}>Agregar respuesta</Button> : undefined}
             </div>
           </CardBody>
           <CardFooter>
@@ -326,5 +331,13 @@ const styles = createStyles({
     userSelect: 'none',
   }
 });
+
+const scoreAnswerDefaultText = [
+  ["Muy Mala 😠", "Very Bad 😠"],
+  ["Mala 😕", "Bad 😕"],
+  ["Regular 😐", "Regular 😐"],
+  ["Buena 😊", "Good 😊"],
+  ["Muy Buena 😀", "Awesome 😀"],
+]
 
 export default withStyles(styles)(CreateQuestion);
