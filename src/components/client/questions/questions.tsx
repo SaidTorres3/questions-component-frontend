@@ -2,6 +2,8 @@ import { FC, useEffect, useState } from "react";
 import Question from "src/components/client/question/question";
 import './questions.css'
 import { useCreatePostedAnswersMutation, useGetQuestionsQuery } from "./operations.gql";
+import enFlag from './en-FLAG.png'
+import esFlag from './es-FLAG.jpg'
 
 enum Languages {
   "spanish" = "es",
@@ -20,7 +22,7 @@ const QuestionsScreen: FC = () => {
   const { data } = useGetQuestionsQuery()
   const [CreatePostedAnswersMutation] = useCreatePostedAnswersMutation()
 
-  useEffect(()=>{
+  useEffect(() => {
     if (finished && registeredAnswers) {
       CreatePostedAnswersMutation({
         variables: {
@@ -37,10 +39,6 @@ const QuestionsScreen: FC = () => {
     setQuestionsFromData()
     // eslint-disable-next-line
   }, [data])
-
-  useEffect(() => {
-    console.log(question?.imgUrl)
-  }, [question])
 
   useEffect(() => {
     updateActualQuestionAccordingToActualIndex()
@@ -74,14 +72,14 @@ const QuestionsScreen: FC = () => {
     storeAnswerAndSetNextQuestion(answer)
   }
 
-  const handlePrev = (answer: string|undefined) => {
+  const handlePrev = (answer: string | undefined) => {
     storeAnswerAndSetPrevQuestion(answer)
   }
 
   // UTILITIES *******************************************************************************************************
 
   const setQuestionsFromData = () => {
-    if(!data?.getQuestions.questions) return
+    if (!data?.getQuestions.questions) return
     setQuestions(data.getQuestions.questions)
     setActualQuestion(data.getQuestions.questions[0])
   }
@@ -194,7 +192,9 @@ const QuestionsScreen: FC = () => {
               onClick={() => { language === Languages.spanish ? setLanguage(Languages.english) : setLanguage(Languages.spanish) }}
               className="questions-screen__question__question-counter__lang-button"
             >
-              {language === Languages.spanish ? "Change language" : "Cambiar idioma"}
+              {language === Languages.spanish ?
+                <img className="questions-screen__question__question-counter__lang-button__flag" src={enFlag} /> :
+                <img className="questions-screen__question__question-counter__lang-button__flag" src={esFlag} />}
             </button>
           </header>
           <Question
@@ -251,15 +251,15 @@ interface QuestionData {
   uuid: string
   es: string,
   en: string,
-  imgUrl?: string|null
+  imgUrl?: string | null
   answers: { value: any, es?: string, en?: string, uuid: string }[]
 }
 interface ActualQuestion {
   question: string
-  imgUrl?: string|null
+  imgUrl?: string | null
   answers: Answer[]
 }
-interface Answer { 
+interface Answer {
   value: any,
   label: string,
   uuid: string

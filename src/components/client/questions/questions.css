@@ -26,11 +26,26 @@
 }
 
 .questions-screen__question__question-counter__lang-button {
-  width       : 18vh;
-  font-size   : 1.6vh;
-  padding     : 0.1vh;
-  border-width: 0.1vh;
-  margin-left : 1.5vh;
+  width           : auto;
+  height          : auto;
+  font-size       : 1.6vh;
+  padding         : 0;
+  margin-left     : 1.5vh;
+  width           : auto;
+  height          : auto;
+  background-color: #0000;
+}
+
+.questions-screen__question__question-counter__lang-button__flag {
+  width              : 10vh;
+  height             : 6vh;
+  border-width       : 0.3vh;
+  user-select        : none;
+  -webkit-user-select: none;
+  -khtml-user-select : none;
+  -moz-user-select   : none;
+  -o-user-select     : none;
+  pointer-events     : none;
 }
 
 .questions-screen__question__question-counter__txt {
