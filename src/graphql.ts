@@ -53,6 +53,15 @@ export type CreateQuestionPayload = {
   createdUuid: Scalars['ID'];
 };
 
+export type DeleteQuestionInput = {
+  questionUuid: Scalars['ID'];
+};
+
+export type DeleteQuestionPayload = {
+  __typename?: 'DeleteQuestionPayload';
+  deletedUuid: Scalars['ID'];
+};
+
 export type EditAnswerInput = {
   uuid: Scalars['ID'];
   es: Scalars['String'];
@@ -107,6 +116,7 @@ export type Mutation = {
   createQuestion: CreateQuestionPayload;
   createPostedAnswers: CreatePostedAnswerPayload;
   editQuestion: EditQuestionPayload;
+  deleteQuestion: DeleteQuestionPayload;
 };
 
 
@@ -122,6 +132,11 @@ export type MutationCreatePostedAnswersArgs = {
 
 export type MutationEditQuestionArgs = {
   input?: Maybe<EditQuestionInput>;
+};
+
+
+export type MutationDeleteQuestionArgs = {
+  input: DeleteQuestionInput;
 };
 
 export type Posted_Answer = {

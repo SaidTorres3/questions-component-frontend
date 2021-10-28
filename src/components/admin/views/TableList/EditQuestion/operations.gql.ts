@@ -17,6 +17,13 @@ export type GetQuestionQueryVariables = Types.Exact<{
 
 export type GetQuestionQuery = { __typename?: 'Query', getQuestion: { __typename?: 'GetQuestionPayload', question: { __typename?: 'Question', uuid: string, imgUrl?: string | null | undefined, es: string, en: string, answers: Array<{ __typename?: 'Answer', uuid: string, en: string, es: string, value: any }>, posted_answers: Array<{ __typename?: 'Posted_Answer', answer: { __typename?: 'Answer', value: any } }> } } };
 
+export type DeleteQuestionMutationVariables = Types.Exact<{
+  input: Types.DeleteQuestionInput;
+}>;
+
+
+export type DeleteQuestionMutation = { __typename?: 'Mutation', deleteQuestion: { __typename?: 'DeleteQuestionPayload', deletedUuid: string } };
+
 
 export const EditQuestionDocument = gql`
     mutation EditQuestion($input: EditQuestionInput) {
@@ -102,3 +109,36 @@ export function useGetQuestionLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetQuestionQueryHookResult = ReturnType<typeof useGetQuestionQuery>;
 export type GetQuestionLazyQueryHookResult = ReturnType<typeof useGetQuestionLazyQuery>;
 export type GetQuestionQueryResult = Apollo.QueryResult<GetQuestionQuery, GetQuestionQueryVariables>;
+export const DeleteQuestionDocument = gql`
+    mutation DeleteQuestion($input: DeleteQuestionInput!) {
+  deleteQuestion(input: $input) {
+    deletedUuid
+  }
+}
+    `;
+export type DeleteQuestionMutationFn = Apollo.MutationFunction<DeleteQuestionMutation, DeleteQuestionMutationVariables>;
+
+/**
+ * __useDeleteQuestionMutation__
+ *
+ * To run a mutation, you first call `useDeleteQuestionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteQuestionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteQuestionMutation, { data, loading, error }] = useDeleteQuestionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteQuestionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteQuestionMutation, DeleteQuestionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteQuestionMutation, DeleteQuestionMutationVariables>(DeleteQuestionDocument, options);
+      }
+export type DeleteQuestionMutationHookResult = ReturnType<typeof useDeleteQuestionMutation>;
+export type DeleteQuestionMutationResult = Apollo.MutationResult<DeleteQuestionMutation>;
+export type DeleteQuestionMutationOptions = Apollo.BaseMutationOptions<DeleteQuestionMutation, DeleteQuestionMutationVariables>;

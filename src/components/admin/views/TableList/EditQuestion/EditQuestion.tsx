@@ -13,7 +13,7 @@ import { EditAnswerInput, EditQuestionInput } from 'src/graphql';
 import CustomInput from 'src/components/admin/components/CustomInput/CustomInput';
 import CardFooter from 'src/components/admin/components/Card/CardFooter';
 import { useHistory, useParams } from "react-router-dom";
-import { useEditQuestionMutation, useGetQuestionQuery } from './operations.gql';
+import { useDeleteQuestionMutation, useEditQuestionMutation, useGetQuestionQuery } from './operations.gql';
 import { URLParams } from 'src/routes';
 
 function EditQuestion(props: any) {
@@ -44,6 +44,7 @@ function EditQuestion(props: any) {
 
   const [submited, setSubmited] = useState<boolean>(false)
   const [editQuestionMutation] = useEditQuestionMutation();
+  const [deleteQuestion] = useDeleteQuestionMutation();
 
   const handleChange = (evt: any) => {
     const value = evt.target.value;
@@ -100,8 +101,33 @@ function EditQuestion(props: any) {
     }
   }
 
+  const deleteQuestionHandler = () => {
+    if (!state) return
+    deleteQuestion({
+      variables: {
+        input: {
+          questionUuid: state.uuid
+        }
+      }
+    })
+      .then((res) => {
+        history.replace('/admin/preguntas')
+      })
+  }
+
+
   return (
     <GridContainer>
+      <Button
+        color="danger"
+        onClick={() => {
+          if (window.confirm('¿Estás segur@ de eliminar esta pregunta? Se eliminarán también las estadisticas relacionadas con esta pregunta.')) {
+            deleteQuestionHandler()
+          }
+        }}
+      >
+        Eliminar Pregunta
+      </Button>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardBody>
