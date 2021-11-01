@@ -89,7 +89,7 @@ const Dashboard = (props: any) => {
               <CardIcon color="success">
                 <Store />
               </CardIcon>
-              <p className={classes.cardCategory}>Calificación promedio</p>
+              <p className={classes.cardCategory}>Calificación promedio historica</p>
               <h3 className={classes.cardTitle}>{data?.getStats.averageScore}/100</h3>
             </CardHeader>
             <CardFooter stats={true}>
@@ -147,7 +147,7 @@ const Dashboard = (props: any) => {
                   type="Bar"
                   options={{
                     low: 0,
-                    high: data.getStats.selectedAnswersChart.count.at(-1), // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+                    high: data.getStats.selectedAnswersChart.hightestCount, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
                     chartPadding: {
                       top: 0,
                       right: 0,
