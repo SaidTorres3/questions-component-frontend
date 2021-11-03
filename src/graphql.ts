@@ -90,6 +90,23 @@ export type GetQuestionPayload = {
   question: Question;
 };
 
+export type GetQuestionStatsInput = {
+  questionUuid: Scalars['ID'];
+};
+
+export type GetQuestionStatsPayload = {
+  __typename?: 'GetQuestionStatsPayload';
+  selectedAnswersChart: GetQuestionStatsSelectedAnswersChart;
+};
+
+export type GetQuestionStatsSelectedAnswersChart = {
+  __typename?: 'GetQuestionStatsSelectedAnswersChart';
+  labels: Array<Scalars['String']>;
+  count: Array<Scalars['Int']>;
+  hightestCount: Scalars['Int'];
+  allNumericValues: Scalars['Boolean'];
+};
+
 export type GetQuestionsPayload = {
   __typename?: 'GetQuestionsPayload';
   questions: Array<Question>;
@@ -99,8 +116,9 @@ export type GetStatsPayload = {
   __typename?: 'GetStatsPayload';
   monthlyAverageScore: Scalars['Int'];
   averageScore: Scalars['Int'];
-  questionsAmount: Scalars['Int'];
   respondentsAmount: Scalars['Int'];
+  monthlyRespondentsAmount: Scalars['Int'];
+  questionsAmount: Scalars['Int'];
   selectedAnswersChart: SelectedAnswersChart;
   monthlyAnswersChart: MonthlyAnswersChart;
 };
@@ -152,12 +170,18 @@ export type Query = {
   __typename?: 'Query';
   getQuestion: GetQuestionPayload;
   getQuestions: GetQuestionsPayload;
+  getQuestionStats: GetQuestionStatsPayload;
   getStats: GetStatsPayload;
 };
 
 
 export type QueryGetQuestionArgs = {
   input: GetQuestionInput;
+};
+
+
+export type QueryGetQuestionStatsArgs = {
+  input: GetQuestionStatsInput;
 };
 
 export type Question = {

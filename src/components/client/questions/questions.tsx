@@ -46,12 +46,24 @@ const QuestionsScreen: FC = () => {
   }, [questionIndex, questions, language])
 
   const setActualQuestion = (questionInQuestionDataForm: QuestionData) => {
+    const setLang = (questionInQuestionDataForm: QuestionData, lang: Languages) => {
+      let answers: ActualQuestion['answers']
+      let question: ActualQuestion['question']
+      question = lang == Languages.english ? questionInQuestionDataForm.en : questionInQuestionDataForm.es
+      answers = questionInQuestionDataForm.answers.map((answer) => {
+        let answerLabel = answer.value;
+        answerLabel = lang == Languages.english ? answer.en : answer.es
+        return { value: answer.value, label: answerLabel, uuid: answer.uuid }
+      })
+      setQuestion({ imgUrl: questionInQuestionDataForm.imgUrl, answers, question })
+    }
+
     switch (language) {
       case (Languages.spanish):
-        langToSpanish(questionInQuestionDataForm); break;
+        setLang(questionInQuestionDataForm, Languages.spanish); break;
       case (Languages.english):
-        langToEnglish(questionInQuestionDataForm); break;
-      default: langToSpanish(questionInQuestionDataForm);
+        setLang(questionInQuestionDataForm, Languages.english); break;
+      default: setLang(questionInQuestionDataForm, Languages.spanish)
     }
   }
 
@@ -79,33 +91,9 @@ const QuestionsScreen: FC = () => {
   // UTILITIES *******************************************************************************************************
 
   const setQuestionsFromData = () => {
-    if (!data?.getQuestions.questions) return
+    if (!data || data.getQuestions.questions.length <= 0) return
     setQuestions(data.getQuestions.questions)
     setActualQuestion(data.getQuestions.questions[0])
-  }
-
-  const langToSpanish = (questionInQuestionDataForm: QuestionData) => {
-    let answers: ActualQuestion['answers']
-    let question: ActualQuestion['question']
-    question = questionInQuestionDataForm.es
-    answers = questionInQuestionDataForm.answers.map((answer) => {
-      let answerLabel = answer.value;
-      if (answer.es) answerLabel = answer.es
-      return { value: answer.value, label: answerLabel, uuid: answer.uuid }
-    })
-    setQuestion({ imgUrl: questionInQuestionDataForm.imgUrl, answers, question })
-  }
-
-  const langToEnglish = (questionInQuestionDataForm: QuestionData) => {
-    let answers: ActualQuestion['answers']
-    let question: ActualQuestion['question']
-    question = questionInQuestionDataForm.en
-    answers = questionInQuestionDataForm.answers.map((answer) => {
-      let answerLabel = answer.value;
-      if (answer.es) answerLabel = answer.en
-      return { value: answer.value, label: answerLabel, uuid: answer.uuid }
-    })
-    setQuestion({ imgUrl: questionInQuestionDataForm.imgUrl, answers, question })
   }
 
   const updateActualQuestionAccordingToActualIndex = () => {
@@ -197,14 +185,21 @@ const QuestionsScreen: FC = () => {
                 <img className="questions-screen__question__question-counter__lang-button__flag" src={esFlag} />}
             </button>
           </header>
-          <Question
-            question={question?.question || ""}
-            answers={question?.answers || [{ value: '', uuid: '', label: '' }]}
-            onNext={answer => handleNext(answer)}
-            prevAnswer={registeredAnswers?.length ? registeredAnswers[questionIndex] : undefined}
-            onPrev={answer => handlePrev(answer)}
-            language={language}
-          />
+          {(data && data.getQuestions.questions.length > 0) ?
+            <Question
+              question={question?.question || ""}
+              answers={question?.answers || [{ value: '', uuid: '', label: '' }]}
+              onNext={answer => handleNext(answer)}
+              prevAnswer={registeredAnswers?.length ? registeredAnswers[questionIndex] : undefined}
+              onPrev={answer => handlePrev(answer)}
+              language={language}
+            />
+            :
+            !data ?
+            <h1>No hay conexión con el servidor :(</h1>
+            :
+            <h1>No hay preguntas :(</h1>
+          }
         </div>
         :
         <QuestionScreenFinished />

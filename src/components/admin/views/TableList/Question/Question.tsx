@@ -1,4 +1,3 @@
-import React from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
@@ -10,15 +9,17 @@ import CardHeader from '../../../components/Card/CardHeader';
 import CardBody from '../../../components/Card/CardBody';
 import { createStyles } from '@material-ui/core';
 import Button from '../../../components/CustomButtons/Button';
-import { useGetQuestionQuery } from './operations.gql';
+import { useGetQuestionQuery, useGetQuestionStatsQuery } from './operations.gql';
 import { Link, useParams } from "react-router-dom";
 import { URLParams } from 'src/routes'
+import ChartistGraph from 'react-chartist';
 
 function Question(props: any) {
   const { classes } = props;
 
   const { pregunta } = useParams<URLParams>()
   const { data } = useGetQuestionQuery({ variables: { input: { questionUuid: pregunta } } })
+  const { data: chartData } = useGetQuestionStatsQuery({ variables: { input: { questionUuid: pregunta } } })
 
   return (
     <GridContainer>
@@ -57,7 +58,32 @@ function Question(props: any) {
                 })) || [[1], [2], [3]]
               }
             />
+
           </CardBody>
+          {chartData ?
+            <Card chart={true}>
+              <CardHeader color="info">
+                <ChartistGraph
+                  className="ct-chart"
+                  data={{ labels: chartData.getQuestionStats.selectedAnswersChart.labels, series: [chartData.getQuestionStats.selectedAnswersChart.count] }}
+                  type="Bar"
+                  options={{
+                    axisX: {
+                      showGrid: false
+                    },
+                    low: 0,
+                    high: chartData.getQuestionStats.selectedAnswersChart.hightestCount,
+                    chartPadding: {
+                      top: 0,
+                      right: 5,
+                      bottom: 0,
+                      left: 0
+                    }
+                  }}
+                />
+              </CardHeader>
+            </Card> : undefined
+          }
         </Card>
       </GridItem>
     </GridContainer>
