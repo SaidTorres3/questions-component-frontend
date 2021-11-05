@@ -7,9 +7,8 @@ import TableList from './components/admin/views/TableList/TableList';
 import NotificationsPage from './components/admin/views/Notifications/Notifications';
 import Question from './components/admin/views/TableList/Question/Question';
 import CreateQuestion from './components/admin/views/TableList/CreateQuestion/CreateQuestion';
-import UserProfile from './components/admin/views/UserProfile/UserProfile';
 import EditQuestion from './components/admin/views/TableList/EditQuestion/EditQuestion';
-// core components/views for RTL layout
+import Respondents from './components/admin/views/Respondents/Respondents';
 
 const dashboardRoutes = [
   {
@@ -48,6 +47,13 @@ const dashboardRoutes = [
     name: 'Preguntas',
     icon: 'content_paste',
     component: TableList,
+    layout: '/admin'
+  },
+  {
+    path: '/encuestados',
+    name: 'Encuestados',
+    icon: 'content_paste',
+    component: Respondents,
     layout: '/admin'
   },
   {
