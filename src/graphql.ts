@@ -112,6 +112,11 @@ export type GetQuestionsPayload = {
   questions: Array<Question>;
 };
 
+export type GetRespondentsPayload = {
+  __typename?: 'GetRespondentsPayload';
+  respondents: Array<Respondent>;
+};
+
 export type GetStatsPayload = {
   __typename?: 'GetStatsPayload';
   monthlyAverageScore: Scalars['Int'];
@@ -171,6 +176,7 @@ export type Query = {
   getQuestion: GetQuestionPayload;
   getQuestions: GetQuestionsPayload;
   getQuestionStats: GetQuestionStatsPayload;
+  getRespondents: GetRespondentsPayload;
   getStats: GetStatsPayload;
 };
 

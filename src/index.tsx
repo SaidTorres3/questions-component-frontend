@@ -11,7 +11,8 @@ import {
 } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: 'http://JURIDICO4:4000',
+  // declare REACT_APP_BACKEND_IP in .env file, example: REACT_APP_BACKEND_IP=http://localhost:4000
+  uri: process.env.REACT_APP_BACKEND_IP,
   cache: new InMemoryCache()
 });
 
