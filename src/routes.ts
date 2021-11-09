@@ -9,6 +9,7 @@ import Question from './components/admin/views/TableList/Question/Question';
 import CreateQuestion from './components/admin/views/TableList/CreateQuestion/CreateQuestion';
 import EditQuestion from './components/admin/views/TableList/EditQuestion/EditQuestion';
 import Respondents from './components/admin/views/Respondents/Respondents';
+import Respondent from './components/admin/views/Respondents/Respondent/Respondent';
 
 const dashboardRoutes = [
   {
@@ -50,6 +51,14 @@ const dashboardRoutes = [
     layout: '/admin'
   },
   {
+    path: '/encuestados/:encuestado',
+    name: 'Encuestado',
+    icon: 'content_paste',
+    component: Respondent, 
+    layout: '/admin',
+    invisible: true
+  },
+  {
     path: '/encuestados',
     name: 'Encuestados',
     icon: 'content_paste',
@@ -69,5 +78,6 @@ export default dashboardRoutes;
 
 
 export type URLParams = {
-  pregunta: string
+  pregunta: string,
+  encuestado: string
 }

@@ -112,6 +112,15 @@ export type GetQuestionsPayload = {
   questions: Array<Question>;
 };
 
+export type GetRespondentInput = {
+  respondentUuid: Scalars['ID'];
+};
+
+export type GetRespondentPayload = {
+  __typename?: 'GetRespondentPayload';
+  respondent: Respondent;
+};
+
 export type GetRespondentsPayload = {
   __typename?: 'GetRespondentsPayload';
   respondents: Array<Respondent>;
@@ -176,6 +185,7 @@ export type Query = {
   getQuestion: GetQuestionPayload;
   getQuestions: GetQuestionsPayload;
   getQuestionStats: GetQuestionStatsPayload;
+  getRespondent: GetRespondentPayload;
   getRespondents: GetRespondentsPayload;
   getStats: GetStatsPayload;
 };
@@ -188,6 +198,11 @@ export type QueryGetQuestionArgs = {
 
 export type QueryGetQuestionStatsArgs = {
   input: GetQuestionStatsInput;
+};
+
+
+export type QueryGetRespondentArgs = {
+  input: GetRespondentInput;
 };
 
 export type Question = {
@@ -203,6 +218,7 @@ export type Question = {
 
 export type Respondent = {
   __typename?: 'Respondent';
+  id: Scalars['ID'];
   uuid: Scalars['ID'];
   posted_answers: Array<Posted_Answer>;
   createdAt: Scalars['DateTime'];

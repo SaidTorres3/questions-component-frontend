@@ -49,10 +49,10 @@ const QuestionsScreen: FC = () => {
     const setLang = (questionInQuestionDataForm: QuestionData, lang: Languages) => {
       let answers: ActualQuestion['answers']
       let question: ActualQuestion['question']
-      question = lang == Languages.english ? questionInQuestionDataForm.en : questionInQuestionDataForm.es
+      question = lang === Languages.english ? questionInQuestionDataForm.en : questionInQuestionDataForm.es
       answers = questionInQuestionDataForm.answers.map((answer) => {
         let answerLabel = answer.value;
-        answerLabel = lang == Languages.english ? answer.en : answer.es
+        answerLabel = lang === Languages.english ? answer.en : answer.es
         return { value: answer.value, label: answerLabel, uuid: answer.uuid }
       })
       setQuestion({ imgUrl: questionInQuestionDataForm.imgUrl, answers, question })

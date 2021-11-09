@@ -9,18 +9,13 @@ import Button from '../../components/CustomButtons/Button';
 import { Link } from 'react-router-dom';
 import { useGetRespondentsQuery } from './operations.gql';
 
-function Respondent(props: any) {
+function Respondents(props: any) {
   const { classes } = props;
 
   const { data } = useGetRespondentsQuery()
 
   return (
     <GridContainer>
-      <GridItem xs={12} sm={12} md={12}>
-        <Link to="/admin/preguntas/crear">
-          <Button type="button" color="success">Agregar pregunta</Button>
-        </Link>
-      </GridItem>
       {
         data?.getRespondents.respondents.map((respondent, index) => {
           return <GridItem xs={12} sm={12} md={12} key={index}>
@@ -28,7 +23,7 @@ function Respondent(props: any) {
               <div className={classes.cardHeader}>
                 <div>
                   <h4 className={classes.cardTitleWhite}>
-                    Encuestado {respondent.uuid}
+                    Encuestado {respondent.id}
                   </h4>
                   <p className={classes.cardCategoryWhite}>
                     {/* {question.en} */}
@@ -115,4 +110,4 @@ const styles = createStyles({
   }
 });
 
-export default withStyles(styles)(Respondent);
+export default withStyles(styles)(Respondents);
