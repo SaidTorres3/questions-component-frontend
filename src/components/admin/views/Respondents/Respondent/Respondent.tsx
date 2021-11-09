@@ -34,12 +34,19 @@ export const Respondent = (props: Props) => {
 
   return (
     <div>
+      <h3 className={classes.title}>
+        Encuestado {data?.getRespondent.respondent.id} ➡ Calificación promedio: {data?.getRespondent.respondent.avgScore}
+      </h3>
       {mapPostedAnswers()}
     </div>
   );
 };
 
 const styles = createStyles({
+  title: {
+    fontSize: '1.5rem',
+    marginBottom: '1rem'
+  },
   card__inside: {
     padding: '10px 20px'
   },

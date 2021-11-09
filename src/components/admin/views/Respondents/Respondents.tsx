@@ -26,7 +26,7 @@ function Respondents(props: any) {
                     Encuestado {respondent.id}
                   </h4>
                   <p className={classes.cardCategoryWhite}>
-                    {/* {question.en} */}
+                    Puntaje promedio: {respondent.avgScore}
                   </p>
                 </div>
                 <div className={classes.cardButtons}>

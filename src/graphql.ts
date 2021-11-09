@@ -220,6 +220,7 @@ export type Respondent = {
   __typename?: 'Respondent';
   id: Scalars['ID'];
   uuid: Scalars['ID'];
+  avgScore: Scalars['Float'];
   posted_answers: Array<Posted_Answer>;
   createdAt: Scalars['DateTime'];
 };
