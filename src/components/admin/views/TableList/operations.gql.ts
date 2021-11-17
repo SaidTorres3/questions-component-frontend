@@ -3,27 +3,35 @@ import * as Types from '../../../../graphql';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type GetQuestionsQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type GetQuestionsQueryVariables = Types.Exact<{
+  skip?: Types.Maybe<Types.Scalars['Int']>;
+  take?: Types.Maybe<Types.Scalars['Int']>;
+  sort?: Types.Maybe<Types.GetQuestionsSortInput>;
+}>;
 
 
-export type GetQuestionsQuery = { __typename?: 'Query', getQuestions: { __typename?: 'GetQuestionsPayload', questions: Array<{ __typename?: 'Question', uuid: string, imgUrl?: string | null | undefined, es: string, en: string, answers: Array<{ __typename?: 'Answer', uuid: string, value: any, es: string, en: string }> }> } };
+export type GetQuestionsQuery = { __typename?: 'Query', getQuestions: { __typename?: 'GetQuestionsPayload', total: number, skip: number, take: number, hasMore: boolean, items: Array<{ __typename?: 'Question', uuid: string, imgUrl?: string | null | undefined, en: string, es: string, answers: Array<{ __typename?: 'Answer', en: string, es: string, uuid: string, value: any }> }> } };
 
 
 export const GetQuestionsDocument = gql`
-    query GetQuestions {
-  getQuestions {
-    questions {
+    query GetQuestions($skip: Int, $take: Int, $sort: GetQuestionsSortInput) {
+  getQuestions(skip: $skip, take: $take, sort: $sort) {
+    items {
       uuid
       imgUrl
-      es
       en
+      es
       answers {
+        en
+        es
         uuid
         value
-        es
-        en
       }
     }
+    total
+    skip
+    take
+    hasMore
   }
 }
     `;
@@ -40,6 +48,9 @@ export const GetQuestionsDocument = gql`
  * @example
  * const { data, loading, error } = useGetQuestionsQuery({
  *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
+ *      sort: // value for 'sort'
  *   },
  * });
  */

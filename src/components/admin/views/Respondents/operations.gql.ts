@@ -3,32 +3,29 @@ import * as Types from '../../../../graphql';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type GetRespondentsQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type GetRespondentsQueryVariables = Types.Exact<{
+  skip?: Types.Maybe<Types.Scalars['Int']>;
+  take?: Types.Maybe<Types.Scalars['Int']>;
+  sort?: Types.Maybe<Types.GetRespondentsSortInput>;
+}>;
 
 
-export type GetRespondentsQuery = { __typename?: 'Query', getRespondents: { __typename?: 'GetRespondentsPayload', respondents: Array<{ __typename?: 'Respondent', id: string, avgScore: number, uuid: string, createdAt: any, posted_answers: Array<{ __typename?: 'Posted_Answer', uuid: string, question: { __typename?: 'Question', uuid: string, es: string }, answer: { __typename?: 'Answer', es: string, value: any } }> }> } };
+export type GetRespondentsQuery = { __typename?: 'Query', getRespondents: { __typename?: 'GetRespondentsPayload', total: number, take: number, skip: number, hasMore: boolean, items: Array<{ __typename?: 'Respondent', uuid: string, id: string, createdAt: any, avgScore: number }> } };
 
 
 export const GetRespondentsDocument = gql`
-    query GetRespondents {
-  getRespondents {
-    respondents {
-      id
-      avgScore
+    query GetRespondents($skip: Int, $take: Int, $sort: GetRespondentsSortInput) {
+  getRespondents(skip: $skip, take: $take, sort: $sort) {
+    items {
       uuid
+      id
       createdAt
-      posted_answers {
-        uuid
-        question {
-          uuid
-          es
-        }
-        answer {
-          es
-          value
-        }
-      }
+      avgScore
     }
+    total
+    take
+    skip
+    hasMore
   }
 }
     `;
@@ -45,6 +42,9 @@ export const GetRespondentsDocument = gql`
  * @example
  * const { data, loading, error } = useGetRespondentsQuery({
  *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
+ *      sort: // value for 'sort'
  *   },
  * });
  */

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
@@ -8,16 +8,68 @@ import { createStyles } from '@material-ui/core';
 import Button from '../../components/CustomButtons/Button';
 import { Link } from 'react-router-dom';
 import { useGetRespondentsQuery } from './operations.gql';
+import { GetRespondentsSortBy, SortDirection } from 'src/graphql';
 
 function Respondents(props: any) {
   const { classes } = props;
+  const takeAmount = 8;
+  const [pagination, setPagination] = useState({
+    page: 1,
+    take: takeAmount,
+    skip: 0,
+    hasMore: true
+  })
 
-  const { data } = useGetRespondentsQuery()
+  const { data } = useGetRespondentsQuery({
+    variables: {
+      sort: {
+        direction: SortDirection.Desc,
+        by: GetRespondentsSortBy.CreatedAt,
+      },
+      take: pagination.take,
+      skip: pagination.skip
+    }
+  })
+
+  useEffect(() => {
+    if (data)
+      setPagination(prev => {
+        let { page, take, skip, hasMore } = prev;
+        hasMore = data.getRespondents.hasMore;
+        return {
+          page, take, skip, hasMore
+        }
+      })
+  }, [data])
+
+  const nextHandler = () => {
+    if (!pagination.hasMore) return;
+    setPagination(prev => {
+      let { page, take, skip, hasMore } = prev;
+      page++;
+      skip += takeAmount;
+      return {
+        page, take, skip, hasMore
+      }
+    })
+  }
+
+  const prevHandler = () => {
+    if (pagination.page <= 1) return;
+    setPagination(prev => {
+      let { page, take, skip, hasMore } = prev;
+      page--;
+      skip -= takeAmount;
+      return {
+        page, take, skip, hasMore
+      }
+    })
+  }
 
   return (
     <GridContainer>
       {
-        data?.getRespondents.respondents.map((respondent, index) => {
+        data?.getRespondents.items.map((respondent, index) => {
           return <GridItem xs={12} sm={12} md={12} key={index}>
             <div className={classes.respondentCard}>
               <div className={classes.cardHeader}>
@@ -45,6 +97,10 @@ function Respondents(props: any) {
           </GridItem>
         })
       }
+      <br />
+      <button onClick={prevHandler}>Prev</button>
+      <button>{pagination.page}</button>
+      <button onClick={() => nextHandler()}>Next</button>
     </GridContainer>
   );
 }
@@ -78,8 +134,8 @@ const styles = createStyles({
     }
   },
   respondentCard: {
-    marginTop: '10px',
-    marginBottom: '10px',
+    marginTop: '8px',
+    marginBottom: '8px',
     padding: '10px',
     borderRadius: '5px',
     background: 'linear-gradient(60deg, #ab47bc, #8e24aa)',

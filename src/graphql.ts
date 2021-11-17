@@ -107,9 +107,27 @@ export type GetQuestionStatsSelectedAnswersChart = {
   allNumericValues: Scalars['Boolean'];
 };
 
+export type GetQuestionsFilterInput = {
+  nameSearch?: Maybe<Scalars['String']>;
+};
+
 export type GetQuestionsPayload = {
   __typename?: 'GetQuestionsPayload';
-  questions: Array<Question>;
+  items: Array<Question>;
+  total: Scalars['Int'];
+  skip: Scalars['Int'];
+  take: Scalars['Int'];
+  hasMore: Scalars['Boolean'];
+};
+
+export enum GetQuestionsSortBy {
+  CreatedAt = 'createdAt'
+}
+
+export type GetQuestionsSortInput = {
+  by: GetQuestionsSortBy;
+  direction?: Maybe<SortDirection>;
+  nulls?: Maybe<SortNulls>;
 };
 
 export type GetRespondentInput = {
@@ -121,9 +139,27 @@ export type GetRespondentPayload = {
   respondent: Respondent;
 };
 
+export type GetRespondentsFilterInput = {
+  nameSearch?: Maybe<Scalars['String']>;
+};
+
 export type GetRespondentsPayload = {
   __typename?: 'GetRespondentsPayload';
-  respondents: Array<Respondent>;
+  items: Array<Respondent>;
+  total: Scalars['Int'];
+  skip: Scalars['Int'];
+  take: Scalars['Int'];
+  hasMore: Scalars['Boolean'];
+};
+
+export enum GetRespondentsSortBy {
+  CreatedAt = 'createdAt'
+}
+
+export type GetRespondentsSortInput = {
+  by: GetRespondentsSortBy;
+  direction?: Maybe<SortDirection>;
+  nulls?: Maybe<SortNulls>;
 };
 
 export type GetStatsPayload = {
@@ -196,6 +232,14 @@ export type QueryGetQuestionArgs = {
 };
 
 
+export type QueryGetQuestionsArgs = {
+  sort?: Maybe<GetQuestionsSortInput>;
+  filter?: Maybe<GetQuestionsFilterInput>;
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+};
+
+
 export type QueryGetQuestionStatsArgs = {
   input: GetQuestionStatsInput;
 };
@@ -203,6 +247,14 @@ export type QueryGetQuestionStatsArgs = {
 
 export type QueryGetRespondentArgs = {
   input: GetRespondentInput;
+};
+
+
+export type QueryGetRespondentsArgs = {
+  sort?: Maybe<GetRespondentsSortInput>;
+  filter?: Maybe<GetRespondentsFilterInput>;
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
 };
 
 export type Question = {
@@ -231,3 +283,13 @@ export type SelectedAnswersChart = {
   count: Array<Scalars['Int']>;
   hightestCount: Scalars['Int'];
 };
+
+export enum SortDirection {
+  Asc = 'Asc',
+  Desc = 'Desc'
+}
+
+export enum SortNulls {
+  First = 'First',
+  Last = 'Last'
+}

@@ -26,7 +26,7 @@ function TableList(props: any) {
         </Link>
       </GridItem>
       {
-        data?.getQuestions.questions.map((question, index) => {
+        data?.getQuestions.items.map((question, index) => {
           return <GridItem xs={12} sm={12} md={12} key={index}>
             <Card>
               <CardHeader color="primary">
