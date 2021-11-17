@@ -19,7 +19,11 @@ const QuestionsScreen: FC = () => {
   const [registeredAnswers, setRegisteredAnswers] = useState<string[]>()
   const [finished, setFinished] = useState<boolean>(false);
 
-  const { data, loading, error } = useGetQuestionsQuery()
+  const { data, loading, error } = useGetQuestionsQuery({
+    variables: {
+      take: 1000
+    }
+  })
   const [CreatePostedAnswersMutation] = useCreatePostedAnswersMutation()
 
   useEffect(() => {

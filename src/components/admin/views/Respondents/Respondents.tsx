@@ -12,10 +12,9 @@ import { GetRespondentsSortBy, SortDirection } from 'src/graphql';
 
 function Respondents(props: any) {
   const { classes } = props;
-  const takeAmount = 8;
   const [pagination, setPagination] = useState({
     page: 1,
-    take: takeAmount,
+    take: 8,
     skip: 0,
     hasMore: true
   })
@@ -24,7 +23,7 @@ function Respondents(props: any) {
     variables: {
       sort: {
         direction: SortDirection.Desc,
-        by: GetRespondentsSortBy.CreatedAt,
+        by: GetRespondentsSortBy.Id,
       },
       take: pagination.take,
       skip: pagination.skip
@@ -32,36 +31,33 @@ function Respondents(props: any) {
   })
 
   useEffect(() => {
-    if (data)
-      setPagination(prev => {
-        let { page, take, skip, hasMore } = prev;
-        hasMore = data.getRespondents.hasMore;
-        return {
-          page, take, skip, hasMore
-        }
-      })
+    if (!data) return;
+    setPagination(prev => {
+      return {
+        ...prev,
+        hasMore: data.getRespondents.hasMore
+      }
+    })
   }, [data])
 
-  const nextHandler = () => {
+  const handleNextPage = () => {
     if (!pagination.hasMore) return;
     setPagination(prev => {
-      let { page, take, skip, hasMore } = prev;
-      page++;
-      skip += takeAmount;
       return {
-        page, take, skip, hasMore
+        ...prev,
+        page: prev.page + 1,
+        skip: prev.skip + prev.take
       }
     })
   }
 
-  const prevHandler = () => {
+  const handlePrevPage = () => {
     if (pagination.page <= 1) return;
     setPagination(prev => {
-      let { page, take, skip, hasMore } = prev;
-      page--;
-      skip -= takeAmount;
       return {
-        page, take, skip, hasMore
+        ...prev,
+        page: prev.page - 1,
+        skip: prev.skip - prev.take
       }
     })
   }
@@ -98,9 +94,9 @@ function Respondents(props: any) {
         })
       }
       <br />
-      <button onClick={prevHandler}>Prev</button>
+      <button onClick={handlePrevPage}>Prev</button>
       <button>{pagination.page}</button>
-      <button onClick={() => nextHandler()}>Next</button>
+      <button onClick={handleNextPage}>Next</button>
     </GridContainer>
   );
 }

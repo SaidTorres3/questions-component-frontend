@@ -153,7 +153,8 @@ export type GetRespondentsPayload = {
 };
 
 export enum GetRespondentsSortBy {
-  CreatedAt = 'createdAt'
+  CreatedAt = 'createdAt',
+  Id = 'id'
 }
 
 export type GetRespondentsSortInput = {

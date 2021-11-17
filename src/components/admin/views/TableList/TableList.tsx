@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
@@ -15,8 +15,52 @@ import { Link } from 'react-router-dom';
 
 function TableList(props: any) {
   const { classes } = props;
+  const [pagination, setPagination] = React.useState({
+    page: 1,
+    take: 5,
+    skip: 0,
+    hasMore: true
+  });
 
-  const { data } = useGetQuestionsQuery()
+  const { data } = useGetQuestionsQuery({
+    variables: {
+      take: pagination.take,
+      skip: pagination.skip
+    }
+  })
+
+  useEffect(() => {
+    if (!data) return;
+    setPagination(prev => {
+      return {
+        ...prev,
+        hasMore: data.getQuestions.hasMore
+      }
+    })
+  }, [data])
+
+  const handleNextPage = () => {
+    window.scrollTo(0, 0);
+    if(!pagination.hasMore) return;
+    setPagination(prev => {
+      return {
+        ...prev,
+        page: prev.page + 1,
+        skip: prev.skip + prev.take
+      }
+    })
+  }
+
+  const handlePrevPage = () => {
+    if(pagination.page <= 1) return;
+    setPagination(prev => {
+      return {
+        ...prev,
+        page: prev.page - 1,
+        skip: prev.skip - prev.take
+      }
+    })
+  }
 
   return (
     <GridContainer>
@@ -76,6 +120,9 @@ function TableList(props: any) {
           </GridItem>
         })
       }
+      <button onClick={handlePrevPage}>Prev</button>
+      <button>{pagination.page}</button>
+      <button onClick={handleNextPage}>Next</button>
     </GridContainer>
   );
 }
