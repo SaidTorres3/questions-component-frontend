@@ -96,11 +96,13 @@ class Dashboard extends React.Component<Props, State> {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
     window.addEventListener('resize', this.resizeFunction);
+    // window.addEventListener('click', this.resizeFunction);
   }
 
   componentDidUpdate(e: any) {
     if (e.history.location.pathname !== e.location.pathname) {
       this.refs.mainPanel.scrollTop = 0;
+      // where does refs obtains its value? R: this.refs.mainPanel is a ref object that is obtained from the DOM element with the ref attribute. 
       if (this.state.mobileOpen) {
         this.setState({ mobileOpen: false });
       }
@@ -125,7 +127,7 @@ class Dashboard extends React.Component<Props, State> {
           color={this.state.color}
           {...rest}
         />
-        <div className={classes.mainPanel} ref="mainPanel">
+        <div className={classes.mainPanel} ref="mainPanel" id="mainPanel">
           <Navbar
             routes={routes}
             handleDrawerToggle={this.handleDrawerToggle}

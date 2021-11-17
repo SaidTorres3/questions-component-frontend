@@ -39,9 +39,14 @@ function TableList(props: any) {
     })
   }, [data])
 
+  const scrollTop = () => {
+    const element = document.getElementById('mainPanel');
+    element?.scrollTo(0, 0);
+  }
+
   const handleNextPage = () => {
-    window.scrollTo(0, 0);
-    if(!pagination.hasMore) return;
+    if (!pagination.hasMore) return;
+    scrollTop();
     setPagination(prev => {
       return {
         ...prev,
@@ -52,7 +57,8 @@ function TableList(props: any) {
   }
 
   const handlePrevPage = () => {
-    if(pagination.page <= 1) return;
+    if (pagination.page <= 1) return;
+    scrollTop();
     setPagination(prev => {
       return {
         ...prev,

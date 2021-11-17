@@ -40,8 +40,14 @@ function Respondents(props: any) {
     })
   }, [data])
 
+  const scrollTop = () => {
+    const element = document.getElementById('mainPanel');
+    element?.scrollTo(0, 0);
+  }
+
   const handleNextPage = () => {
     if (!pagination.hasMore) return;
+    scrollTop();
     setPagination(prev => {
       return {
         ...prev,
@@ -53,6 +59,7 @@ function Respondents(props: any) {
 
   const handlePrevPage = () => {
     if (pagination.page <= 1) return;
+    scrollTop();
     setPagination(prev => {
       return {
         ...prev,
