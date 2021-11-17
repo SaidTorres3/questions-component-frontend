@@ -3,11 +3,11 @@ import Dashboard from '@material-ui/icons/Dashboard';
 import Notifications from '@material-ui/icons/Notifications';
 // core components/views for Admin layout
 import DashboardPage from './components/admin/views/Dashboard/Dashboard';
-import TableList from './components/admin/views/TableList/TableList';
+import Questions from './components/admin/views/Questions//Questions';
 import NotificationsPage from './components/admin/views/Notifications/Notifications';
-import Question from './components/admin/views/TableList/Question/Question';
-import CreateQuestion from './components/admin/views/TableList/CreateQuestion/CreateQuestion';
-import EditQuestion from './components/admin/views/TableList/EditQuestion/EditQuestion';
+import Question from './components/admin/views/Questions/Question/Question';
+import CreateQuestion from './components/admin/views/Questions/CreateQuestion/CreateQuestion';
+import EditQuestion from './components/admin/views/Questions/EditQuestion/EditQuestion';
 import Respondents from './components/admin/views/Respondents/Respondents';
 import Respondent from './components/admin/views/Respondents/Respondent/Respondent';
 
@@ -47,7 +47,7 @@ const dashboardRoutes = [
     path: '/preguntas',
     name: 'Preguntas',
     icon: 'content_paste',
-    component: TableList,
+    component: Questions,
     layout: '/admin'
   },
   {
