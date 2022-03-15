@@ -33,7 +33,8 @@ export type CreateAnswerInput = {
 };
 
 export type CreatePostedAnswerInput = {
-  answersUuid?: Maybe<Array<Scalars['ID']>>;
+  answersUuid: Array<Scalars['ID']>;
+  userUuid: Scalars['ID'];
 };
 
 export type CreatePostedAnswerPayload = {
@@ -50,6 +51,17 @@ export type CreateQuestionInput = {
 
 export type CreateQuestionPayload = {
   __typename?: 'CreateQuestionPayload';
+  createdUuid: Scalars['ID'];
+};
+
+export type CreateUserInput = {
+  username: Scalars['String'];
+  password: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export type CreateUserPayload = {
+  __typename?: 'CreateUserPayload';
   createdUuid: Scalars['ID'];
 };
 
@@ -174,6 +186,50 @@ export type GetStatsPayload = {
   monthlyAnswersChart: MonthlyAnswersChart;
 };
 
+export type GetUserInput = {
+  userUuid: Scalars['ID'];
+};
+
+export type GetUserPayload = {
+  __typename?: 'GetUserPayload';
+  user: User;
+};
+
+export type GetUsersFilterInput = {
+  nameSearch?: Maybe<Scalars['String']>;
+};
+
+export type GetUsersPayload = {
+  __typename?: 'GetUsersPayload';
+  items: Array<User>;
+  total: Scalars['Int'];
+  skip: Scalars['Int'];
+  take: Scalars['Int'];
+  hasMore: Scalars['Boolean'];
+};
+
+export enum GetUsersSortBy {
+  CreatedAt = 'createdAt',
+  Id = 'id'
+}
+
+export type GetUsersSortInput = {
+  by: GetUsersSortBy;
+  direction?: Maybe<SortDirection>;
+  nulls?: Maybe<SortNulls>;
+};
+
+export type LoginUserInput = {
+  username: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type LoginUserPayload = {
+  __typename?: 'LoginUserPayload';
+  token: Scalars['ID'];
+  user: User;
+};
+
 export type MonthlyAnswersChart = {
   __typename?: 'MonthlyAnswersChart';
   monthlyCount: Array<Scalars['Int']>;
@@ -186,6 +242,8 @@ export type Mutation = {
   createPostedAnswers: CreatePostedAnswerPayload;
   editQuestion: EditQuestionPayload;
   deleteQuestion: DeleteQuestionPayload;
+  createUser: CreateUserPayload;
+  LoginUser: LoginUserPayload;
 };
 
 
@@ -208,6 +266,16 @@ export type MutationDeleteQuestionArgs = {
   input: DeleteQuestionInput;
 };
 
+
+export type MutationCreateUserArgs = {
+  input?: Maybe<CreateUserInput>;
+};
+
+
+export type MutationLoginUserArgs = {
+  input?: Maybe<LoginUserInput>;
+};
+
 export type Posted_Answer = {
   __typename?: 'Posted_Answer';
   uuid: Scalars['ID'];
@@ -225,6 +293,8 @@ export type Query = {
   getRespondent: GetRespondentPayload;
   getRespondents: GetRespondentsPayload;
   getStats: GetStatsPayload;
+  getUser: GetUserPayload;
+  getUsers: GetUsersPayload;
 };
 
 
@@ -258,6 +328,19 @@ export type QueryGetRespondentsArgs = {
   take?: Maybe<Scalars['Int']>;
 };
 
+
+export type QueryGetUserArgs = {
+  input: GetUserInput;
+};
+
+
+export type QueryGetUsersArgs = {
+  sort?: Maybe<GetUsersSortInput>;
+  filter?: Maybe<GetUsersFilterInput>;
+  skip?: Maybe<Scalars['Int']>;
+  take?: Maybe<Scalars['Int']>;
+};
+
 export type Question = {
   __typename?: 'Question';
   uuid: Scalars['ID'];
@@ -273,9 +356,10 @@ export type Respondent = {
   __typename?: 'Respondent';
   id: Scalars['ID'];
   uuid: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
   avgScore: Scalars['Float'];
   posted_answers: Array<Posted_Answer>;
-  createdAt: Scalars['DateTime'];
+  user: User;
 };
 
 export type SelectedAnswersChart = {
@@ -294,3 +378,13 @@ export enum SortNulls {
   First = 'First',
   Last = 'Last'
 }
+
+export type User = {
+  __typename?: 'User';
+  uuid: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  username: Scalars['String'];
+  password: Scalars['String'];
+  type: Scalars['String'];
+  respondents: Array<Respondent>;
+};

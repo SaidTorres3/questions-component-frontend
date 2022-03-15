@@ -12,6 +12,7 @@ import { createStyles } from '@material-ui/core';
 import { useGetQuestionsQuery } from './operations.gql'
 import Button from '../../components/CustomButtons/Button';
 import { Link } from 'react-router-dom';
+import SpinLoader from '../../components/SpinLoader/SpinLoader';
 
 function TableList(props: any) {
   const { classes } = props;
@@ -22,7 +23,7 @@ function TableList(props: any) {
     hasMore: true
   });
 
-  const { data } = useGetQuestionsQuery({
+  const { data, loading } = useGetQuestionsQuery({
     variables: {
       take: pagination.take,
       skip: pagination.skip
@@ -69,12 +70,13 @@ function TableList(props: any) {
   }
 
   return (
-    <GridContainer>
+    <GridContainer style={{innerHeight: 'fit-content'}}>
       <GridItem xs={12} sm={12} md={12}>
         <Link to="/admin/preguntas/crear">
           <Button type="button" color="success">Agregar pregunta</Button>
         </Link>
       </GridItem>
+      {loading ? <SpinLoader /> : <SpinLoader />}
       {
         data?.getQuestions.items.map((question, index) => {
           return <GridItem xs={12} sm={12} md={12} key={index}>

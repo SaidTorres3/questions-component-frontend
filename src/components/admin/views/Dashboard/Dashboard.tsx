@@ -22,12 +22,8 @@ import CardIcon from '../../components/Card/CardIcon';
 import CardBody from '../../components/Card/CardBody';
 import CardFooter from '../../components/Card/CardFooter';
 
-import { bugs, website, server } from '../../variables/general';
-
 import {
-  dailySalesChart,
   emailsSubscriptionChart,
-  completedTasksChart
 } from '../../variables/charts';
 
 import dashboardStyle from '../../assets/jss/material-dashboard-react/views/dashboardStyle';
