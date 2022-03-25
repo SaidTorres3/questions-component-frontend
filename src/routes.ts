@@ -10,6 +10,7 @@ import CreateQuestion from './components/admin/views/Questions/CreateQuestion/Cr
 import EditQuestion from './components/admin/views/Questions/EditQuestion/EditQuestion';
 import Respondents from './components/admin/views/Respondents/Respondents';
 import Respondent from './components/admin/views/Respondents/Respondent/Respondent';
+import User from './components/admin/views/User/User';
 
 const dashboardRoutes = [
   {
@@ -71,6 +72,14 @@ const dashboardRoutes = [
     icon: Notifications,
     component: NotificationsPage,
     layout: '/admin'
+  },
+  {
+    path: '/usuario',
+    name: 'Usuario',
+    icon: 'content_paste',
+    component: User,
+    layout: '/admin',
+    invisible: true
   }
 ];
 

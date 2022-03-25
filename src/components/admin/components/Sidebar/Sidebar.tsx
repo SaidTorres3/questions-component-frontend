@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 // import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Drawer from '@material-ui/core/Drawer';
@@ -22,6 +22,7 @@ const Sidebar = ({ ...props }) => {
     return props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }
   const { classes, color, logo, image, logoText, routes } = props;
+  const history = useHistory()
   var links = (
     <List className={classes.list}>
       {routes.map((prop: any, key: any) => {
@@ -113,7 +114,7 @@ const Sidebar = ({ ...props }) => {
         >
           {brand}
           <div className={classes.sidebarWrapper}>
-            {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+            {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks history={history} />}
             {links}
           </div>
           {image !== undefined ? (

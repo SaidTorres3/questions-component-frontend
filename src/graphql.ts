@@ -224,8 +224,15 @@ export type LoginUserInput = {
   password: Scalars['String'];
 };
 
-export type LoginUserPayload = {
-  __typename?: 'LoginUserPayload';
+export type LoginUserPayload = LoginUserPayloadSuccess | LoginUserPayloadFail;
+
+export type LoginUserPayloadFail = {
+  __typename?: 'LoginUserPayloadFail';
+  message: Scalars['String'];
+};
+
+export type LoginUserPayloadSuccess = {
+  __typename?: 'LoginUserPayloadSuccess';
   token: Scalars['ID'];
   user: User;
 };
@@ -243,7 +250,8 @@ export type Mutation = {
   editQuestion: EditQuestionPayload;
   deleteQuestion: DeleteQuestionPayload;
   createUser: CreateUserPayload;
-  LoginUser: LoginUserPayload;
+  loginUser?: Maybe<LoginUserPayload>;
+  validadeToken?: Maybe<ValidadeTokenPayload>;
 };
 
 
@@ -274,6 +282,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationLoginUserArgs = {
   input?: Maybe<LoginUserInput>;
+};
+
+
+export type MutationValidadeTokenArgs = {
+  input?: Maybe<ValidadeTokenInput>;
 };
 
 export type Posted_Answer = {
@@ -387,4 +400,20 @@ export type User = {
   password: Scalars['String'];
   type: Scalars['String'];
   respondents: Array<Respondent>;
+};
+
+export type ValidadeTokenInput = {
+  token: Scalars['String'];
+};
+
+export type ValidadeTokenPayload = ValidadeTokenPayloadSuccess | ValidadeTokenPayloadFail;
+
+export type ValidadeTokenPayloadFail = {
+  __typename?: 'ValidadeTokenPayloadFail';
+  message: Scalars['String'];
+};
+
+export type ValidadeTokenPayloadSuccess = {
+  __typename?: 'ValidadeTokenPayloadSuccess';
+  user: User;
 };

@@ -17,7 +17,7 @@ import dashboardStyle from "../assets/jss/material-dashboard-react/layouts/dashb
 import image from "../assets/img/sidebar-2.jpg";
 import logo from "../assets/img/reactlogo.png";
 import Login from "./Login";
-import { UserContext } from "src/App";
+import { UserContext } from "src/auth/authContext";
 
 const switchRoutes = (
   <Switch>
@@ -123,7 +123,6 @@ class Dashboard extends React.Component<Props, State> {
           <div style={{height: "100%"}}>
             <Login></Login>
             <div ref="mainPanel"></div>
-
           </div>
         ) : (
           <div className={classes.wrapper}>

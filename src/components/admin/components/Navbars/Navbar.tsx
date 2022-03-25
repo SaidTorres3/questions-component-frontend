@@ -61,7 +61,7 @@ function Header({ ...props }: any) {
           </Button>
         </div>
         <Hidden smDown={true} implementation="css">
-          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks history={history} />}
         </Hidden>
         <Hidden mdUp={true} implementation="css">
           <IconButton

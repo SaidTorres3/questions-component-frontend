@@ -76,8 +76,7 @@ function TableList(props: any) {
           <Button type="button" color="success">Agregar pregunta</Button>
         </Link>
       </GridItem>
-      {loading ? <SpinLoader /> : <SpinLoader />}
-      {
+      {loading ? <SpinLoader /> :
         data?.getQuestions.items.map((question, index) => {
           return <GridItem xs={12} sm={12} md={12} key={index}>
             <Card>

@@ -7,8 +7,8 @@ import {
 } from "./operations.gql";
 import enFlag from "./en-FLAG.png";
 import esFlag from "./es-FLAG.jpg";
-import { UserContext } from "src/App";
 import React from "react";
+import { UserContext } from "src/auth/authContext";
 
 enum Languages {
   "spanish" = "es",
@@ -187,10 +187,10 @@ const QuestionsScreen: FC = () => {
 
   return (
     <body
-      className="questions-screen"
-      style={
-        question?.imgUrl
-          ? {
+    className="questions-screen"
+    style={
+      question?.imgUrl
+      ? {
               backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${question.imgUrl})`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
@@ -200,7 +200,8 @@ const QuestionsScreen: FC = () => {
               backgroundColor: "#56A",
             }
       }
-    >
+      >
+      { userData.uuid ? <></> : <></> }
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"

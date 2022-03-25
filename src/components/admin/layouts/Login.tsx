@@ -1,8 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { createStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import { useLoginUserMutation } from "./operations.gql";
-import { UserContext } from "src/App";
+import { UserContext } from "src/auth/authContext";
+import useToken from "src/auth/useToken";
+import useValidadeToken from "src/auth/useValidadeToken";
 
 const LoginScreen: FC = (props: any) => {
   const { classes } = props;
@@ -13,9 +15,23 @@ const LoginScreen: FC = (props: any) => {
   });
   const [doesUserLoggedIn, setDoesUserLoggedIn] = React.useState(false);
   const [attemptToLogIn] = useLoginUserMutation();
-  const {
-    setUserData: setUserDataContext,
-  } = React.useContext(UserContext);
+  const { setUserData: setUserDataContext } = React.useContext(UserContext);
+  const { token, setToken } = useToken();
+  const { validadeToken } = useValidadeToken();
+
+  useEffect(() => {
+    console.log(token);
+    if (!doesUserLoggedIn && token) {
+      console.log("tring");
+      validadeToken(token).then((res) => {
+        console.log("before if");
+        console.log(res);
+        if (res) {
+          setUserDataContext(res);
+        }
+      });
+    }
+  }, []);
 
   const login = async (opts: { username: string; password: string }) => {
     const res = await attemptToLogIn({
@@ -26,15 +42,26 @@ const LoginScreen: FC = (props: any) => {
         },
       },
     });
-    if (res.data?.LoginUser?.token) {
+    const loginUserVar = res?.data?.loginUser;
+    if (loginUserVar && loginUserVar.__typename === "LoginUserPayloadSuccess") {
       setUserDataContext({
-        jwt: res.data.LoginUser.token,
-        type: res.data.LoginUser.user.type,
-        uuid: res.data.LoginUser.user.uuid,
+        type: loginUserVar.user.type,
+        uuid: loginUserVar.user.uuid,
+        username: loginUserVar.user.username,
       });
+      setDoesUserLoggedIn(true);
+      setToken(loginUserVar.token);
+    } else if (
+      loginUserVar &&
+      loginUserVar.__typename === "LoginUserPayloadFail"
+    ) {
+      setUserDataContext({
+        username: "",
+        type: "",
+        uuid: "",
+      });
+      setDoesUserLoggedIn(false);
     }
-
-    setDoesUserLoggedIn(!!res.data?.LoginUser.token);
   };
 
   return (

@@ -13,7 +13,10 @@ import {
 const client = new ApolloClient({
   // declare REACT_APP_BACKEND_IP in .env file, example: REACT_APP_BACKEND_IP=http://localhost:4000
   uri: process.env.REACT_APP_BACKEND_IP,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  headers: {
+    autorization: `Bearer ${localStorage.getItem("token")}`,
+  }
 });
 
 ReactDOM.render(

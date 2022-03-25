@@ -8,16 +8,22 @@ export type LoginUserMutationVariables = Types.Exact<{
 }>;
 
 
-export type LoginUserMutation = { __typename?: 'Mutation', LoginUser: { __typename?: 'LoginUserPayload', token: string, user: { __typename?: 'User', type: string, uuid: string } } };
+export type LoginUserMutation = { __typename?: 'Mutation', loginUser?: { __typename?: 'LoginUserPayloadSuccess', token: string, user: { __typename?: 'User', uuid: string, type: string, username: string } } | { __typename?: 'LoginUserPayloadFail', message: string } | null | undefined };
 
 
 export const LoginUserDocument = gql`
     mutation LoginUser($input: LoginUserInput) {
-  LoginUser(input: $input) {
-    token
-    user {
-      type
-      uuid
+  loginUser(input: $input) {
+    ... on LoginUserPayloadSuccess {
+      user {
+        uuid
+        type
+        username
+      }
+      token
+    }
+    ... on LoginUserPayloadFail {
+      message
     }
   }
 }
