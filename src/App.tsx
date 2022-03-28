@@ -2,21 +2,15 @@ import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import QuestionsScreen from "src/components/client/questions/questions";
 import "./App.css";
-import { UserContext, UserData } from "./auth/authContext";
+import { UserContext } from "./auth/authContext";
+import useAuth from "./auth/useAuth";
 import "./components/admin/assets/css/material-dashboard-react.css";
 import Admin from "./components/admin/layouts/Admin";
 import Login from "./components/admin/layouts/Login";
 
 function App() {
-  const [userData, setUserData] = React.useState<UserData>({
-    uuid: "",
-    type: "",
-    username: "",
-  });
+  const {userData, setUserData} = useAuth()
 
-  React.useEffect(() => {
-    console.log(userData);
-  }, [userData]);
   return (
     <div className="App">
       <UserContext.Provider value={{ userData, setUserData }}>

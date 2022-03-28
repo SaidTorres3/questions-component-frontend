@@ -1,10 +1,15 @@
 import { useState } from "react";
+import { UserData } from "./authContext";
 
 export default function useAuth() {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [userData, setUserData] = useState<UserData>({
+    type: "",
+    uuid: "",
+    username: ""
+  });
 
   return {
-    setLoggedIn,
-    loggedIn,
+    userData,
+    setUserData
   };
 }

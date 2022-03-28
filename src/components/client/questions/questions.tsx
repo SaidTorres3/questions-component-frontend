@@ -44,14 +44,14 @@ const QuestionsScreen: FC = () => {
         },
       });
     }
-  }, [finished]);
+  }, [CreatePostedAnswersMutation, finished, registeredAnswers, userData.uuid]);
 
   useEffect(() => {
     if (!data?.getQuestions.items) return;
     setQuestionsFromData();
     // eslint-disable-next-line
     console.log(userData);
-  }, [data]);
+  }, [data, userData]);
 
   useEffect(() => {
     updateActualQuestionAccordingToActualIndex();
@@ -136,7 +136,7 @@ const QuestionsScreen: FC = () => {
     storeAnswerAndSetPrevQuestion(answer);
   };
 
-  // UTILITIES *******************************************************************************************************
+  // *UTILITIES ******************************************************************************************************
 
   const setQuestionsFromData = () => {
     if (!data || data.getQuestions.items.length <= 0) return;
@@ -187,10 +187,10 @@ const QuestionsScreen: FC = () => {
 
   return (
     <body
-    className="questions-screen"
-    style={
-      question?.imgUrl
-      ? {
+      className="questions-screen"
+      style={
+        question?.imgUrl
+          ? {
               backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${question.imgUrl})`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
@@ -200,8 +200,8 @@ const QuestionsScreen: FC = () => {
               backgroundColor: "#56A",
             }
       }
-      >
-      { userData.uuid ? <></> : <></> }
+    >
+      {userData.uuid ? <></> : <></>}
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -258,8 +258,10 @@ const QuestionsScreen: FC = () => {
               onPrev={(answer) => handlePrev(answer)}
               language={language}
             />
-          ) : !data ? (
+          ) : error ? (
             <h1>No hay conexión con el servidor :(</h1>
+          ) : !data ? (
+            <h1>Cargando...</h1>
           ) : (
             <h1>No hay preguntas :(</h1>
           )}

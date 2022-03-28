@@ -5,33 +5,36 @@ import { useLoginUserMutation } from "./operations.gql";
 import { UserContext } from "src/auth/authContext";
 import useToken from "src/auth/useToken";
 import useValidadeToken from "src/auth/useValidadeToken";
+import LoadingScreen from "src/auth/LoadingScreen";
 
 const LoginScreen: FC = (props: any) => {
   const { classes } = props;
 
-  const [userData, setUserData] = React.useState({
+  const [userDataForm, setUserDataForm] = React.useState({
     username: "",
     password: "",
   });
   const [doesUserLoggedIn, setDoesUserLoggedIn] = React.useState(false);
+  const [doesQueryFinished, setDoesQueryFinished] = React.useState(false);
   const [attemptToLogIn] = useLoginUserMutation();
-  const { setUserData: setUserDataContext } = React.useContext(UserContext);
+  const { setUserData } = React.useContext(UserContext);
   const { token, setToken } = useToken();
   const { validadeToken } = useValidadeToken();
 
   useEffect(() => {
-    console.log(token);
-    if (!doesUserLoggedIn && token) {
-      console.log("tring");
+    if (token) {
+      setDoesQueryFinished(false);
       validadeToken(token).then((res) => {
-        console.log("before if");
-        console.log(res);
+        setDoesQueryFinished(true);
         if (res) {
-          setUserDataContext(res);
+          setUserData(res);
         }
       });
+    } else {
+      setDoesQueryFinished(true);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   const login = async (opts: { username: string; password: string }) => {
     const res = await attemptToLogIn({
@@ -44,7 +47,7 @@ const LoginScreen: FC = (props: any) => {
     });
     const loginUserVar = res?.data?.loginUser;
     if (loginUserVar && loginUserVar.__typename === "LoginUserPayloadSuccess") {
-      setUserDataContext({
+      setUserData({
         type: loginUserVar.user.type,
         uuid: loginUserVar.user.uuid,
         username: loginUserVar.user.username,
@@ -55,7 +58,7 @@ const LoginScreen: FC = (props: any) => {
       loginUserVar &&
       loginUserVar.__typename === "LoginUserPayloadFail"
     ) {
-      setUserDataContext({
+      setUserData({
         username: "",
         type: "",
         uuid: "",
@@ -66,37 +69,41 @@ const LoginScreen: FC = (props: any) => {
 
   return (
     <div className={classes.loginRoot}>
-      <div className={classes.loginModuleContainer}>
-        <div className={classes.loginModule}>
-          {doesUserLoggedIn ? <div>Logged in</div> : ""}
-          <div className={classes.loginWlcm}>Iniciar sesión</div>
-          <br />
-          <div className={classes.loginInstructionLabel}>Usuario:</div>
-          <input
-            className={classes.inputBox}
-            onChange={(e) => {
-              setUserData({ ...userData, username: e.target.value });
-            }}
-            type="username"
-          />
-          <div className={classes.loginInstructionLabel}>Contraseña:</div>
-          <input
-            className={classes.inputBox}
-            onChange={(e) => {
-              setUserData({ ...userData, password: e.target.value });
-            }}
-            type="password"
-          />
-          <br />
-          <button
-            className={classes.loginButton}
-            onClick={() => login(userData)}
-          >
-            Aceptar
-          </button>
-          <br />
+      {doesQueryFinished ? (
+        <div className={classes.loginModuleContainer}>
+          <div className={classes.loginModule}>
+            {doesUserLoggedIn ? <div>Logged in</div> : ""}
+            <div className={classes.loginWlcm}>Iniciar sesión</div>
+            <br />
+            <div className={classes.loginInstructionLabel}>Usuario:</div>
+            <input
+              className={classes.inputBox}
+              onChange={(e) => {
+                setUserDataForm({ ...userDataForm, username: e.target.value });
+              }}
+              type="username"
+            />
+            <div className={classes.loginInstructionLabel}>Contraseña:</div>
+            <input
+              className={classes.inputBox}
+              onChange={(e) => {
+                setUserDataForm({ ...userDataForm, password: e.target.value });
+              }}
+              type="password"
+            />
+            <br />
+            <button
+              className={classes.loginButton}
+              onClick={() => login(userDataForm)}
+            >
+              Aceptar
+            </button>
+            <br />
+          </div>
         </div>
-      </div>
+      ) : (
+        <LoadingScreen></LoadingScreen>
+      )}
     </div>
   );
 };

@@ -13,7 +13,6 @@ const useValidadeToken = () => {
       },
     });
 
-    console.log(res.data?.validadeToken?.__typename);
     if (res.data?.validadeToken?.__typename === "ValidadeTokenPayloadSuccess") {
       return res.data.validadeToken.user;
     }

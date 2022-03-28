@@ -61,7 +61,7 @@ class Dashboard extends React.Component<Props, State> {
     };
   }
 
-  static contextType = UserContext; 
+  static contextType = UserContext;
 
   handleImageClick = (i: string) => {
     this.setState({ image: i });
@@ -98,6 +98,7 @@ class Dashboard extends React.Component<Props, State> {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
     window.addEventListener("resize", this.resizeFunction);
+    console.log(this.context);
     // window.addEventListener('click', this.resizeFunction);
   }
 
@@ -119,8 +120,8 @@ class Dashboard extends React.Component<Props, State> {
     const { classes, ...rest } = this.props;
     return (
       <>
-        {!this.context?.userData?.jwt ? (
-          <div style={{height: "100%"}}>
+        {this.context?.userData?.type !== "admin" ? (
+          <div style={{ height: "100%" }}>
             <Login></Login>
             <div ref="mainPanel"></div>
           </div>
