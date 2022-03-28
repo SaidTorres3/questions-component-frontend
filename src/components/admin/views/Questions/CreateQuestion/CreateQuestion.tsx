@@ -5,7 +5,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import GridItem from '../../../components/Grid/GridItem';
 import GridContainer from '../../../components/Grid/GridContainer';
 import Card from '../../../components/Card/Card';
-import CardHeader from '../../../components/Card/CardHeader';
 import CardBody from '../../../components/Card/CardBody';
 import { createStyles } from '@material-ui/core';
 import Button from '../../../components/CustomButtons/Button';

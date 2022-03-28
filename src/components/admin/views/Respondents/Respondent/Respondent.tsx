@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import Card from "src/components/admin/components/Card/Card";
 import { URLParams } from "src/routes";
-import { GetRespondentQuery, useGetRespondentQuery } from "./operations.gql";
+import { useGetRespondentQuery } from "./operations.gql";
 import { createStyles } from '@material-ui/core';
 import { withStyles } from "@material-ui/styles";
 
@@ -9,6 +9,7 @@ export const Respondent = (props: Props) => {
   const { classes } = props;
 
   const { encuestado } = useParams<URLParams>()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, loading, error } = useGetRespondentQuery({
     variables: {
       input: {

@@ -161,7 +161,7 @@ const RadioAnswer: FC<InternalRadioAnswerRequeriments> = ({ selectedAnswer, labe
     } else {
       setThisIsSelected(false)
     }
-  }, [selectedAnswer, setThisIsSelected, value])
+  }, [selectedAnswer, setThisIsSelected, uuid, value])
   return (
     <div
       className="question-screen__question-container__radio-answers__radio_answer"

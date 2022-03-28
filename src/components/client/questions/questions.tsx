@@ -26,6 +26,7 @@ const QuestionsScreen: FC = () => {
 
   const { userData } = React.useContext(UserContext);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, loading, error } = useGetQuestionsQuery({
     variables: {
       take: 1000,
@@ -51,6 +52,7 @@ const QuestionsScreen: FC = () => {
     setQuestionsFromData();
     // eslint-disable-next-line
     console.log(userData);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, userData]);
 
   useEffect(() => {
@@ -231,11 +233,13 @@ const QuestionsScreen: FC = () => {
               className="questions-screen__question__question-counter__lang-button"
             >
               {language === Languages.spanish ? (
+                // eslint-disable-next-line jsx-a11y/alt-text
                 <img
                   className="questions-screen__question__question-counter__lang-button__flag"
                   src={enFlag}
                 />
               ) : (
+                // eslint-disable-next-line jsx-a11y/alt-text
                 <img
                   className="questions-screen__question__question-counter__lang-button__flag"
                   src={esFlag}

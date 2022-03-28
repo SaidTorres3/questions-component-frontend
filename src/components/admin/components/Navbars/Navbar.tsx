@@ -22,6 +22,7 @@ function Header({ ...props }: any) {
 
   function makeBrand() {
     let name = "";
+    // eslint-disable-next-line array-callback-return
     props.routes.map((prop: any, key: any) => {
       let expectedRoute: string = prop.layout + prop.path
       let currentRoute: string = props.location.pathname

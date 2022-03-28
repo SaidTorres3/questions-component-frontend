@@ -9,7 +9,7 @@ import Admin from "./components/admin/layouts/Admin";
 import Login from "./components/admin/layouts/Login";
 
 function App() {
-  const {userData, setUserData} = useAuth()
+  const { userData, setUserData } = useAuth();
 
   return (
     <div className="App">

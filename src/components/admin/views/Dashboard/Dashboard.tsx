@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from 'react';
 // react plugin for creating charts
 import ChartistGraph from 'react-chartist';
@@ -29,17 +30,10 @@ import {
 import dashboardStyle from '../../assets/jss/material-dashboard-react/views/dashboardStyle';
 import { useGetStatsQuery } from './operations.gql';
 
-interface Props {
-  classes: any;
-}
-
-interface State {
-  value: number;
-}
-
 const Dashboard = (props: any) => {
   const { classes } = props;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, loading, error } = useGetStatsQuery()
 
   useEffect(() => {
