@@ -399,7 +399,7 @@ export type User = {
   username: Scalars['String'];
   password: Scalars['String'];
   type: Scalars['String'];
-  respondents: Array<Respondent>;
+  respondents?: Maybe<Array<Respondent>>;
 };
 
 export type ValidadeTokenInput = {

@@ -1,43 +1,42 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 // react plugin for creating charts
-import ChartistGraph from 'react-chartist';
+import ChartistGraph from "react-chartist";
 // @material-ui/core
-import withStyles from '@material-ui/core/styles/withStyles';
-import Icon from '@material-ui/core/Icon';
+import withStyles from "@material-ui/core/styles/withStyles";
+import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
-import Store from '@material-ui/icons/Store';
-import Warning from '@material-ui/icons/Warning';
-import DateRange from '@material-ui/icons/DateRange';
-import LocalOffer from '@material-ui/icons/LocalOffer';
-import Update from '@material-ui/icons/Update';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
-import Accessibility from '@material-ui/icons/Accessibility';
+import Store from "@material-ui/icons/Store";
+import Warning from "@material-ui/icons/Warning";
+import DateRange from "@material-ui/icons/DateRange";
+import LocalOffer from "@material-ui/icons/LocalOffer";
+import Update from "@material-ui/icons/Update";
+import ArrowUpward from "@material-ui/icons/ArrowUpward";
+import Accessibility from "@material-ui/icons/Accessibility";
 // core components
-import GridItem from '../../components/Grid/GridItem';
-import GridContainer from '../../components/Grid/GridContainer';
-import Danger from '../../components/Typography/Danger';
-import Card from '../../components/Card/Card';
-import CardHeader from '../../components/Card/CardHeader';
-import CardIcon from '../../components/Card/CardIcon';
-import CardBody from '../../components/Card/CardBody';
-import CardFooter from '../../components/Card/CardFooter';
+import GridItem from "../../components/Grid/GridItem";
+import GridContainer from "../../components/Grid/GridContainer";
+import Danger from "../../components/Typography/Danger";
+import Card from "../../components/Card/Card";
+import CardHeader from "../../components/Card/CardHeader";
+import CardIcon from "../../components/Card/CardIcon";
+import CardBody from "../../components/Card/CardBody";
+import CardFooter from "../../components/Card/CardFooter";
+import { Rating } from "react-simple-star-rating";
 
-import {
-  emailsSubscriptionChart,
-} from '../../variables/charts';
+import { emailsSubscriptionChart } from "../../variables/charts";
 
-import dashboardStyle from '../../assets/jss/material-dashboard-react/views/dashboardStyle';
-import { useGetStatsQuery } from './operations.gql';
+import dashboardStyle from "../../assets/jss/material-dashboard-react/views/dashboardStyle";
+import { useGetStatsQuery } from "./operations.gql";
 
 const Dashboard = (props: any) => {
   const { classes } = props;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data, loading, error } = useGetStatsQuery()
+  const { data, loading, error } = useGetStatsQuery();
 
   useEffect(() => {
-    console.log(data?.getStats.selectedAnswersChart)
+    console.log(data?.getStats.selectedAnswersChart);
   }, [data]);
 
   return (
@@ -49,9 +48,18 @@ const Dashboard = (props: any) => {
               <CardIcon color="warning">
                 <Icon>content_copy</Icon>
               </CardIcon>
-              <p className={classes.cardCategory}>Calificación promedio mensual</p>
+              <p className={classes.cardCategory}>
+                Calificación promedio mensual
+              </p>
               <h3 className={classes.cardTitle}>
                 {data?.getStats.monthlyAverageScore}/100
+                <Rating
+                  initialValue={
+                    (data?.getStats.monthlyAverageScore || 0) / 2 / 10
+                  }
+                  ratingValue={0}
+                  readonly
+                ></Rating>
               </h3>
             </CardHeader>
             <CardFooter stats={true}>
@@ -59,7 +67,7 @@ const Dashboard = (props: any) => {
                 <Danger>
                   <Warning />
                 </Danger>
-                <a href="" onClick={e => e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   Get more space
                 </a>
               </div>
@@ -72,8 +80,12 @@ const Dashboard = (props: any) => {
               <CardIcon color="success">
                 <Store />
               </CardIcon>
-              <p className={classes.cardCategory}>Calificación promedio historica</p>
-              <h3 className={classes.cardTitle}>{data?.getStats.averageScore}/100</h3>
+              <p className={classes.cardCategory}>
+                Calificación promedio historica
+              </p>
+              <h3 className={classes.cardTitle}>
+                {data?.getStats.averageScore}/100
+              </h3>
             </CardHeader>
             <CardFooter stats={true}>
               <div className={classes.stats}>
@@ -89,8 +101,12 @@ const Dashboard = (props: any) => {
               <CardIcon color="danger">
                 <Icon>info_outline</Icon>
               </CardIcon>
-              <p className={classes.cardCategory}>Encuestas realizadas este mes</p>
-              <h3 className={classes.cardTitle}>{data?.getStats.monthlyRespondentsAmount}</h3>
+              <p className={classes.cardCategory}>
+                Encuestas realizadas este mes
+              </p>
+              <h3 className={classes.cardTitle}>
+                {data?.getStats.monthlyRespondentsAmount}
+              </h3>
             </CardHeader>
             <CardFooter stats={true}>
               <div className={classes.stats}>
@@ -106,8 +122,12 @@ const Dashboard = (props: any) => {
               <CardIcon color="info">
                 <Accessibility />
               </CardIcon>
-              <p className={classes.cardCategory}>Encuestas realizadas historicamente</p>
-              <h3 className={classes.cardTitle}>{data?.getStats.respondentsAmount}</h3>
+              <p className={classes.cardCategory}>
+                Encuestas realizadas historicamente
+              </p>
+              <h3 className={classes.cardTitle}>
+                {data?.getStats.respondentsAmount}
+              </h3>
             </CardHeader>
             <CardFooter stats={true}>
               <div className={classes.stats}>
@@ -123,10 +143,13 @@ const Dashboard = (props: any) => {
           <Card chart={true}>
             <CardHeader color="success">
               {data?.getStats.selectedAnswersChart.labels &&
-                data?.getStats.selectedAnswersChart.count ?
+              data?.getStats.selectedAnswersChart.count ? (
                 <ChartistGraph
                   className="ct-chart"
-                  data={{ labels: data.getStats.selectedAnswersChart.labels, series: [data.getStats.selectedAnswersChart.count] }}
+                  data={{
+                    labels: data.getStats.selectedAnswersChart.labels,
+                    series: [data.getStats.selectedAnswersChart.count],
+                  }}
                   type="Bar"
                   options={{
                     low: 0,
@@ -135,21 +158,27 @@ const Dashboard = (props: any) => {
                       top: 0,
                       right: 0,
                       bottom: 0,
-                      left: 0
-                    }
+                      left: 0,
+                    },
                   }}
-                // listener={dailySalesChart.animation}
-                /> : undefined}
+                  // listener={dailySalesChart.animation}
+                />
+              ) : undefined}
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Conteo de respuestas a preguntas</h4>
+              <h4 className={classes.cardTitle}>
+                Conteo de respuestas a preguntas
+              </h4>
               <p className={classes.cardCategory}>
-                Conteo del puntaje de las respuestas a las preguntas que son aptas para sacar una calificación.
+                Conteo del puntaje de las respuestas a las preguntas que son
+                aptas para sacar una calificación.
               </p>
             </CardBody>
             <CardFooter chart={true}>
               <div className={classes.stats}>
-                <ArrowUpward className={classes.upArrowCardCategory} /> Cantidad de veces que aparece el puntaje seleccionado más abundante: {data?.getStats.selectedAnswersChart.hightestCount}
+                <ArrowUpward className={classes.upArrowCardCategory} /> Cantidad
+                de veces que aparece el puntaje seleccionado más abundante:{" "}
+                {data?.getStats.selectedAnswersChart.hightestCount}
               </div>
             </CardFooter>
           </Card>
@@ -157,14 +186,17 @@ const Dashboard = (props: any) => {
         <GridItem xs={12} sm={12} md={6}>
           <Card chart={true}>
             <CardHeader color="warning">
-              {data?.getStats.monthlyAnswersChart.monthlyCount ?
+              {data?.getStats.monthlyAnswersChart.monthlyCount ? (
                 <ChartistGraph
                   className="ct-chart"
-                  data={{ labels: emailsSubscriptionChart.data.labels, series: [data.getStats.monthlyAnswersChart.monthlyCount] }}
+                  data={{
+                    labels: emailsSubscriptionChart.data.labels,
+                    series: [data.getStats.monthlyAnswersChart.monthlyCount],
+                  }}
                   type="Line"
                   options={{
                     axisX: {
-                      showGrid: false
+                      showGrid: false,
                     },
                     low: 0,
                     high: data.getStats.monthlyAnswersChart.hightestCount,
@@ -172,24 +204,29 @@ const Dashboard = (props: any) => {
                       top: 0,
                       right: 5,
                       bottom: 0,
-                      left: 0
-                    }
+                      left: 0,
+                    },
                   }}
                 />
-                : undefined}
+              ) : undefined}
             </CardHeader>
             <CardBody>
-              <h4 className={classes.cardTitle}>Encuestas realizadas en el {new Date().getFullYear()}</h4>
+              <h4 className={classes.cardTitle}>
+                Encuestas realizadas en el {new Date().getFullYear()}
+              </h4>
               <p className={classes.cardCategory}>
                 {/* <span className={classes.successText}>
                   <ArrowUpward className={classes.upArrowCardCategory} /> 55%
                 </span>{' '} */}
-                Conteo mensual de todas las encuestas realizadas en el año {new Date().getFullYear()}.
+                Conteo mensual de todas las encuestas realizadas en el año{" "}
+                {new Date().getFullYear()}.
               </p>
             </CardBody>
             <CardFooter chart={true}>
               <div className={classes.stats}>
-                <ArrowUpward className={classes.upArrowCardCategory} /> Mayor cantidad de encuestas realizadas en un mes: {data?.getStats.monthlyAnswersChart.hightestCount}
+                <ArrowUpward className={classes.upArrowCardCategory} /> Mayor
+                cantidad de encuestas realizadas en un mes:{" "}
+                {data?.getStats.monthlyAnswersChart.hightestCount}
               </div>
             </CardFooter>
           </Card>
@@ -197,7 +234,7 @@ const Dashboard = (props: any) => {
       </GridContainer>
     </div>
   );
-}
+};
 
 // Dashboard.propTypes = {
 //   classes: PropTypes.object.isRequired
