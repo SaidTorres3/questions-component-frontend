@@ -27,7 +27,8 @@ function TableList(props: any) {
     variables: {
       take: pagination.take,
       skip: pagination.skip
-    }
+    },
+    pollInterval: 1000
   })
 
   useEffect(() => {

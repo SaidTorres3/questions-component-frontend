@@ -5,14 +5,19 @@ import { withStyles } from "@material-ui/styles";
 const LoadingScreen: FC = (props: any) => {
   const { classes } = props;
 
-  return <div className={classes.magicClass}>Loading...</div>;
+  return <div className={classes.magicClass}>Conecting...</div>;
 };
 
 const styles = createStyles({
   magicClass: {
     height: "100vh",
     width: "100vw",
-    background: "black"
+    background: "black",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "5em",
+    color: "white",
   },
 });
 

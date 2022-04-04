@@ -8,7 +8,7 @@ export type GetRespondentQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetRespondentQuery = { __typename?: 'Query', getRespondent: { __typename?: 'GetRespondentPayload', respondent: { __typename?: 'Respondent', id: string, avgScore: number, posted_answers: Array<{ __typename?: 'Posted_Answer', question: { __typename?: 'Question', es: string }, answer: { __typename?: 'Answer', uuid: string, es: string } }> } } };
+export type GetRespondentQuery = { __typename?: 'Query', getRespondent: { __typename?: 'GetRespondentPayload', respondent: { __typename?: 'Respondent', id: string, avgScore: number, createdAt: any, posted_answers: Array<{ __typename?: 'Posted_Answer', question: { __typename?: 'Question', es: string }, answer: { __typename?: 'Answer', uuid: string, es: string } }> } } };
 
 
 export const GetRespondentDocument = gql`
@@ -17,6 +17,7 @@ export const GetRespondentDocument = gql`
     respondent {
       id
       avgScore
+      createdAt
       posted_answers {
         question {
           es

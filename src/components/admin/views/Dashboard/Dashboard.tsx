@@ -33,7 +33,9 @@ const Dashboard = (props: any) => {
   const { classes } = props;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data, loading, error } = useGetStatsQuery();
+  const { data, loading, error } = useGetStatsQuery({
+    pollInterval: 1000
+  });
 
   useEffect(() => {
     console.log(data?.getStats.selectedAnswersChart);
@@ -52,7 +54,7 @@ const Dashboard = (props: any) => {
                 Calificación promedio mensual
               </p>
               <h3 className={classes.cardTitle}>
-                {data?.getStats.monthlyAverageScore}/100
+                {(data?.getStats.monthlyAverageScore || 0) / 2 / 10}/5
                 <Rating
                   initialValue={
                     (data?.getStats.monthlyAverageScore || 0) / 2 / 10
@@ -84,7 +86,14 @@ const Dashboard = (props: any) => {
                 Calificación promedio historica
               </p>
               <h3 className={classes.cardTitle}>
-                {data?.getStats.averageScore}/100
+                {(data?.getStats.averageScore || 0) / 2 / 10}/5
+                <Rating
+                  initialValue={
+                    (data?.getStats.monthlyAverageScore || 0) / 2 / 10
+                  }
+                  ratingValue={0}
+                  readonly
+                ></Rating>
               </h3>
             </CardHeader>
             <CardFooter stats={true}>

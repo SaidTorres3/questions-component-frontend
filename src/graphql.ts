@@ -74,6 +74,15 @@ export type DeleteQuestionPayload = {
   deletedUuid: Scalars['ID'];
 };
 
+export type DeleteRespondentInput = {
+  respondentUuid: Scalars['ID'];
+};
+
+export type DeleteRespondentPayload = {
+  __typename?: 'DeleteRespondentPayload';
+  deletedUuid: Scalars['ID'];
+};
+
 export type EditAnswerInput = {
   uuid: Scalars['ID'];
   es: Scalars['String'];
@@ -252,6 +261,7 @@ export type Mutation = {
   createUser: CreateUserPayload;
   loginUser?: Maybe<LoginUserPayload>;
   validadeToken?: Maybe<ValidadeTokenPayload>;
+  deleteRespondent: DeleteRespondentPayload;
 };
 
 
@@ -287,6 +297,11 @@ export type MutationLoginUserArgs = {
 
 export type MutationValidadeTokenArgs = {
   input?: Maybe<ValidadeTokenInput>;
+};
+
+
+export type MutationDeleteRespondentArgs = {
+  input: DeleteRespondentInput;
 };
 
 export type Posted_Answer = {
