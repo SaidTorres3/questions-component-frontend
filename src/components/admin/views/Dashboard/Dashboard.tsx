@@ -34,7 +34,12 @@ const Dashboard = (props: any) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, loading, error } = useGetStatsQuery({
-    pollInterval: 1000
+    pollInterval: 1000,
+    context: {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    },
   });
 
   useEffect(() => {

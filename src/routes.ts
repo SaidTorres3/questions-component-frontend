@@ -66,13 +66,13 @@ const dashboardRoutes = [
     component: Respondents,
     layout: '/admin'
   },
-  {
-    path: '/notifications',
-    name: 'Notifications',
-    icon: Notifications,
-    component: NotificationsPage,
-    layout: '/admin'
-  },
+  // {
+  //   path: '/notifications',
+  //   name: 'Notifications',
+  //   icon: Notifications,
+  //   component: NotificationsPage,
+  //   layout: '/admin'
+  // },
   {
     path: '/usuario',
     name: 'Usuario',

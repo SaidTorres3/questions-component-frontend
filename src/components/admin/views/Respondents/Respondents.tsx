@@ -33,9 +33,30 @@ function Respondents(props: any) {
       take: pagination.take,
       skip: pagination.skip,
     },
+    context: {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    },
     pollInterval: 500,
   });
-  
+
+  const deleteRespondent = () => {
+    deleteRespondentMutation({
+      variables: {
+        input: {
+          respondentUuid: modalData.respondentUuid,
+        },
+      },
+      context: {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      },
+    });
+    closeModal();
+  };
+
   const [modalData, setModalData] = useState({
     showModal: false,
     respondentUuid: "",
@@ -55,10 +76,10 @@ function Respondents(props: any) {
   }, [data]);
 
   useEffect(() => {
-    console.log('eje')
+    console.log("eje");
     window.addEventListener("keydown", keyListener);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const scrollToTop = () => {
     const element = document.getElementById("mainPanel");
@@ -89,46 +110,49 @@ function Respondents(props: any) {
     });
   };
 
-  const deleteRespondent = () => {
-    deleteRespondentMutation({
-      variables: { 
-        input: {
-          respondentUuid: modalData.respondentUuid,
-        }
-      }
-    })
-    closeModal();
-  };
-
   const closeModal = () => {
     setModalData({
       respondentUuid: "",
       showModal: false,
       respondentNo: "0",
-    })
-  }
+    });
+  };
 
   const keyListener = (e: any) => {
-    console.log(e)
-    console.log(data)
+    console.log(e);
+    console.log(data);
 
-    if (e.keyCode === 39 && data?.getRespondents.total && (pagination.page+1 < Math.ceil(data?.getRespondents.total / take))) {
+    if (
+      e.keyCode === 39 &&
+      data?.getRespondents.total &&
+      pagination.page + 1 < Math.ceil(data?.getRespondents.total / take)
+    ) {
       handleNextPage();
     } else if ((e.keyCode === 37 || e.keyCode === 8) && pagination.page > 1) {
       handlePrevPage();
     }
-  }
+  };
 
   return (
     <div>
       {modalData.showModal ? (
         <div id="modal" className={classes.modal}>
-          <h1 className={classes.modalMsg}>¿Desea eliminar la encuesta {modalData.respondentNo}?</h1>
+          <h1 className={classes.modalMsg}>
+            ¿Desea eliminar la encuesta {modalData.respondentNo}?
+          </h1>
           <div className={classes.modalButtonsContainer}>
-            <Button className={classes.modalButton} color="danger" onClick={() => deleteRespondent()}>
+            <Button
+              className={classes.modalButton}
+              color="danger"
+              onClick={() => deleteRespondent()}
+            >
               Eliminar
             </Button>
-            <Button className={classes.modalButton} color="warning" onClick={() => closeModal()}>
+            <Button
+              className={classes.modalButton}
+              color="warning"
+              onClick={() => closeModal()}
+            >
               Cancelar
             </Button>
           </div>
@@ -142,7 +166,8 @@ function Respondents(props: any) {
                 <div className={classes.cardHeader}>
                   <div>
                     <h4 className={classes.cardTitleWhite}>
-                      Encuestado {respondent.id} --- {new Date(respondent.createdAt).toLocaleString('en-US')}
+                      Encuestado {respondent.id} ---{" "}
+                      {new Date(respondent.createdAt).toLocaleString("en-US")}
                     </h4>
                     <p className={classes.cardCategoryWhite}>
                       Puntaje promedio: {respondent.avgScore}
@@ -184,9 +209,18 @@ function Respondents(props: any) {
         })}
         <br />
         <div className={classes.paginationButtonsContainer}>
-          <Button onClick={handlePrevPage} color="warning">Prev</Button>
-          <div style={{margin: 8}}>{pagination.page} / {data?.getRespondents.total ? Math.ceil(data?.getRespondents.total / take) : 0}</div>
-          <Button onClick={handleNextPage} color="success">Next</Button>
+          <Button onClick={handlePrevPage} color="warning">
+            Prev
+          </Button>
+          <div style={{ margin: 8 }}>
+            {pagination.page} /{" "}
+            {data?.getRespondents.total
+              ? Math.ceil(data?.getRespondents.total / take)
+              : 0}
+          </div>
+          <Button onClick={handleNextPage} color="success">
+            Next
+          </Button>
         </div>
       </GridContainer>
     </div>
@@ -268,7 +302,7 @@ const styles = createStyles({
   },
   modalMsg: {
     color: "#fff",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalButtonsContainer: {
     display: "flex",
@@ -285,7 +319,7 @@ const styles = createStyles({
     alignItems: "center",
     flexGrow: 1,
     justifyContent: "center",
-  }
+  },
 });
 
 export default withStyles(styles)(Respondents);

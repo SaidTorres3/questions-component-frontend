@@ -9,7 +9,7 @@ import {
   ApolloProvider,
 } from "@apollo/client";
 
-const client = new ApolloClient({
+const client = new ApolloClient({ // frotend
   // declare REACT_APP_BACKEND_IP in .env file, example: REACT_APP_BACKEND_IP=http://localhost:4000
   uri: process.env.REACT_APP_BACKEND_IP,
   cache: new InMemoryCache(),
@@ -18,6 +18,7 @@ const client = new ApolloClient({
   }
 });
 
+// how to pass the token to the backend
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>

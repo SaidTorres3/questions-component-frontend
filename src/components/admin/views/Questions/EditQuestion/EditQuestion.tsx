@@ -1,127 +1,152 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 // @material-ui/core components
-import withStyles from '@material-ui/core/styles/withStyles';
+import withStyles from "@material-ui/core/styles/withStyles";
 // core components
-import GridItem from '../../../components/Grid/GridItem';
-import GridContainer from '../../../components/Grid/GridContainer';
-import Card from '../../../components/Card/Card';
-import CardBody from '../../../components/Card/CardBody';
-import { createStyles } from '@material-ui/core';
-import Button from '../../../components/CustomButtons/Button';
-import { EditAnswerInput, EditQuestionInput } from 'src/graphql';
-import CustomInput from 'src/components/admin/components/CustomInput/CustomInput';
-import CardFooter from 'src/components/admin/components/Card/CardFooter';
+import GridItem from "../../../components/Grid/GridItem";
+import GridContainer from "../../../components/Grid/GridContainer";
+import Card from "../../../components/Card/Card";
+import CardBody from "../../../components/Card/CardBody";
+import { createStyles } from "@material-ui/core";
+import Button from "../../../components/CustomButtons/Button";
+import { EditAnswerInput, EditQuestionInput } from "src/graphql";
+import CustomInput from "src/components/admin/components/CustomInput/CustomInput";
+import CardFooter from "src/components/admin/components/Card/CardFooter";
 import { useHistory, useParams } from "react-router-dom";
-import { useDeleteQuestionMutation, useEditQuestionMutation, useGetQuestionQuery } from './operations.gql';
-import { URLParams } from 'src/routes';
+import {
+  useDeleteQuestionMutation,
+  useEditQuestionMutation,
+  useGetQuestionQuery,
+} from "./operations.gql";
+import { URLParams } from "src/routes";
 
 function EditQuestion(props: any) {
   const { classes } = props;
-  const history = useHistory()
+  const history = useHistory();
 
-  const [state, setState] = useState<EditQuestionInput>()
-  const { pregunta } = useParams<URLParams>()
-  const { data } = useGetQuestionQuery({ variables: { input: { questionUuid: pregunta } } })
+  const [state, setState] = useState<EditQuestionInput>();
+  const { pregunta } = useParams<URLParams>();
+  const { data } = useGetQuestionQuery({
+    variables: { input: { questionUuid: pregunta } },
+    pollInterval: 1000,
+    context: {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    },
+  });
+
   useEffect(() => {
-    if (!data?.getQuestion.question) return
-    const question = data.getQuestion.question
+    if (!data?.getQuestion.question) return;
+    const question = data.getQuestion.question;
     const ansuas = question.answers.map((ansua) => {
       return {
         uuid: ansua.uuid,
         en: ansua.en,
-        es: ansua.es
-      }
-    })
+        es: ansua.es,
+      };
+    });
     setState({
       uuid: question.uuid,
       en: question.en,
       es: question.es,
       imgUrl: question.imgUrl,
-      answers: ansuas
-    })
-  }, [data])
+      answers: ansuas,
+    });
+  }, [data]);
 
-  const [submited, setSubmited] = useState<boolean>(false)
+  const [submited, setSubmited] = useState<boolean>(false);
   const [editQuestionMutation] = useEditQuestionMutation();
   const [deleteQuestion] = useDeleteQuestionMutation();
 
   const handleChange = (evt: any) => {
     const value = evt.target.value;
-    if (!state) return
+    if (!state) return;
     setState({
       ...state,
-      [evt.target.name]: value
+      [evt.target.name]: value,
     });
-  }
+  };
 
   const handleChangeAnswer = (evt: any, index: number) => {
-    if (!state) return
+    if (!state) return;
     setState({
       ...state,
-      answers: state.answers.map((answerE, indexE): EditAnswerInput => {
-        const answer = index === indexE ? {
-          ...answerE,
-          [evt.target.name]: evt.target.value
-        } : answerE
-        return answer
-      })
-    })
-  }
+      answers: state.answers.map(
+        (answerE, indexE): EditAnswerInput => {
+          const answer =
+            index === indexE
+              ? {
+                  ...answerE,
+                  [evt.target.name]: evt.target.value,
+                }
+              : answerE;
+          return answer;
+        }
+      ),
+    });
+  };
 
   const handleSubmit = (): void => {
-    if (!state) return
-    setSubmited(true)
+    if (!state) return;
+    setSubmited(true);
 
     if (state.en.trim() && state.es.trim()) {
       const doesAnswerHasAllValues = (answer: EditAnswerInput): boolean => {
-        if (
-          answer.en.trim() &&
-          answer.es.trim()
-        ) return true
-        return false
-      }
-      const results = state.answers.map((answer) => doesAnswerHasAllValues(answer))
+        if (answer.en.trim() && answer.es.trim()) return true;
+        return false;
+      };
+      const results = state.answers.map((answer) =>
+        doesAnswerHasAllValues(answer)
+      );
       for (let result of results) {
         if (!result) {
-          setSubmited(false)
-          return
+          setSubmited(false);
+          return;
         }
       }
       editQuestionMutation({
         variables: {
-          input: state
-        }
-      })
-        .then((res) => {
-          history.replace(`/admin/preguntas/${res.data?.editQuestion.questionUuid}`)
-        })
+          input: state,
+        },
+        context: {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        },
+      }).then((res) => {
+        history.replace(
+          `/admin/preguntas/${res.data?.editQuestion.questionUuid}`
+        );
+      });
     } else {
-      setSubmited(false)
+      setSubmited(false);
     }
-  }
+  };
 
   const deleteQuestionHandler = () => {
-    if (!state) return
+    if (!state) return;
     deleteQuestion({
       variables: {
         input: {
-          questionUuid: state.uuid
-        }
-      }
-    })
-      .then((res) => {
-        history.replace('/admin/preguntas')
-      })
-  }
-
+          questionUuid: state.uuid,
+        },
+      },
+    }).then((res) => {
+      history.replace("/admin/preguntas");
+    });
+  };
 
   return (
     <GridContainer>
       <Button
         color="danger"
         onClick={() => {
-          if (window.confirm('¿Estás segur@ de eliminar esta pregunta? Se eliminarán también las estadisticas relacionadas con esta pregunta.')) {
-            deleteQuestionHandler()
+          if (
+            window.confirm(
+              "¿Estás segur@ de eliminar esta pregunta? Se eliminarán también las estadisticas relacionadas con esta pregunta."
+            )
+          ) {
+            deleteQuestionHandler();
           }
         }}
       >
@@ -142,7 +167,7 @@ function EditQuestion(props: any) {
                     inputProps={{
                       name: "es",
                       value: state?.es || "Cargando...",
-                      onChange: handleChange
+                      onChange: handleChange,
                     }}
                   />
                 </GridItem>
@@ -151,12 +176,12 @@ function EditQuestion(props: any) {
                     labelText="Pregunta en inglés*"
                     id="en"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
                     inputProps={{
                       name: "en",
                       value: state?.en || "Cargando...",
-                      onChange: handleChange
+                      onChange: handleChange,
                     }}
                   />
                 </GridItem>
@@ -165,31 +190,33 @@ function EditQuestion(props: any) {
                     labelText="Imagen"
                     id="imgUrl"
                     formControlProps={{
-                      fullWidth: true
+                      fullWidth: true,
                     }}
                     inputProps={{
                       name: "imgUrl",
                       value: state?.imgUrl || "Cargando...",
-                      onChange: handleChange
+                      onChange: handleChange,
                     }}
                   />
                 </GridItem>
               </GridContainer>
-              <h3 style={{ textAlign: 'center' }}>Respuestas:</h3>
-              {
-                state?.answers.map((answer, index) => {
-                  return <GridContainer key={index} className={classes.formArray}>
+              <h3 style={{ textAlign: "center" }}>Respuestas:</h3>
+              {state?.answers.map((answer, index) => {
+                return (
+                  <GridContainer key={index} className={classes.formArray}>
                     <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
                         labelText="Valor*"
                         id="value"
                         formControlProps={{
-                          fullWidth: true
+                          fullWidth: true,
                         }}
                         inputProps={{
                           name: "value",
-                          value: data?.getQuestion.question.answers[index].value || "Cargando...",
-                          disabled: true
+                          value:
+                            data?.getQuestion.question.answers[index].value ||
+                            "Cargando...",
+                          disabled: true,
                         }}
                       />
                     </GridItem>
@@ -198,12 +225,13 @@ function EditQuestion(props: any) {
                         labelText="Respuesta en español*"
                         id="es"
                         formControlProps={{
-                          fullWidth: true
+                          fullWidth: true,
                         }}
                         inputProps={{
                           name: "es",
                           value: answer.es,
-                          onChange: (evt: any) => handleChangeAnswer(evt, index)
+                          onChange: (evt: any) =>
+                            handleChangeAnswer(evt, index),
                         }}
                       />
                     </GridItem>
@@ -212,26 +240,23 @@ function EditQuestion(props: any) {
                         labelText="Respuesta en inglés*"
                         id="en"
                         formControlProps={{
-                          fullWidth: true
+                          fullWidth: true,
                         }}
                         inputProps={{
                           name: "en",
                           value: answer.en,
-                          onChange: (evt: any) => handleChangeAnswer(evt, index)
+                          onChange: (evt: any) =>
+                            handleChangeAnswer(evt, index),
                         }}
                       />
                     </GridItem>
                   </GridContainer>
-                })
-              }
+                );
+              })}
             </div>
           </CardBody>
           <CardFooter>
-            <Button
-              onClick={handleSubmit}
-              color="primary"
-              disabled={submited}
-            >
+            <Button onClick={handleSubmit} color="primary" disabled={submited}>
               Editar pregunta
             </Button>
           </CardFooter>
@@ -243,58 +268,58 @@ function EditQuestion(props: any) {
 
 const styles = createStyles({
   cardCategoryWhite: {
-    '&,& a,& a:hover,& a:focus': {
-      color: 'rgba(255,255,255,.62)',
-      margin: '0',
-      fontSize: '14px',
-      marginTop: '0',
-      marginBottom: '0'
+    "&,& a,& a:hover,& a:focus": {
+      color: "rgba(255,255,255,.62)",
+      margin: "0",
+      fontSize: "14px",
+      marginTop: "0",
+      marginBottom: "0",
     },
-    '& a,& a:hover,& a:focus': {
-      color: '#FFFFFF'
-    }
+    "& a,& a:hover,& a:focus": {
+      color: "#FFFFFF",
+    },
   },
   cardTitleWhite: {
-    color: '#FFFFFF',
-    marginTop: '0px',
-    minHeight: 'auto',
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
     fontWeight: 300,
-    fontFamily: '\'Roboto\', \'Helvetica\', \'Arial\', sans-serif',
-    marginBottom: '3px',
-    textDecoration: 'none',
-    '& small': {
-      color: '#777',
-      fontSize: '65%',
+    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    marginBottom: "3px",
+    textDecoration: "none",
+    "& small": {
+      color: "#777",
+      fontSize: "65%",
       fontWeight: 400,
-      lineHeight: 1
-    }
+      lineHeight: 1,
+    },
   },
   cardButtons: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     flexGrow: 1,
-    justifyContent: 'end',
+    justifyContent: "end",
     "@media (max-width: 700px)": {
-      justifyContent: 'center'
-    }
+      justifyContent: "center",
+    },
   },
   cardButton: {
-    margin: 5
+    margin: 5,
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column'
+    display: "flex",
+    flexDirection: "column",
   },
   formArray: {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: '#f00'
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "#f00",
   },
   numericValueLabelContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    userSelect: 'none',
-  }
+    display: "flex",
+    flexDirection: "row",
+    userSelect: "none",
+  },
 });
 
 export default withStyles(styles)(EditQuestion);

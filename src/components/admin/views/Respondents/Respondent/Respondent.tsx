@@ -11,10 +11,15 @@ export const Respondent = (props: Props) => {
 
   const { encuestado } = useParams<URLParams>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data, loading, error } = useGetRespondentQuery({
+  const { data } = useGetRespondentQuery({
     variables: {
       input: {
         respondentUuid: encuestado,
+      },
+    },
+    context: {
+      headers: {
+        Authorization: localStorage.getItem("token"),
       },
     },
   });
@@ -42,9 +47,10 @@ export const Respondent = (props: Props) => {
     <div>
       <h3 className={classes.title}>
         Encuestado {data?.getRespondent.respondent.id} ---{" ("}
-        {new Date(data?.getRespondent.respondent.createdAt).toLocaleString('en-US')}{") "}
-         ➡ Calificación promedio:{" "}
-        {data?.getRespondent.respondent.avgScore}
+        {new Date(data?.getRespondent.respondent.createdAt).toLocaleString(
+          "en-US"
+        )}
+        {") "}➡ Calificación promedio: {data?.getRespondent.respondent.avgScore}
         <Rating
           initialValue={data?.getRespondent.respondent.avgScore}
           ratingValue={0}

@@ -44,7 +44,11 @@ const LoginScreen: FC = (props: any) => {
           password: opts.password,
         },
       },
+    }).catch((err) => {
+      console.log("testing");
+      console.log(err);
     });
+
     const loginUserVar = res?.data?.loginUser;
     if (loginUserVar && loginUserVar.__typename === "LoginUserPayloadSuccess") {
       setUserData({

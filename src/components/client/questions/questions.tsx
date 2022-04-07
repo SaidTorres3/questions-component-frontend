@@ -31,6 +31,11 @@ const QuestionsScreen: FC = () => {
     variables: {
       take: 1000,
     },
+    context: {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    },
   });
   const [CreatePostedAnswersMutation] = useCreatePostedAnswersMutation();
 
@@ -43,6 +48,11 @@ const QuestionsScreen: FC = () => {
             userUuid: userData.uuid,
           },
         },
+        context: {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          }
+        }
       });
     }
   }, [CreatePostedAnswersMutation, finished, registeredAnswers, userData.uuid]);
@@ -52,7 +62,7 @@ const QuestionsScreen: FC = () => {
     setQuestionsFromData();
     // eslint-disable-next-line
     console.log(userData);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, userData]);
 
   useEffect(() => {
