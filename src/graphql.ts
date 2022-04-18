@@ -26,6 +26,24 @@ export type Answer = {
   createdAt: Scalars['DateTime'];
 };
 
+export type ChangeUserPasswordInput = {
+  userUuid: Scalars['String'];
+  actualPassword: Scalars['String'];
+  newPassword: Scalars['String'];
+};
+
+export type ChangeUserPasswordPayload = ChangeUserPasswordPayloadSuccess | ChangeUserPasswordPayloadFail;
+
+export type ChangeUserPasswordPayloadFail = {
+  __typename?: 'ChangeUserPasswordPayloadFail';
+  message: Scalars['String'];
+};
+
+export type ChangeUserPasswordPayloadSuccess = {
+  __typename?: 'ChangeUserPasswordPayloadSuccess';
+  user: User;
+};
+
 export type CreateAnswerInput = {
   value: Scalars['JSON'];
   es: Scalars['String'];
@@ -254,14 +272,20 @@ export type MonthlyAnswersChart = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  validadeToken?: Maybe<ValidadeTokenPayload>;
   createQuestion: CreateQuestionPayload;
   createPostedAnswers: CreatePostedAnswerPayload;
   editQuestion: EditQuestionPayload;
   deleteQuestion: DeleteQuestionPayload;
   createUser: CreateUserPayload;
   loginUser?: Maybe<LoginUserPayload>;
-  validadeToken?: Maybe<ValidadeTokenPayload>;
   deleteRespondent: DeleteRespondentPayload;
+  changeUserPassword?: Maybe<ChangeUserPasswordPayload>;
+};
+
+
+export type MutationValidadeTokenArgs = {
+  input?: Maybe<ValidadeTokenInput>;
 };
 
 
@@ -295,13 +319,13 @@ export type MutationLoginUserArgs = {
 };
 
 
-export type MutationValidadeTokenArgs = {
-  input?: Maybe<ValidadeTokenInput>;
+export type MutationDeleteRespondentArgs = {
+  input: DeleteRespondentInput;
 };
 
 
-export type MutationDeleteRespondentArgs = {
-  input: DeleteRespondentInput;
+export type MutationChangeUserPasswordArgs = {
+  input?: Maybe<ChangeUserPasswordInput>;
 };
 
 export type Posted_Answer = {

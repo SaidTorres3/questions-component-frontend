@@ -1,10 +1,8 @@
 // @material-ui/icons
 import Dashboard from '@material-ui/icons/Dashboard';
-import Notifications from '@material-ui/icons/Notifications';
 // core components/views for Admin layout
 import DashboardPage from './components/admin/views/Dashboard/Dashboard';
 import Questions from './components/admin/views/Questions//Questions';
-import NotificationsPage from './components/admin/views/Notifications/Notifications';
 import Question from './components/admin/views/Questions/Question/Question';
 import CreateQuestion from './components/admin/views/Questions/CreateQuestion/CreateQuestion';
 import EditQuestion from './components/admin/views/Questions/EditQuestion/EditQuestion';

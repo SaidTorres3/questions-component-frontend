@@ -71,70 +71,13 @@ class HeaderLinks extends React.Component<Props> {
           simple={!(window.innerWidth > 959)}
           aria-label="Dashboard"
           className={classes.buttonLink}
+          onClick={() => history.push("/admin/dashboard")}
         >
           <Dashboard className={classes.icons} />
           <Hidden mdUp={true} implementation="css">
             <p className={classes.linkText}>Dashboard</p>
           </Hidden>
         </Button>
-        <div className={classes.manager}>
-          <Button
-            buttonRef={(node: any) => {
-              this.anchorEl = node;
-            }}
-            color={window.innerWidth > 959 ? "transparent" : "white"}
-            justIcon={window.innerWidth > 959}
-            simple={!(window.innerWidth > 959)}
-            aria-owns={open ? "menu-list-grow" : null}
-            aria-haspopup="true"
-            onClick={this.handleToggle}
-            className={classes.buttonLink}
-          >
-            <Notifications className={classes.icons} />
-            <span className={classes.notifications}>5</span>
-            <Hidden mdUp={true} implementation="css">
-              <p className={classes.linkText}>
-                {/* onClick={this.handleClick} */}
-                Notification
-              </p>
-            </Hidden>
-          </Button>
-          <Poppers
-            open={open}
-            anchorEl={this.anchorEl}
-            transition={true}
-            disablePortal={true}
-            className={
-              classNames({ [classes.popperClose]: !open }) +
-              " " +
-              classes.pooperNav
-            }
-          >
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                // id="menu-list-grow"
-                style={{
-                  transformOrigin:
-                    placement === "bottom" ? "center top" : "center bottom",
-                }}
-              >
-                <Paper>
-                  <ClickAwayListener onClickAway={this.handleClose}>
-                    <MenuList role="menu">
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Mike John responded to your email
-                      </MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Poppers>
-        </div>
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
@@ -142,9 +85,7 @@ class HeaderLinks extends React.Component<Props> {
           aria-label="Person"
           className={classes.buttonLink}
           // on click, go to /admin/user
-          onClick={(e: any) => {
-            history.go("/admin/user");
-          }}
+         onClick={() => history.push("/admin/usuario")}
         >
           <Person className={classes.icons} />
           <Hidden mdUp={true} implementation="css">
