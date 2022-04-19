@@ -83,7 +83,6 @@ function Question(props: any) {
               }
             />
           </CardBody>
-          {questionStats?.getQuestionStats.selectedAnswersChart.count}
           {questionStats ? (
             <Card chart={true}>
               <CardHeader color="info">

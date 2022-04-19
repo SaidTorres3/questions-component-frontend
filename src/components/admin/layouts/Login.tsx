@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import { createStyles } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import { useLoginUserMutation } from "./operations.gql";
@@ -6,6 +6,7 @@ import { UserContext } from "src/auth/authContext";
 import useToken from "src/auth/useToken";
 import useValidadeToken from "src/auth/useValidadeToken";
 import LoadingScreen from "src/auth/LoadingScreen";
+import Button from "../components/CustomButtons/Button";
 
 const LoginScreen: FC = (props: any) => {
   const { classes } = props;
@@ -36,7 +37,7 @@ const LoginScreen: FC = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
-  const login = async (opts: { username: string; password: string }) => {
+  const login = useCallback(async (opts: { username: string; password: string }) => {
     const res = await attemptToLogIn({
       variables: {
         input: {
@@ -69,7 +70,25 @@ const LoginScreen: FC = (props: any) => {
       });
       setDoesUserLoggedIn(false);
     }
-  };
+  }, [attemptToLogIn, setToken, setUserData]);
+
+  const handleSubmit = useCallback(() => {
+    console.log(userDataForm);
+    login(userDataForm);
+  }, [userDataForm, login]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        handleSubmit();
+        console.log("Handle submit just triggered");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleSubmit]);
 
   return (
     <div className={classes.loginRoot}>
@@ -96,12 +115,9 @@ const LoginScreen: FC = (props: any) => {
               type="password"
             />
             <br />
-            <button
-              className={classes.loginButton}
-              onClick={() => login(userDataForm)}
-            >
+            <Button className={classes.loginButton} onClick={handleSubmit} color="primary">
               Aceptar
-            </button>
+            </Button>
             <br />
           </div>
         </div>
@@ -131,21 +147,29 @@ const styles = createStyles({
     display: "flex",
     alignContent: "center",
     // justifyContent: "center",
+    maxWidth: "50%",
     flexDirection: "column",
-    border: "1px solid #fff",
-    padding: "30px",
+    border: "2px solid #fff",
+    borderRadius: "10px",
+    padding: "60px",
     boxShadow: "0px 0px 10px #0005",
   },
   loginWlcm: {
-    fontSize: "70px",
+    fontSize: "60px",
     textAlign: "center",
     fontWeight: 800,
     textShadow: "0px 0px 5px #0003",
     whiteSpace: "pre-line",
+    "@media (max-width: 600px)": {
+      fontSize: "50px",  
+    }
   },
   loginInstructionLabel: {
     textShadow: "0px 0px 5px #0003",
-    fontSize: "35px",
+    fontSize: "30px",
+    paddingTop: "10px",
+    paddingBottom: "5px",
+    fontWeight: 800,
   },
   inputBox: {
     height: "40px",
